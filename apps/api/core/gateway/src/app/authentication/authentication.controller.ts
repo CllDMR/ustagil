@@ -19,11 +19,11 @@ import {
   AuthenticationLoginAccountMSMessage,
   AuthenticationRegisterAccountMSMessage,
 } from '@ustagil/api/core/authentication/typing';
-import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
 import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
-} from '@ustagil/api/core/gateway/typing';
+} from '@ustagil/api/core/common/typing';
+import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
 import { AuthenticationRegisterAccountBodyDto } from './dtos';
 
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)

@@ -32,7 +32,7 @@ import {
 import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
-} from '@ustagil/api/core/gateway/typing';
+} from '@ustagil/api/core/common/typing';
 import {
   AccountCreateOneBodyDto,
   AccountFindAllQueryDto,
