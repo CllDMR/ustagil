@@ -2,6 +2,20 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "api-core-account": "apps/api/core/account",
+    "api-core-account-constant": "libs/api/core/account/constant",
+    "api-core-account-data-access": "libs/api/core/account/data-access",
+    "api-core-account-typing": "libs/api/core/account/typing",
+    "api-core-account-util": "libs/api/core/account/util",
+    "api-core-authentication": "apps/api/core/authentication",
+    "api-core-authentication-constant": "libs/api/core/authentication/constant",
+    "api-core-authentication-data-access": "libs/api/core/authentication/data-access",
+    "api-core-authentication-typing": "libs/api/core/authentication/typing",
+    "api-core-authentication-util": "libs/api/core/authentication/util",
+    "api-core-common-constant": "libs/api/core/common/constant",
+    "api-core-common-data-access": "libs/api/core/common/data-access",
+    "api-core-common-typing": "libs/api/core/common/typing",
+    "api-core-common-util": "libs/api/core/common/util",
     "api-core-gateway": "apps/api/core/gateway"
   }
 }

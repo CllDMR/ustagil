@@ -14,7 +14,44 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@ustagil/api/core/account/constant": [
+        "libs/api/core/account/constant/src/index.ts"
+      ],
+      "@ustagil/api/core/account/data-access": [
+        "libs/api/core/account/data-access/src/index.ts"
+      ],
+      "@ustagil/api/core/account/typing": [
+        "libs/api/core/account/typing/src/index.ts"
+      ],
+      "@ustagil/api/core/account/util": [
+        "libs/api/core/account/util/src/index.ts"
+      ],
+      "@ustagil/api/core/authentication/constant": [
+        "libs/api/core/authentication/constant/src/index.ts"
+      ],
+      "@ustagil/api/core/authentication/data-access": [
+        "libs/api/core/authentication/data-access/src/index.ts"
+      ],
+      "@ustagil/api/core/authentication/typing": [
+        "libs/api/core/authentication/typing/src/index.ts"
+      ],
+      "@ustagil/api/core/authentication/util": [
+        "libs/api/core/authentication/util/src/index.ts"
+      ],
+      "@ustagil/api/core/common/constant": [
+        "libs/api/core/common/constant/src/index.ts"
+      ],
+      "@ustagil/api/core/common/data-access": [
+        "libs/api/core/common/data-access/src/index.ts"
+      ],
+      "@ustagil/api/core/common/typing": [
+        "libs/api/core/common/typing/src/index.ts"
+      ],
+      "@ustagil/api/core/common/util": [
+        "libs/api/core/common/util/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
