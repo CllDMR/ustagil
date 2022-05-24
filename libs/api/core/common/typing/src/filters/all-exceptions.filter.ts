@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { isICustomRpcException } from '@ustagil/api/core/common/typing';
+import { isICustomRpcException } from '../exceptions/custom-rpc.exception';
 
 interface ResponseBody {
   timestamp: string;
