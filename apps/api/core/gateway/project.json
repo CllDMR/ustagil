@@ -1,0 +1,52 @@
+{
+  "$schema": "..\\..\\..\\..\\node_modules\\nx\\schemas\\project-schema.json",
+  "sourceRoot": "apps/api/core/gateway/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/api/core/gateway",
+        "main": "apps/api/core/gateway/src/main.ts",
+        "tsConfig": "apps/api/core/gateway/tsconfig.app.json",
+        "assets": ["apps/api/core/gateway/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/core/gateway/src/environments/environment.ts",
+              "with": "apps/api/core/gateway/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "api-core-gateway:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/api/core/gateway/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/api/core/gateway"],
+      "options": {
+        "jestConfig": "apps/api/core/gateway/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
