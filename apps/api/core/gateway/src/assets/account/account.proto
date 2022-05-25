@@ -24,6 +24,11 @@ service AccountService {
 }
 
 message Account {
+  string _id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
+  string password = 5;
 }
 
 message ListAccountsRequest {
