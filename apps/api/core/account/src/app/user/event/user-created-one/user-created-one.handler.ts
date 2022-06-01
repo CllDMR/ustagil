@@ -5,7 +5,7 @@ import { UserCreatedOneEvent } from './user-created-one.event';
 export class UserCreatedOneHandler
   implements IEventHandler<UserCreatedOneEvent>
 {
-  async handle({ userId }: UserCreatedOneEvent): Promise<void> {
-    console.log('Created user with id:', userId);
+  async handle({ id }: UserCreatedOneEvent): Promise<void> {
+    console.log('Created user with id:', id);
   }
 }

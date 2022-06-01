@@ -18,7 +18,7 @@ export class AuthenticationLoginAccountHandler
   ) {}
 
   async execute({ dto }: AuthenticationLoginAccountQuery) {
-    const { email, displayName, _id } = dto;
+    const { email, displayName, id } = dto;
     const authenticationDomain = new AuthenticationDomain({
       email,
       displayName,
@@ -37,7 +37,7 @@ export class AuthenticationLoginAccountHandler
     authentication.commit();
 
     const payload = {
-      sub: _id,
+      sub: id,
       email: authentication.email,
       displayName: authentication.displayName,
     };

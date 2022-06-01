@@ -5,7 +5,7 @@ import { SuperAdminDeletedOneEvent } from './super_admin-deleted-one.event';
 export class SuperAdminDeletedOneHandler
   implements IEventHandler<SuperAdminDeletedOneEvent>
 {
-  async handle({ super_adminId }: SuperAdminDeletedOneEvent): Promise<void> {
-    console.log('Deleted super_admin with id:', super_adminId);
+  async handle({ id }: SuperAdminDeletedOneEvent): Promise<void> {
+    console.log('Deleted super_admin with id:', id);
   }
 }

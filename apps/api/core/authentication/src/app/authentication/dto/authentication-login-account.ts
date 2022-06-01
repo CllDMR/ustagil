@@ -2,7 +2,7 @@ import { IsMongoId, IsString } from 'class-validator';
 
 export class AuthenticationLoginAccountDto {
   @IsMongoId()
-  _id: string;
+  id: string;
 
   @IsString()
   email: string;

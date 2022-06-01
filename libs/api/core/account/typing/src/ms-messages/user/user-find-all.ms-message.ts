@@ -1,23 +1,17 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class UserFindAllMSMessage {
   @IsNumber()
   @IsOptional()
   page_size?: number;
 
-  @IsString()
-  @IsOptional()
-  page_token?: string;
-
-  constructor(page_size?: number, page_token?: string) {
+  constructor(page_size?: number) {
     this.page_size = page_size;
-    this.page_token = page_token;
   }
 
   toString() {
     return JSON.stringify({
       page_size: this.page_size,
-      page_token: this.page_token,
     });
   }
 }

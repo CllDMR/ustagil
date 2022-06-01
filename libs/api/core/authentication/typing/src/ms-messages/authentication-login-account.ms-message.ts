@@ -3,7 +3,7 @@ import { IsMongoId, IsString } from 'class-validator';
 
 export class AuthenticationLoginAccountMSMessage {
   @IsMongoId()
-  _id: string;
+  id: string;
 
   @IsString()
   email: string;
@@ -12,18 +12,18 @@ export class AuthenticationLoginAccountMSMessage {
   displayName: string;
 
   constructor(
-    _id: AccountDomain['_id'],
+    id: AccountDomain['id'],
     email: AccountDomain['email'],
     displayName: AccountDomain['displayName']
   ) {
-    this._id = _id;
+    this.id = id;
     this.email = email;
     this.displayName = displayName;
   }
 
   toString() {
     return JSON.stringify({
-      _id: this._id,
+      id: this.id,
       email: this.email,
       displayName: this.displayName,
     });

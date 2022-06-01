@@ -18,7 +18,7 @@ export class OrganizationUpdateOneHandler
 
     const a_organization = this.eventPublisher.mergeObjectContext(
       new OrganizationDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -32,7 +32,7 @@ export class OrganizationUpdateOneHandler
 
     await this.organizationRepository.findOneAndReplace({}, a_organization);
 
-    a_organization.apply(new OrganizationUpdatedOneEvent(a_organization._id));
+    a_organization.apply(new OrganizationUpdatedOneEvent(a_organization.id));
     a_organization.commit();
   }
 }

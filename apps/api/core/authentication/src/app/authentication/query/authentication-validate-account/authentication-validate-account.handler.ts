@@ -51,7 +51,7 @@ export class AuthenticationValidateAccountHandler
         )
     );
 
-    authentication.apply(new AuthenticationValidatedAccountEvent(account._id));
+    authentication.apply(new AuthenticationValidatedAccountEvent(account.id));
 
     authentication.commit();
 

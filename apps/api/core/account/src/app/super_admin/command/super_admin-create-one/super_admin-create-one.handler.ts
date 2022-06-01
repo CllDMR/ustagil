@@ -18,7 +18,7 @@ export class SuperAdminCreateOneHandler
     const { displayName, email, organization, password } = dto;
     const super_admin = this.eventPublisher.mergeObjectContext(
       new SuperAdminDomain({
-        _id: new ObjectId().toHexString(),
+        id: new ObjectId().toHexString(),
         displayName: displayName,
         email: email,
         organization: organization,
@@ -28,7 +28,7 @@ export class SuperAdminCreateOneHandler
 
     await this.super_adminRepository.create(super_admin);
 
-    super_admin.apply(new SuperAdminCreatedOneEvent(super_admin._id));
+    super_admin.apply(new SuperAdminCreatedOneEvent(super_admin.id));
     super_admin.commit();
   }
 }

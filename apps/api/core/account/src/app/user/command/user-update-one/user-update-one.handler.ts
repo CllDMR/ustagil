@@ -18,7 +18,7 @@ export class UserUpdateOneHandler
 
     const user = this.eventPublisher.mergeObjectContext(
       new UserDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -32,7 +32,7 @@ export class UserUpdateOneHandler
 
     await this.userRepository.findOneAndReplace({}, user);
 
-    user.apply(new UserUpdatedOneEvent(user._id));
+    user.apply(new UserUpdatedOneEvent(user.id));
     user.commit();
   }
 }

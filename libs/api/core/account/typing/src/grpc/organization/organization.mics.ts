@@ -1,5 +1,5 @@
 interface Organization {
-  _id: string;
+  id: string;
   displayName: string;
   email: string;
   organization: string;
@@ -8,12 +8,10 @@ interface Organization {
 
 export interface ListOrganizationsRequest {
   page_size: number;
-  page_token: string;
 }
 
 export interface ListOrganizationsResponse {
   organizations: Organization[];
-  next_page_token: string;
 }
 
 export interface GetOrganizationRequest {
@@ -21,12 +19,12 @@ export interface GetOrganizationRequest {
 }
 
 export interface CreateOrganizationRequest {
-  organization: Omit<Organization, '_id'>;
+  organization: Omit<Organization, 'id'>;
 }
 
 export interface UpdateOrganizationRequest {
   id: string;
-  organization: Partial<Omit<Organization, '_id'>>;
+  organization: Partial<Omit<Organization, 'id'>>;
 }
 
 export interface DeleteOrganizationRequest {

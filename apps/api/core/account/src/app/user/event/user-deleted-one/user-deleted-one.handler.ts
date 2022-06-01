@@ -5,7 +5,7 @@ import { UserDeletedOneEvent } from './user-deleted-one.event';
 export class UserDeletedOneHandler
   implements IEventHandler<UserDeletedOneEvent>
 {
-  async handle({ userId }: UserDeletedOneEvent): Promise<void> {
-    console.log('Deleted user with id:', userId);
+  async handle({ id }: UserDeletedOneEvent): Promise<void> {
+    console.log('Deleted user with id:', id);
   }
 }

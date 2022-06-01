@@ -5,7 +5,7 @@ import { AccountCreatedOneEvent } from './account-created-one.event';
 export class AccountCreatedOneHandler
   implements IEventHandler<AccountCreatedOneEvent>
 {
-  async handle({ accountId }: AccountCreatedOneEvent): Promise<void> {
-    console.log('Created account with id:', accountId);
+  async handle({ id }: AccountCreatedOneEvent): Promise<void> {
+    console.log('Created account with id:', id);
   }
 }

@@ -18,7 +18,7 @@ export class AccountCreateOneHandler
     const { displayName, email, organization, password } = dto;
     const account = this.eventPublisher.mergeObjectContext(
       new AccountDomain({
-        _id: new ObjectId().toHexString(),
+        id: new ObjectId().toHexString(),
         displayName: displayName,
         email: email,
         organization: organization,
@@ -28,7 +28,7 @@ export class AccountCreateOneHandler
 
     await this.accountRepository.create(account);
 
-    account.apply(new AccountCreatedOneEvent(account._id));
+    account.apply(new AccountCreatedOneEvent(account.id));
     account.commit();
   }
 }

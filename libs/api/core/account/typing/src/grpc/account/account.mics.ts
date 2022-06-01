@@ -1,5 +1,5 @@
 interface Account {
-  _id: string;
+  id: string;
   displayName: string;
   email: string;
   organization: string;
@@ -8,12 +8,10 @@ interface Account {
 
 export interface ListAccountsRequest {
   page_size: number;
-  page_token: string;
 }
 
 export interface ListAccountsResponse {
   accounts: Account[];
-  next_page_token: string;
 }
 
 export interface GetAccountRequest {
@@ -21,12 +19,12 @@ export interface GetAccountRequest {
 }
 
 export interface CreateAccountRequest {
-  account: Omit<Account, '_id'>;
+  account: Omit<Account, 'id'>;
 }
 
 export interface UpdateAccountRequest {
   id: string;
-  account: Partial<Omit<Account, '_id'>>;
+  account: Partial<Omit<Account, 'id'>>;
 }
 
 export interface DeleteAccountRequest {

@@ -21,7 +21,7 @@ export class AccountDeleteOneHandler
 
     const account = this.eventPublisher.mergeObjectContext(
       new AccountDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -29,7 +29,7 @@ export class AccountDeleteOneHandler
       })
     );
 
-    account.apply(new AccountDeletedOneEvent(account._id));
+    account.apply(new AccountDeletedOneEvent(account.id));
     account.commit();
   }
 }

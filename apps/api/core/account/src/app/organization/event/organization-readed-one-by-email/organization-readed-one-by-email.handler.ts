@@ -5,9 +5,7 @@ import { OrganizationReadedOneByEmailEvent } from './organization-readed-one-by-
 export class OrganizationReadedOneByEmailHandler
   implements IEventHandler<OrganizationReadedOneByEmailEvent>
 {
-  async handle({
-    organizationId,
-  }: OrganizationReadedOneByEmailEvent): Promise<void> {
-    console.log('Readed one organization by email with id:', organizationId);
+  async handle({ id }: OrganizationReadedOneByEmailEvent): Promise<void> {
+    console.log('Readed one organization by email with id:', id);
   }
 }

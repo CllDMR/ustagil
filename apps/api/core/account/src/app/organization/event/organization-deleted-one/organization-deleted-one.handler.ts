@@ -5,7 +5,7 @@ import { OrganizationDeletedOneEvent } from './organization-deleted-one.event';
 export class OrganizationDeletedOneHandler
   implements IEventHandler<OrganizationDeletedOneEvent>
 {
-  async handle({ organizationId }: OrganizationDeletedOneEvent): Promise<void> {
-    console.log('Deleted organization with id:', organizationId);
+  async handle({ id }: OrganizationDeletedOneEvent): Promise<void> {
+    console.log('Deleted organization with id:', id);
   }
 }

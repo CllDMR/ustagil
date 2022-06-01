@@ -44,29 +44,23 @@ export class UserController implements OnModuleInit {
   @Get('account/users')
   getUsers(@Query() dto: UserFindAllQueryDto) {
     return this.userGrpcService.listUsers(
-      { page_size: dto.page_size ?? 10, page_token: dto.page_token ?? '' },
+      { page_size: dto.page_size ?? 10 },
       new Metadata()
     );
   }
 
-  @Get('account/users/:user_id')
-  getUser(@Param('user_id') user_id: string) {
-    return this.userGrpcService.getUser({ id: user_id }, new Metadata());
+  @Get('account/users/:id')
+  getUser(@Param('id') id: string) {
+    return this.userGrpcService.getUser({ id }, new Metadata());
   }
 
-  @Patch('account/users/:user_id')
-  patchUser(
-    @Param('user_id') user_id: string,
-    @Body() dto: UserUpdateOneBodyDto
-  ) {
-    return this.userGrpcService.updateUser(
-      { id: user_id, user: dto },
-      new Metadata()
-    );
+  @Patch('account/users/:id')
+  patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneBodyDto) {
+    return this.userGrpcService.updateUser({ id, user: dto }, new Metadata());
   }
 
-  @Delete('account/users/:user_id')
-  deleteUser(@Param('user_id') user_id: string) {
-    return this.userGrpcService.deleteUser({ id: user_id }, new Metadata());
+  @Delete('account/users/:id')
+  deleteUser(@Param('id') id: string) {
+    return this.userGrpcService.deleteUser({ id }, new Metadata());
   }
 }

@@ -1,21 +1,21 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 
 export class UserDomain extends AggregateRoot {
-  _id: string;
+  id: string;
   displayName: string;
   email: string;
   organization: string;
   password: string;
 
   constructor({
-    _id,
+    id,
     displayName,
     email,
     organization,
     password,
   }: Partial<UserDomain>) {
     super();
-    this._id = _id;
+    this.id = id;
     this.displayName = displayName;
     this.email = email;
     this.organization = organization;
@@ -24,7 +24,7 @@ export class UserDomain extends AggregateRoot {
 
   toString() {
     return JSON.stringify({
-      _id: this._id,
+      id: this.id,
       displayName: this.displayName,
       email: this.email,
       organization: this.organization,

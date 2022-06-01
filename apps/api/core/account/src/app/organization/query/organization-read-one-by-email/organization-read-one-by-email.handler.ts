@@ -21,14 +21,14 @@ export class OrganizationReadOneByEmailHandler
 
     const organization = this.eventPublisher.mergeObjectContext(
       new OrganizationDomain({
-        _id: organizationData._id,
+        id: organizationData.id,
         displayName: organizationData.displayName,
         email: organizationData.email,
         organization: organizationData.organization,
         password: organizationData.password,
       })
     );
-    organization.apply(new OrganizationReadedOneByEmailEvent(organization._id));
+    organization.apply(new OrganizationReadedOneByEmailEvent(organization.id));
     organization.commit();
 
     return organization;

@@ -21,7 +21,7 @@ export class OrganizationDeleteOneHandler
 
     const organization = this.eventPublisher.mergeObjectContext(
       new OrganizationDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -29,7 +29,7 @@ export class OrganizationDeleteOneHandler
       })
     );
 
-    organization.apply(new OrganizationDeletedOneEvent(organization._id));
+    organization.apply(new OrganizationDeletedOneEvent(organization.id));
     organization.commit();
   }
 }

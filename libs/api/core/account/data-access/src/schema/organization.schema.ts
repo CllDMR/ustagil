@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 
 export type OrganizationDocument = Organization & Document;
 
-@Schema({ collection: 'users' })
+@Schema({ collection: 'organizations' })
 export class Organization extends IdentifiableSchema {
   @Prop()
   readonly displayName: string;

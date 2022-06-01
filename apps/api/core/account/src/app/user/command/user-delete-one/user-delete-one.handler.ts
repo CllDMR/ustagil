@@ -21,7 +21,7 @@ export class UserDeleteOneHandler
 
     const user = this.eventPublisher.mergeObjectContext(
       new UserDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -29,7 +29,7 @@ export class UserDeleteOneHandler
       })
     );
 
-    user.apply(new UserDeletedOneEvent(user._id));
+    user.apply(new UserDeletedOneEvent(user.id));
     user.commit();
   }
 }

@@ -19,14 +19,14 @@ export class SuperAdminReadOneByEmailHandler
 
     const super_admin = this.eventPublisher.mergeObjectContext(
       new SuperAdminDomain({
-        _id: superAdminData._id,
+        id: superAdminData.id,
         displayName: superAdminData.displayName,
         email: superAdminData.email,
         organization: superAdminData.organization,
         password: superAdminData.password,
       })
     );
-    super_admin.apply(new SuperAdminReadedOneByEmailEvent(super_admin._id));
+    super_admin.apply(new SuperAdminReadedOneByEmailEvent(super_admin.id));
     super_admin.commit();
 
     return super_admin;

@@ -1,5 +1,5 @@
 interface SuperAdmin {
-  _id: string;
+  id: string;
   displayName: string;
   email: string;
   organization: string;
@@ -8,12 +8,10 @@ interface SuperAdmin {
 
 export interface ListSuperAdminsRequest {
   page_size: number;
-  page_token: string;
 }
 
 export interface ListSuperAdminsResponse {
   super_admins: SuperAdmin[];
-  next_page_token: string;
 }
 
 export interface GetSuperAdminRequest {
@@ -21,12 +19,12 @@ export interface GetSuperAdminRequest {
 }
 
 export interface CreateSuperAdminRequest {
-  super_admin: Omit<SuperAdmin, '_id'>;
+  super_admin: Omit<SuperAdmin, 'id'>;
 }
 
 export interface UpdateSuperAdminRequest {
   id: string;
-  super_admin: Partial<Omit<SuperAdmin, '_id'>>;
+  super_admin: Partial<Omit<SuperAdmin, 'id'>>;
 }
 
 export interface DeleteSuperAdminRequest {

@@ -5,7 +5,7 @@ import { OrganizationCreatedOneEvent } from './organization-created-one.event';
 export class OrganizationCreatedOneHandler
   implements IEventHandler<OrganizationCreatedOneEvent>
 {
-  async handle({ organizationId }: OrganizationCreatedOneEvent): Promise<void> {
-    console.log('Created organization with id:', organizationId);
+  async handle({ id }: OrganizationCreatedOneEvent): Promise<void> {
+    console.log('Created organization with id:', id);
   }
 }

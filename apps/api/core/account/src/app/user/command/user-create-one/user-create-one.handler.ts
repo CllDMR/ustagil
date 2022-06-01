@@ -18,7 +18,7 @@ export class UserCreateOneHandler
     const { displayName, email, organization, password } = dto;
     const user = this.eventPublisher.mergeObjectContext(
       new UserDomain({
-        _id: new ObjectId().toHexString(),
+        id: new ObjectId().toHexString(),
         displayName: displayName,
         email: email,
         organization: organization,
@@ -28,7 +28,7 @@ export class UserCreateOneHandler
 
     await this.userRepository.create(user);
 
-    user.apply(new UserCreatedOneEvent(user._id));
+    user.apply(new UserCreatedOneEvent(user.id));
     user.commit();
   }
 }

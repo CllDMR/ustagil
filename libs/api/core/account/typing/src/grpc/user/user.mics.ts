@@ -1,5 +1,5 @@
 interface User {
-  _id: string;
+  id: string;
   displayName: string;
   email: string;
   organization: string;
@@ -8,12 +8,10 @@ interface User {
 
 export interface ListUsersRequest {
   page_size: number;
-  page_token: string;
 }
 
 export interface ListUsersResponse {
   users: User[];
-  next_page_token: string;
 }
 
 export interface GetUserRequest {
@@ -21,12 +19,12 @@ export interface GetUserRequest {
 }
 
 export interface CreateUserRequest {
-  user: Omit<User, '_id'>;
+  user: Omit<User, 'id'>;
 }
 
 export interface UpdateUserRequest {
   id: string;
-  user: Partial<Omit<User, '_id'>>;
+  user: Partial<Omit<User, 'id'>>;
 }
 
 export interface DeleteUserRequest {

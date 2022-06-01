@@ -18,7 +18,7 @@ export class AccountUpdateOneHandler
 
     const account = this.eventPublisher.mergeObjectContext(
       new AccountDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -32,7 +32,7 @@ export class AccountUpdateOneHandler
 
     await this.accountRepository.findOneAndReplace({}, account);
 
-    account.apply(new AccountUpdatedOneEvent(account._id));
+    account.apply(new AccountUpdatedOneEvent(account.id));
     account.commit();
   }
 }

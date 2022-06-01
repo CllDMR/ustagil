@@ -5,7 +5,7 @@ import { SuperAdminReadedOneEvent } from './super_admin-readed-one.event';
 export class SuperAdminReadedOneHandler
   implements IEventHandler<SuperAdminReadedOneEvent>
 {
-  async handle({ super_adminId }: SuperAdminReadedOneEvent): Promise<void> {
-    console.log('Readed one super_admin with id:', super_adminId);
+  async handle({ id }: SuperAdminReadedOneEvent): Promise<void> {
+    console.log('Readed one super_admin with id:', id);
   }
 }

@@ -10,7 +10,7 @@ export class SuperAdminEntityDomainFactory
 {
   createEntityFromDomain(domain: SuperAdminDomain): SuperAdmin {
     return {
-      _id: new ObjectId(domain._id),
+      _id: new ObjectId(domain.id),
       displayName: domain.displayName,
       email: domain.email,
       organization: domain.organization,
@@ -20,7 +20,7 @@ export class SuperAdminEntityDomainFactory
 
   createDomainFromEntity(entity: SuperAdmin): SuperAdminDomain {
     return new SuperAdminDomain({
-      _id: entity._id.toHexString(),
+      id: entity._id.toHexString(),
       displayName: entity.displayName,
       email: entity.email,
       organization: entity.organization,

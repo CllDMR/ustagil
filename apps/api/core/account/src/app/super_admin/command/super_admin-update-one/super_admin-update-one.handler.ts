@@ -18,7 +18,7 @@ export class SuperAdminUpdateOneHandler
 
     const super_admin = this.eventPublisher.mergeObjectContext(
       new SuperAdminDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -32,7 +32,7 @@ export class SuperAdminUpdateOneHandler
 
     await this.super_adminRepository.findOneAndReplace({}, super_admin);
 
-    super_admin.apply(new SuperAdminUpdatedOneEvent(super_admin._id));
+    super_admin.apply(new SuperAdminUpdatedOneEvent(super_admin.id));
     super_admin.commit();
   }
 }

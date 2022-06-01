@@ -21,7 +21,7 @@ export class SuperAdminDeleteOneHandler
 
     const super_admin = this.eventPublisher.mergeObjectContext(
       new SuperAdminDomain({
-        _id: id,
+        id,
         displayName: 'displayName',
         email: 'email',
         organization: 'organization',
@@ -29,7 +29,7 @@ export class SuperAdminDeleteOneHandler
       })
     );
 
-    super_admin.apply(new SuperAdminDeletedOneEvent(super_admin._id));
+    super_admin.apply(new SuperAdminDeletedOneEvent(super_admin.id));
     super_admin.commit();
   }
 }

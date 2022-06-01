@@ -39,7 +39,7 @@ export class AuthenticationController {
     return this.authenticationMSClient.send(
       AUTHENTICATION_LOGIN_ACCOUNT_MSMESSAGE,
       new AuthenticationLoginAccountMSMessage(
-        account._id,
+        account.id,
         account.email,
         account.displayName
       )

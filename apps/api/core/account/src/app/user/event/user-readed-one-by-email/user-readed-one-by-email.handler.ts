@@ -5,7 +5,7 @@ import { UserReadedOneByEmailEvent } from './user-readed-one-by-email.event';
 export class UserReadedOneByEmailHandler
   implements IEventHandler<UserReadedOneByEmailEvent>
 {
-  async handle({ userId }: UserReadedOneByEmailEvent): Promise<void> {
-    console.log('Readed one user by email with id:', userId);
+  async handle({ id }: UserReadedOneByEmailEvent): Promise<void> {
+    console.log('Readed one user by email with id:', id);
   }
 }

@@ -1,3 +1,3 @@
 export class UserDeletedOneEvent {
-  constructor(public readonly userId: string) {}
+  constructor(public readonly id: string) {}
 }

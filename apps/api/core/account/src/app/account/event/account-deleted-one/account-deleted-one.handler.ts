@@ -5,7 +5,7 @@ import { AccountDeletedOneEvent } from './account-deleted-one.event';
 export class AccountDeletedOneHandler
   implements IEventHandler<AccountDeletedOneEvent>
 {
-  async handle({ accountId }: AccountDeletedOneEvent): Promise<void> {
-    console.log('Deleted account with id:', accountId);
+  async handle({ id }: AccountDeletedOneEvent): Promise<void> {
+    console.log('Deleted account with id:', id);
   }
 }

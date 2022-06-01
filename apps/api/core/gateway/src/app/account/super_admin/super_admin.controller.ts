@@ -49,35 +49,29 @@ export class SuperAdminController implements OnModuleInit {
   @Get('account/super_admins')
   getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
     return this.superAdminGrpcService.listSuperAdmins(
-      { page_size: dto.page_size ?? 10, page_token: dto.page_token ?? '' },
+      { page_size: dto.page_size ?? 10 },
       new Metadata()
     );
   }
 
-  @Get('account/super_admins/:super_admin_id')
-  getSuperAdmin(@Param('super_admin_id') super_admin_id: string) {
-    return this.superAdminGrpcService.getSuperAdmin(
-      { id: super_admin_id },
-      new Metadata()
-    );
+  @Get('account/super_admins/:id')
+  getSuperAdmin(@Param('id') id: string) {
+    return this.superAdminGrpcService.getSuperAdmin({ id }, new Metadata());
   }
 
-  @Patch('account/super_admins/:super_admin_id')
+  @Patch('account/super_admins/:id')
   patchSuperAdmin(
-    @Param('super_admin_id') super_admin_id: string,
+    @Param('id') id: string,
     @Body() dto: SuperAdminUpdateOneBodyDto
   ) {
     return this.superAdminGrpcService.updateSuperAdmin(
-      { id: super_admin_id, super_admin: dto },
+      { id, super_admin: dto },
       new Metadata()
     );
   }
 
-  @Delete('account/super_admins/:super_admin_id')
-  deleteSuperAdmin(@Param('super_admin_id') super_admin_id: string) {
-    return this.superAdminGrpcService.deleteSuperAdmin(
-      { id: super_admin_id },
-      new Metadata()
-    );
+  @Delete('account/super_admins/:id')
+  deleteSuperAdmin(@Param('id') id: string) {
+    return this.superAdminGrpcService.deleteSuperAdmin({ id }, new Metadata());
   }
 }

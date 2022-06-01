@@ -49,34 +49,31 @@ export class OrganizationController implements OnModuleInit {
   @Get('account/organizations')
   getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
     return this.organizationGrpcService.listOrganizations(
-      { page_size: dto.page_size ?? 10, page_token: dto.page_token ?? '' },
+      { page_size: dto.page_size ?? 10 },
       new Metadata()
     );
   }
 
-  @Get('account/organizations/:organization_id')
-  getOrganization(@Param('organization_id') organization_id: string) {
-    return this.organizationGrpcService.getOrganization(
-      { id: organization_id },
-      new Metadata()
-    );
+  @Get('account/organizations/:id')
+  getOrganization(@Param('id') id: string) {
+    return this.organizationGrpcService.getOrganization({ id }, new Metadata());
   }
 
-  @Patch('account/organizations/:organization_id')
+  @Patch('account/organizations/:id')
   patchOrganization(
-    @Param('organization_id') organization_id: string,
+    @Param('id') id: string,
     @Body() dto: OrganizationUpdateOneBodyDto
   ) {
     return this.organizationGrpcService.updateOrganization(
-      { id: organization_id, organization: dto },
+      { id, organization: dto },
       new Metadata()
     );
   }
 
-  @Delete('account/organizations/:organization_id')
-  deleteOrganization(@Param('organization_id') organization_id: string) {
+  @Delete('account/organizations/:id')
+  deleteOrganization(@Param('id') id: string) {
     return this.organizationGrpcService.deleteOrganization(
-      { id: organization_id },
+      { id },
       new Metadata()
     );
   }

@@ -1,3 +1,3 @@
 export class OrganizationReadedOneByEmailEvent {
-  constructor(public readonly organizationId: string) {}
+  constructor(public readonly id: string) {}
 }

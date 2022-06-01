@@ -1,3 +1,3 @@
 export class SuperAdminUpdatedOneEvent {
-  constructor(public readonly super_adminId: string) {}
+  constructor(public readonly id: string) {}
 }

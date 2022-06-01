@@ -19,14 +19,14 @@ export class UserReadOneByEmailHandler
 
     const user = this.eventPublisher.mergeObjectContext(
       new UserDomain({
-        _id: userData._id,
+        id: userData.id,
         displayName: userData.displayName,
         email: userData.email,
         organization: userData.organization,
         password: userData.password,
       })
     );
-    user.apply(new UserReadedOneByEmailEvent(user._id));
+    user.apply(new UserReadedOneByEmailEvent(user.id));
     user.commit();
 
     return user;

@@ -1,3 +1,3 @@
 export class AccountDeletedOneEvent {
-  constructor(public readonly accountId: string) {}
+  constructor(public readonly id: string) {}
 }

@@ -48,35 +48,26 @@ export class AccountController implements OnModuleInit {
   @Get('accounts')
   getAccounts(@Query() dto: AccountFindAllQueryDto) {
     return this.accountGrpcService.listAccounts(
-      { page_size: dto.page_size ?? 10, page_token: dto.page_token ?? '' },
+      { page_size: dto.page_size ?? 10 },
       new Metadata()
     );
   }
 
-  @Get('accounts/:account_id')
-  getAccount(@Param('account_id') account_id: string) {
-    return this.accountGrpcService.getAccount(
-      { id: account_id },
-      new Metadata()
-    );
+  @Get('accounts/:id')
+  getAccount(@Param('id') id: string) {
+    return this.accountGrpcService.getAccount({ id }, new Metadata());
   }
 
-  @Patch('accounts/:account_id')
-  patchAccount(
-    @Param('account_id') account_id: string,
-    @Body() dto: AccountUpdateOneBodyDto
-  ) {
+  @Patch('accounts/:id')
+  patchAccount(@Param('id') id: string, @Body() dto: AccountUpdateOneBodyDto) {
     return this.accountGrpcService.updateAccount(
-      { id: account_id, account: dto },
+      { id, account: dto },
       new Metadata()
     );
   }
 
-  @Delete('accounts/:account_id')
-  deleteAccount(@Param('account_id') account_id: string) {
-    return this.accountGrpcService.deleteAccount(
-      { id: account_id },
-      new Metadata()
-    );
+  @Delete('accounts/:id')
+  deleteAccount(@Param('id') id: string) {
+    return this.accountGrpcService.deleteAccount({ id }, new Metadata());
   }
 }

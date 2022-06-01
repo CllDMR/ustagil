@@ -5,7 +5,7 @@ import { OrganizationUpdatedOneEvent } from './organization-updated-one.event';
 export class OrganizationUpdatedOneHandler
   implements IEventHandler<OrganizationUpdatedOneEvent>
 {
-  async handle({ organizationId }: OrganizationUpdatedOneEvent): Promise<void> {
-    console.log('Updated organization with id:', organizationId);
+  async handle({ id }: OrganizationUpdatedOneEvent): Promise<void> {
+    console.log('Updated organization with id:', id);
   }
 }

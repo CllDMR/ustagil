@@ -5,7 +5,7 @@ import { SuperAdminCreatedOneEvent } from './super_admin-created-one.event';
 export class SuperAdminCreatedOneHandler
   implements IEventHandler<SuperAdminCreatedOneEvent>
 {
-  async handle({ super_adminId }: SuperAdminCreatedOneEvent): Promise<void> {
-    console.log('Created super_admin with id:', super_adminId);
+  async handle({ id }: SuperAdminCreatedOneEvent): Promise<void> {
+    console.log('Created super_admin with id:', id);
   }
 }

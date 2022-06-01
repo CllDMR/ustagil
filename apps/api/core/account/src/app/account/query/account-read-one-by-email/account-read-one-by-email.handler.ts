@@ -19,14 +19,14 @@ export class AccountReadOneByEmailHandler
 
     const account = this.eventPublisher.mergeObjectContext(
       new AccountDomain({
-        _id: accountData._id,
+        id: accountData.id,
         displayName: accountData.displayName,
         email: accountData.email,
         organization: accountData.organization,
         password: accountData.password,
       })
     );
-    account.apply(new AccountReadedOneByEmailEvent(account._id));
+    account.apply(new AccountReadedOneByEmailEvent(account.id));
     account.commit();
 
     return account;
