@@ -40,7 +40,6 @@ export class UserController implements IUserGrpcController {
 
     return {
       users,
-      next_page_token: '',
     };
   }
 

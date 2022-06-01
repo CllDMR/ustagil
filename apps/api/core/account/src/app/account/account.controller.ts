@@ -40,7 +40,6 @@ export class AccountController implements IAccountGrpcController {
 
     return {
       accounts,
-      next_page_token: '',
     };
   }
 

@@ -42,7 +42,6 @@ export class SuperAdminController implements ISuperAdminGrpcController {
 
     return {
       super_admins,
-      next_page_token: '',
     };
   }
 

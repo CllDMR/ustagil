@@ -42,7 +42,6 @@ export class OrganizationController implements IOrganizationGrpcController {
 
     return {
       organizations,
-      next_page_token: '',
     };
   }
 
