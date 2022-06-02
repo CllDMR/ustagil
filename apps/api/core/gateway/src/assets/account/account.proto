@@ -2,82 +2,47 @@ syntax = "proto3";
 
 package account;
 
-import "google/protobuf/empty.proto";
-import "google/protobuf/field_mask.proto";
-
-// Generated according to https://cloud.google.com/apis/design/standard_methods
 service AccountService {
-  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {
-  }
-
-  rpc GetAccount(GetAccountRequest) returns (Account) {
-  }
-
-  rpc CreateAccount(CreateAccountRequest) returns (Account) {
-  }
-
-  rpc UpdateAccount(UpdateAccountRequest) returns (Account) {
-  }
-
-  rpc DeleteAccount(DeleteAccountRequest) returns (google.protobuf.Empty) {
-  }
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {}
+  rpc GetAccount(GetAccountRequest) returns (Account) {}
+  rpc CreateAccount(CreateAccountRequest) returns (Account) {}
+  rpc UpdateAccount(UpdateAccountRequest) returns (Account) {}
+  rpc DeleteAccount(DeleteAccountRequest) returns (Account) {}
 }
 
 message Account {
-  string _id = 1;
+  string id = 1;
   string displayName = 2;
   string email = 3;
   string organization = 4;
-  string password = 5;
 }
 
 message ListAccountsRequest {
-  // The maximum number of items to return.
-  int32 page_size = 1;
-
-  // The next_page_token value returned from a previous List request, if any.
-  string page_token = 2;
+  optional int32 page_size = 1;
 }
 
 message ListAccountsResponse {
-  // The field name should match the noun "account" in the method name.
-  // There will be a maximum number of items returned based on the page
-  //_size field in the request.
   repeated Account accounts = 1;
-
-  // Token to retrieve the next page of results, or empty if there are
-  // no more results in the list.
-  string next_page_token = 2;
 }
 
 message GetAccountRequest {
-  // The field will contain name of the resource requested.
   string id = 1;
 }
 
 message CreateAccountRequest {
-  // The parent resource name where the account is to be created.
-  string parent = 1;
-
-  // The account id to use for this account.
-  string account_id = 2;
-
-  // The account resource to create.
-  // The field name should match the Noun in the method name.
-  Account account = 3;
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
 }
 
 message UpdateAccountRequest {
-  // The account resource which replaces the resource on the server.
-  Account account = 1;
-
-  // The update mask applies to the resource. For the `FieldMask` definition,
-  // see https://developers.google.com/protocol-buffers
-  // /docs/reference/google.protobuf#fieldmask
-  google.protobuf.FieldMask update_mask = 2;
+  string id = 1;
+  optional string displayName = 2;
+  optional string email = 3;
+  optional string organization = 4;
 }
 
 message DeleteAccountRequest {
-  // The resource name of the account to be deleted.
   string id = 1;
 }

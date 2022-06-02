@@ -10,7 +10,8 @@ import { UserController } from './user.controller';
         name: 'ACCOUNT_USER_GRPC_SERVICE',
         transport: Transport.GRPC,
         options: {
-          package: 'account',
+          url: 'localhost:5002',
+          package: 'user',
           protoPath: join(__dirname, 'assets/account/user.proto'),
         },
       },

@@ -1,4 +1,4 @@
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
@@ -11,17 +11,12 @@ import {
   AuthenticationRegisterAccountMSMessage,
   AuthenticationValidateAccountMSMessage,
 } from '@ustagil/api/core/authentication/typing';
-import {
-  AllCustomRpcExceptionsFilter,
-  TimeoutErrorRpcExceptionsFilter,
-} from '@ustagil/api/core/common/typing';
 import { AuthenticationRegisterAccountCommand } from './command';
 import {
   AuthenticationLoginAccountQuery,
   AuthenticationValidateAccountQuery,
 } from './query';
 
-@UseFilters(AllCustomRpcExceptionsFilter, TimeoutErrorRpcExceptionsFilter)
 @Controller()
 export class AuthenticationController {
   constructor(

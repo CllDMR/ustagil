@@ -1,22 +1,13 @@
 syntax = "proto3";
 
-package account;
+package organization;
 
 service OrganizationService {
-  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {
-  }
-
-  rpc GetOrganization(GetOrganizationRequest) returns (Organization) {
-  }
-
-  rpc CreateOrganization(CreateOrganizationRequest) returns (Organization) {
-  }
-
-  rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {
-  }
-
-  rpc DeleteOrganization(DeleteOrganizationRequest) returns (Organization) {
-  }
+  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {}
+  rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
+  rpc CreateOrganization(CreateOrganizationRequest) returns (Organization) {}
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
+  rpc DeleteOrganization(DeleteOrganizationRequest) returns (Organization) {}
 }
 
 message Organization {

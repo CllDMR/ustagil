@@ -1,5 +1,4 @@
-import { Metadata } from '@grpc/grpc-js';
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
@@ -13,17 +12,12 @@ import {
   UpdateOrganizationRequest,
 } from '@ustagil/api/core/account/typing';
 import {
-  AllCustomRpcExceptionsFilter,
-  TimeoutErrorRpcExceptionsFilter,
-} from '@ustagil/api/core/common/typing';
-import {
   OrganizationCreateOneCommand,
   OrganizationDeleteOneCommand,
   OrganizationUpdateOneCommand,
 } from './command';
 import { OrganizationReadAllQuery, OrganizationReadOneQuery } from './query';
 
-@UseFilters(AllCustomRpcExceptionsFilter, TimeoutErrorRpcExceptionsFilter)
 @Controller()
 export class OrganizationController implements IOrganizationGrpcController {
   constructor(
@@ -32,9 +26,8 @@ export class OrganizationController implements IOrganizationGrpcController {
   ) {}
 
   @GrpcMethod('OrganizationService')
-  async listOrganizations(
-    data: ListOrganizationsRequest,
-    _metadata: Metadata
+  async ListOrganizations(
+    data: ListOrganizationsRequest
   ): Promise<ListOrganizationsResponse> {
     const organizations = await this.queryBus.execute(
       new OrganizationReadAllQuery(data)
@@ -46,17 +39,15 @@ export class OrganizationController implements IOrganizationGrpcController {
   }
 
   @GrpcMethod('OrganizationService')
-  async getOrganization(
-    data: GetOrganizationRequest,
-    _metadata: Metadata
+  async GetOrganization(
+    data: GetOrganizationRequest
   ): Promise<OrganizationDomain> {
     return await this.queryBus.execute(new OrganizationReadOneQuery(data));
   }
 
   @GrpcMethod('OrganizationService')
-  async createOrganization(
-    data: CreateOrganizationRequest,
-    _metadata: Metadata
+  async CreateOrganization(
+    data: CreateOrganizationRequest
   ): Promise<OrganizationDomain> {
     return await this.commandBus.execute(
       new OrganizationCreateOneCommand(data.organization)
@@ -64,9 +55,8 @@ export class OrganizationController implements IOrganizationGrpcController {
   }
 
   @GrpcMethod('OrganizationService')
-  async updateOrganization(
-    data: UpdateOrganizationRequest,
-    _metadata: Metadata
+  async UpdateOrganization(
+    data: UpdateOrganizationRequest
   ): Promise<OrganizationDomain> {
     return await this.commandBus.execute(
       new OrganizationUpdateOneCommand({
@@ -77,10 +67,7 @@ export class OrganizationController implements IOrganizationGrpcController {
   }
 
   @GrpcMethod('OrganizationService')
-  async deleteOrganization(
-    data: DeleteOrganizationRequest,
-    _metadata: Metadata
-  ): Promise<void> {
+  async DeleteOrganization(data: DeleteOrganizationRequest): Promise<void> {
     return await this.commandBus.execute(
       new OrganizationDeleteOneCommand(data)
     );

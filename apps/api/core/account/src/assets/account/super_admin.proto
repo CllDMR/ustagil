@@ -1,22 +1,13 @@
 syntax = "proto3";
 
-package account;
+package superAdmin;
 
 service SuperAdminService {
-  rpc ListSuperAdmins(ListSuperAdminsRequest) returns (ListSuperAdminsResponse) {
-  }
-
-  rpc GetSuperAdmin(GetSuperAdminRequest) returns (SuperAdmin) {
-  }
-
-  rpc CreateSuperAdmin(CreateSuperAdminRequest) returns (SuperAdmin) {
-  }
-
-  rpc UpdateSuperAdmin(UpdateSuperAdminRequest) returns (SuperAdmin) {
-  }
-
-  rpc DeleteSuperAdmin(DeleteSuperAdminRequest) returns (SuperAdmin) {
-  }
+  rpc ListSuperAdmins(ListSuperAdminsRequest) returns (ListSuperAdminsResponse) {}
+  rpc GetSuperAdmin(GetSuperAdminRequest) returns (SuperAdmin) {}
+  rpc CreateSuperAdmin(CreateSuperAdminRequest) returns (SuperAdmin) {}
+  rpc UpdateSuperAdmin(UpdateSuperAdminRequest) returns (SuperAdmin) {}
+  rpc DeleteSuperAdmin(DeleteSuperAdminRequest) returns (SuperAdmin) {}
 }
 
 message SuperAdmin {

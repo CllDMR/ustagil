@@ -1,5 +1,4 @@
-import { Metadata } from '@grpc/grpc-js';
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
@@ -13,17 +12,12 @@ import {
   UpdateSuperAdminRequest,
 } from '@ustagil/api/core/account/typing';
 import {
-  AllCustomRpcExceptionsFilter,
-  TimeoutErrorRpcExceptionsFilter,
-} from '@ustagil/api/core/common/typing';
-import {
   SuperAdminCreateOneCommand,
   SuperAdminDeleteOneCommand,
   SuperAdminUpdateOneCommand,
 } from './command';
 import { SuperAdminReadAllQuery, SuperAdminReadOneQuery } from './query';
 
-@UseFilters(AllCustomRpcExceptionsFilter, TimeoutErrorRpcExceptionsFilter)
 @Controller()
 export class SuperAdminController implements ISuperAdminGrpcController {
   constructor(
@@ -32,9 +26,8 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   ) {}
 
   @GrpcMethod('SuperAdminService')
-  async listSuperAdmins(
-    data: ListSuperAdminsRequest,
-    _metadata: Metadata
+  async ListSuperAdmins(
+    data: ListSuperAdminsRequest
   ): Promise<ListSuperAdminsResponse> {
     const super_admins = await this.queryBus.execute(
       new SuperAdminReadAllQuery(data)
@@ -46,17 +39,13 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   }
 
   @GrpcMethod('SuperAdminService')
-  async getSuperAdmin(
-    data: GetSuperAdminRequest,
-    _metadata: Metadata
-  ): Promise<SuperAdminDomain> {
+  async GetSuperAdmin(data: GetSuperAdminRequest): Promise<SuperAdminDomain> {
     return await this.queryBus.execute(new SuperAdminReadOneQuery(data));
   }
 
   @GrpcMethod('SuperAdminService')
-  async createSuperAdmin(
-    data: CreateSuperAdminRequest,
-    _metadata: Metadata
+  async CreateSuperAdmin(
+    data: CreateSuperAdminRequest
   ): Promise<SuperAdminDomain> {
     return await this.commandBus.execute(
       new SuperAdminCreateOneCommand(data.super_admin)
@@ -64,9 +53,8 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   }
 
   @GrpcMethod('SuperAdminService')
-  async updateSuperAdmin(
-    data: UpdateSuperAdminRequest,
-    _metadata: Metadata
+  async UpdateSuperAdmin(
+    data: UpdateSuperAdminRequest
   ): Promise<SuperAdminDomain> {
     return await this.commandBus.execute(
       new SuperAdminUpdateOneCommand({
@@ -77,10 +65,7 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   }
 
   @GrpcMethod('SuperAdminService')
-  async deleteSuperAdmin(
-    data: DeleteSuperAdminRequest,
-    _metadata: Metadata
-  ): Promise<void> {
+  async DeleteSuperAdmin(data: DeleteSuperAdminRequest): Promise<void> {
     return await this.commandBus.execute(new SuperAdminDeleteOneCommand(data));
   }
 }

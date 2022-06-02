@@ -3,20 +3,11 @@ syntax = "proto3";
 package account;
 
 service AccountService {
-  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {
-  }
-
-  rpc GetAccount(GetAccountRequest) returns (Account) {
-  }
-
-  rpc CreateAccount(CreateAccountRequest) returns (Account) {
-  }
-
-  rpc UpdateAccount(UpdateAccountRequest) returns (Account) {
-  }
-
-  rpc DeleteAccount(DeleteAccountRequest) returns (Account) {
-  }
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {}
+  rpc GetAccount(GetAccountRequest) returns (Account) {}
+  rpc CreateAccount(CreateAccountRequest) returns (Account) {}
+  rpc UpdateAccount(UpdateAccountRequest) returns (Account) {}
+  rpc DeleteAccount(DeleteAccountRequest) returns (Account) {}
 }
 
 message Account {

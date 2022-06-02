@@ -1,4 +1,3 @@
-import { Metadata } from '@grpc/grpc-js';
 import { AccountDomain } from '../../domains/account/account.domain';
 import {
   CreateAccountRequest,
@@ -10,33 +9,33 @@ import {
 } from './account.mics';
 
 export interface IAccountGrpcController {
-  listAccounts(
-    data: ListAccountsRequest,
-    metadata: Metadata
+  ListAccounts(
+    data: ListAccountsRequest
+    // metadata: Metadata
     // call: ServerUnaryCall<ListAccountsRequest, ListAccountsResponse>
   ): Promise<ListAccountsResponse>;
 
-  getAccount(
-    data: GetAccountRequest,
-    metadata: Metadata
+  GetAccount(
+    data: GetAccountRequest
+    // metadata: Metadata
     // call: ServerUnaryCall<GetAccountRequest, AccountDomain>
   ): Promise<AccountDomain>;
 
-  createAccount(
-    data: CreateAccountRequest,
-    metadata: Metadata
+  CreateAccount(
+    data: CreateAccountRequest
+    // metadata: Metadata
     // call: ServerUnaryCall<CreateAccountRequest, AccountDomain>
   ): Promise<AccountDomain>;
 
-  updateAccount(
-    data: UpdateAccountRequest,
-    metadata: Metadata
+  UpdateAccount(
+    data: UpdateAccountRequest
+    // metadata: Metadata
     // call: ServerUnaryCall<UpdateAccountRequest, AccountDomain>
   ): Promise<AccountDomain>;
 
-  deleteAccount(
-    data: DeleteAccountRequest,
-    metadata: Metadata
+  DeleteAccount(
+    data: DeleteAccountRequest
+    // metadata: Metadata
     // call: ServerUnaryCall<DeleteAccountRequest, void>
   ): Promise<void>;
 }

@@ -10,6 +10,7 @@ import { AccountController } from './account.controller';
         name: 'ACCOUNT_GRPC_SERVICE',
         transport: Transport.GRPC,
         options: {
+          url: 'localhost:5001',
           package: 'account',
           protoPath: join(__dirname, 'assets/account/account.proto'),
         },

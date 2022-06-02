@@ -1,22 +1,13 @@
 syntax = "proto3";
 
-package account;
+package user;
 
 service UserService {
-  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
-  }
-
-  rpc GetUser(GetUserRequest) returns (User) {
-  }
-
-  rpc CreateUser(CreateUserRequest) returns (User) {
-  }
-
-  rpc UpdateUser(UpdateUserRequest) returns (User) {
-  }
-
-  rpc DeleteUser(DeleteUserRequest) returns (User) {
-  }
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
+  rpc GetUser(GetUserRequest) returns (User) {}
+  rpc CreateUser(CreateUserRequest) returns (User) {}
+  rpc UpdateUser(UpdateUserRequest) returns (User) {}
+  rpc DeleteUser(DeleteUserRequest) returns (User) {}
 }
 
 message User {

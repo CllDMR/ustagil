@@ -9,21 +9,7 @@ import { join } from 'path';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'account',
-        protoPath: [
-          join(__dirname, 'assets/account/account.proto'),
-          join(__dirname, 'assets/account/organization.proto'),
-          join(__dirname, 'assets/account/super_admin.proto'),
-          join(__dirname, 'assets/account/user.proto'),
-        ],
-      },
-    }
-  );
+  const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -39,6 +25,43 @@ async function bootstrap() {
       },
     })
   );
+
+  const _accountMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: 'localhost:5001',
+      package: 'account',
+      protoPath: join(__dirname, 'assets/account/account.proto'),
+    },
+  });
+  const _userMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: 'localhost:5002',
+      package: 'user',
+      protoPath: join(__dirname, 'assets/account/user.proto'),
+    },
+  });
+  const _organizationMicroservice =
+    app.connectMicroservice<MicroserviceOptions>({
+      transport: Transport.GRPC,
+      options: {
+        url: 'localhost:5003',
+        package: 'organization',
+        protoPath: join(__dirname, 'assets/account/organization.proto'),
+      },
+    });
+  const _superAdminMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: 'localhost:5004',
+      package: 'superAdmin',
+      protoPath: join(__dirname, 'assets/account/super_admin.proto'),
+    },
+  });
+
+  await app.init();
+  await app.startAllMicroservices();
 }
 
 bootstrap();

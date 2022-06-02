@@ -1,4 +1,3 @@
-import { Metadata } from '@grpc/grpc-js';
 import {
   Body,
   Controller,
@@ -40,23 +39,19 @@ export class SuperAdminController implements OnModuleInit {
 
   @Post('account/super_admins')
   postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
-    return this.superAdminGrpcService.createSuperAdmin(
-      { super_admin: dto },
-      new Metadata()
-    );
+    return this.superAdminGrpcService.CreateSuperAdmin({ super_admin: dto });
   }
 
   @Get('account/super_admins')
   getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
-    return this.superAdminGrpcService.listSuperAdmins(
-      { page_size: dto.page_size ?? 10 },
-      new Metadata()
-    );
+    return this.superAdminGrpcService.ListSuperAdmins({
+      page_size: dto.page_size ?? 10,
+    });
   }
 
   @Get('account/super_admins/:id')
   getSuperAdmin(@Param('id') id: string) {
-    return this.superAdminGrpcService.getSuperAdmin({ id }, new Metadata());
+    return this.superAdminGrpcService.GetSuperAdmin({ id });
   }
 
   @Patch('account/super_admins/:id')
@@ -64,14 +59,14 @@ export class SuperAdminController implements OnModuleInit {
     @Param('id') id: string,
     @Body() dto: SuperAdminUpdateOneBodyDto
   ) {
-    return this.superAdminGrpcService.updateSuperAdmin(
-      { id, super_admin: dto },
-      new Metadata()
-    );
+    return this.superAdminGrpcService.UpdateSuperAdmin({
+      id,
+      super_admin: dto,
+    });
   }
 
   @Delete('account/super_admins/:id')
   deleteSuperAdmin(@Param('id') id: string) {
-    return this.superAdminGrpcService.deleteSuperAdmin({ id }, new Metadata());
+    return this.superAdminGrpcService.DeleteSuperAdmin({ id });
   }
 }

@@ -1,5 +1,4 @@
-import { Metadata } from '@grpc/grpc-js';
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
@@ -13,17 +12,12 @@ import {
   UpdateAccountRequest,
 } from '@ustagil/api/core/account/typing';
 import {
-  AllCustomRpcExceptionsFilter,
-  TimeoutErrorRpcExceptionsFilter,
-} from '@ustagil/api/core/common/typing';
-import {
   AccountCreateOneCommand,
   AccountDeleteOneCommand,
   AccountUpdateOneCommand,
 } from './command';
 import { AccountReadAllQuery, AccountReadOneQuery } from './query';
 
-@UseFilters(AllCustomRpcExceptionsFilter, TimeoutErrorRpcExceptionsFilter)
 @Controller()
 export class AccountController implements IAccountGrpcController {
   constructor(
@@ -32,10 +26,7 @@ export class AccountController implements IAccountGrpcController {
   ) {}
 
   @GrpcMethod('AccountService')
-  async listAccounts(
-    data: ListAccountsRequest,
-    _metadata: Metadata
-  ): Promise<ListAccountsResponse> {
+  async ListAccounts(data: ListAccountsRequest): Promise<ListAccountsResponse> {
     const accounts = await this.queryBus.execute(new AccountReadAllQuery(data));
 
     return {
@@ -44,28 +35,19 @@ export class AccountController implements IAccountGrpcController {
   }
 
   @GrpcMethod('AccountService')
-  async getAccount(
-    data: GetAccountRequest,
-    _metadata: Metadata
-  ): Promise<AccountDomain> {
+  async GetAccount(data: GetAccountRequest): Promise<AccountDomain> {
     return await this.queryBus.execute(new AccountReadOneQuery(data));
   }
 
   @GrpcMethod('AccountService')
-  async createAccount(
-    data: CreateAccountRequest,
-    _metadata: Metadata
-  ): Promise<AccountDomain> {
+  async CreateAccount(data: CreateAccountRequest): Promise<AccountDomain> {
     return await this.commandBus.execute(
       new AccountCreateOneCommand(data.account)
     );
   }
 
   @GrpcMethod('AccountService')
-  async updateAccount(
-    data: UpdateAccountRequest,
-    _metadata: Metadata
-  ): Promise<AccountDomain> {
+  async UpdateAccount(data: UpdateAccountRequest): Promise<AccountDomain> {
     return await this.commandBus.execute(
       new AccountUpdateOneCommand({
         id: data.id,
@@ -75,10 +57,7 @@ export class AccountController implements IAccountGrpcController {
   }
 
   @GrpcMethod('AccountService')
-  async deleteAccount(
-    data: DeleteAccountRequest,
-    _metadata: Metadata
-  ): Promise<void> {
+  async DeleteAccount(data: DeleteAccountRequest): Promise<void> {
     return await this.commandBus.execute(new AccountDeleteOneCommand(data));
   }
 }

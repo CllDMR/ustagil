@@ -1,4 +1,3 @@
-import { Metadata } from '@grpc/grpc-js';
 import {
   Body,
   Controller,
@@ -39,35 +38,28 @@ export class AccountController implements OnModuleInit {
 
   @Post('accounts')
   postAccount(@Body() dto: AccountCreateOneBodyDto) {
-    return this.accountGrpcService.createAccount(
-      { account: dto },
-      new Metadata()
-    );
+    return this.accountGrpcService.CreateAccount({ account: dto });
   }
 
   @Get('accounts')
   getAccounts(@Query() dto: AccountFindAllQueryDto) {
-    return this.accountGrpcService.listAccounts(
-      { page_size: dto.page_size ?? 10 },
-      new Metadata()
-    );
+    return this.accountGrpcService.ListAccounts({
+      page_size: dto.page_size ?? 10,
+    });
   }
 
   @Get('accounts/:id')
   getAccount(@Param('id') id: string) {
-    return this.accountGrpcService.getAccount({ id }, new Metadata());
+    return this.accountGrpcService.GetAccount({ id });
   }
 
   @Patch('accounts/:id')
   patchAccount(@Param('id') id: string, @Body() dto: AccountUpdateOneBodyDto) {
-    return this.accountGrpcService.updateAccount(
-      { id, account: dto },
-      new Metadata()
-    );
+    return this.accountGrpcService.UpdateAccount({ id, account: dto });
   }
 
   @Delete('accounts/:id')
   deleteAccount(@Param('id') id: string) {
-    return this.accountGrpcService.deleteAccount({ id }, new Metadata());
+    return this.accountGrpcService.DeleteAccount({ id });
   }
 }

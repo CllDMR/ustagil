@@ -10,7 +10,8 @@ import { OrganizationController } from './organization.controller';
         name: 'ACCOUNT_ORGANIZATION_GRPC_SERVICE',
         transport: Transport.GRPC,
         options: {
-          package: 'account',
+          url: 'localhost:5003',
+          package: 'organization',
           protoPath: join(__dirname, 'assets/account/organization.proto'),
         },
       },

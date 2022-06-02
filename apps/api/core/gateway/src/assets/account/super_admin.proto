@@ -1,78 +1,48 @@
 syntax = "proto3";
 
-package account;
+package superAdmin;
 
-import "google/protobuf/empty.proto";
-import "google/protobuf/field_mask.proto";
-
-// Generated according to https://cloud.google.com/apis/design/standard_methods
 service SuperAdminService {
-  rpc ListSuperAdmins(ListSuperAdminsRequest) returns (ListSuperAdminsResponse) {
-  }
-
-  rpc GetSuperAdmin(GetSuperAdminRequest) returns (SuperAdmin) {
-  }
-
-  rpc CreateSuperAdmin(CreateSuperAdminRequest) returns (SuperAdmin) {
-  }
-
-  rpc UpdateSuperAdmin(UpdateSuperAdminRequest) returns (SuperAdmin) {
-  }
-
-  rpc DeleteSuperAdmin(DeleteSuperAdminRequest) returns (google.protobuf.Empty) {
-  }
+  rpc ListSuperAdmins(ListSuperAdminsRequest) returns (ListSuperAdminsResponse) {}
+  rpc GetSuperAdmin(GetSuperAdminRequest) returns (SuperAdmin) {}
+  rpc CreateSuperAdmin(CreateSuperAdminRequest) returns (SuperAdmin) {}
+  rpc UpdateSuperAdmin(UpdateSuperAdminRequest) returns (SuperAdmin) {}
+  rpc DeleteSuperAdmin(DeleteSuperAdminRequest) returns (SuperAdmin) {}
 }
 
 message SuperAdmin {
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
 }
 
 message ListSuperAdminsRequest {
-  // The maximum number of items to return.
-  int32 page_size = 1;
-
-  // The next_page_token value returned from a previous List request, if any.
-  string page_token = 2;
+  optional int32 page_size = 1;
 }
 
 message ListSuperAdminsResponse {
-  // The field name should match the noun "super_admin" in the method name.
-  // There will be a maximum number of items returned based on the page
-  //_size field in the request.
   repeated SuperAdmin super_admins = 1;
-
-  // Token to retrieve the next page of results, or empty if there are
-  // no more results in the list.
-  string next_page_token = 2;
 }
 
 message GetSuperAdminRequest {
-  // The field will contain name of the resource requested.
   string id = 1;
 }
 
 message CreateSuperAdminRequest {
-  // The parent resource name where the super_admin is to be created.
-  string parent = 1;
-
-  // The super_admin id to use for this super_admin.
-  string super_admin_id = 2;
-
-  // The super_admin resource to create.
-  // The field name should match the Noun in the method name.
-  SuperAdmin super_admin = 3;
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
 }
 
 message UpdateSuperAdminRequest {
-  // The super_admin resource which replaces the resource on the server.
-  SuperAdmin super_admin = 1;
-
-  // The update mask applies to the resource. For the `FieldMask` definition,
-  // see https://developers.google.com/protocol-buffers
-  // /docs/reference/google.protobuf#fieldmask
-  google.protobuf.FieldMask update_mask = 2;
+  string id = 1;
+  optional string displayName = 2;
+  optional string email = 3;
+  optional string organization = 4;
 }
 
 message DeleteSuperAdminRequest {
-  // The resource name of the super_admin to be deleted.
   string id = 1;
 }

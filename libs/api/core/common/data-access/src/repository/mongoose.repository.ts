@@ -1,3 +1,4 @@
+import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { CustomRpcException } from '@ustagil/api/core/common/typing';
@@ -27,6 +28,7 @@ export abstract class MongooseRepository<
 
     if (!entity) {
       throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
         statusCode: HttpStatus.BAD_REQUEST,
         errorCode: 'undefined for now',
         message: 'Unable to create the entity.',
@@ -58,6 +60,7 @@ export abstract class MongooseRepository<
 
     if (!entity) {
       throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
         statusCode: HttpStatus.BAD_REQUEST,
         errorCode: 'undefined for now',
         message: 'Unable to find the entity by filter.',
@@ -77,6 +80,7 @@ export abstract class MongooseRepository<
 
     if (!entity) {
       throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
         statusCode: HttpStatus.BAD_REQUEST,
         errorCode: 'undefined for now',
         message: 'Unable to find the entity by id.',
@@ -103,6 +107,7 @@ export abstract class MongooseRepository<
 
     if (!updatedEntityDocument) {
       throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
         statusCode: HttpStatus.BAD_REQUEST,
         errorCode: 'undefined for now',
         message: 'Unable to find the entity to replace.',

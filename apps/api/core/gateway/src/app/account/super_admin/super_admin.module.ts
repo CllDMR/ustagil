@@ -10,7 +10,8 @@ import { SuperAdminController } from './super_admin.controller';
         name: 'ACCOUNT_SUPER_ADMIN_GRPC_SERVICE',
         transport: Transport.GRPC,
         options: {
-          package: 'account',
+          url: 'localhost:5004',
+          package: 'superAdmin',
           protoPath: join(__dirname, 'assets/account/super_admin.proto'),
         },
       },

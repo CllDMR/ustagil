@@ -1,4 +1,3 @@
-import { Metadata } from '@grpc/grpc-js';
 import {
   Body,
   Controller,
@@ -38,29 +37,26 @@ export class UserController implements OnModuleInit {
 
   @Post('account/users')
   postUser(@Body() dto: UserCreateOneBodyDto) {
-    return this.userGrpcService.createUser({ user: dto }, new Metadata());
+    return this.userGrpcService.CreateUser({ user: dto });
   }
 
   @Get('account/users')
   getUsers(@Query() dto: UserFindAllQueryDto) {
-    return this.userGrpcService.listUsers(
-      { page_size: dto.page_size ?? 10 },
-      new Metadata()
-    );
+    return this.userGrpcService.ListUsers({ page_size: dto.page_size ?? 10 });
   }
 
   @Get('account/users/:id')
   getUser(@Param('id') id: string) {
-    return this.userGrpcService.getUser({ id }, new Metadata());
+    return this.userGrpcService.GetUser({ id });
   }
 
   @Patch('account/users/:id')
   patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneBodyDto) {
-    return this.userGrpcService.updateUser({ id, user: dto }, new Metadata());
+    return this.userGrpcService.UpdateUser({ id, user: dto });
   }
 
   @Delete('account/users/:id')
   deleteUser(@Param('id') id: string) {
-    return this.userGrpcService.deleteUser({ id }, new Metadata());
+    return this.userGrpcService.DeleteUser({ id });
   }
 }

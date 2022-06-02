@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AccountModule } from './account/account.module';
 import { OrganizationModule } from './organization/organization.module';
+import { SuperAdminModule } from './super_admin/super_admin.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -24,8 +25,9 @@ import { UserModule } from './user/user.module';
     }),
 
     AccountModule,
-    UserModule,
     OrganizationModule,
+    SuperAdminModule,
+    UserModule,
   ],
   providers: [],
 })
