@@ -51,6 +51,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
           error: string;
         };
         message = _error.message;
+        statusCode = _error.statusCode;
       }
     } else if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
