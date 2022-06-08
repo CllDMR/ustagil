@@ -13,11 +13,22 @@ export class UserReadOneHandler implements IQueryHandler<UserReadOneQuery> {
 
   async execute({ dto }: UserReadOneQuery): Promise<UserDomain> {
     const { id } = dto;
-    const user = this.eventPublisher.mergeObjectContext(new UserDomain({}));
 
-    user.apply(new UserReadedOneEvent(id));
-    user.commit();
+    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
 
-    return await this.userRepository.findOneById(id);
+    const foundUserDomain = await this.userRepository.findOneById(id);
+
+    const userMergedDomain = new UserMergedDomain({
+      displayName: foundUserDomain.displayName,
+      email: foundUserDomain.email,
+      id: foundUserDomain.id,
+      organization: foundUserDomain.organization,
+      password: foundUserDomain.password,
+    });
+
+    userMergedDomain.apply(new UserReadedOneEvent(userMergedDomain.id));
+    userMergedDomain.commit();
+
+    return userMergedDomain;
   }
 }

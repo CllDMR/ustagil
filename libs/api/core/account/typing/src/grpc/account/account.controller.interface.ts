@@ -2,6 +2,7 @@ import { AccountDomain } from '../../domains/account/account.domain';
 import {
   CreateAccountRequest,
   DeleteAccountRequest,
+  GetAccountByEmailRequest,
   GetAccountRequest,
   ListAccountsRequest,
   ListAccountsResponse,
@@ -17,6 +18,12 @@ export interface IAccountGrpcController {
 
   GetAccount(
     data: GetAccountRequest
+    // metadata: Metadata
+    // call: ServerUnaryCall<GetAccountRequest, AccountDomain>
+  ): Promise<AccountDomain>;
+
+  GetAccountByEmail(
+    data: GetAccountByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetAccountRequest, AccountDomain>
   ): Promise<AccountDomain>;

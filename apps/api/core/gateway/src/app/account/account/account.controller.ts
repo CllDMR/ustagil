@@ -12,6 +12,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { ACCOUNT_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IAccountGrpcController } from '@ustagil/api/core/account/typing';
 import {
   AllExceptionsFilter,
@@ -27,7 +28,10 @@ import {
 @Controller()
 export class AccountController implements OnModuleInit {
   private accountGrpcService: IAccountGrpcController;
-  @Inject('ACCOUNT_GRPC_SERVICE') private accountMSGrpcClient: ClientGrpc;
+
+  constructor(
+    @Inject(ACCOUNT_MS_GRPC) private readonly accountMSGrpcClient: ClientGrpc
+  ) {}
 
   onModuleInit() {
     this.accountGrpcService =
@@ -38,14 +42,12 @@ export class AccountController implements OnModuleInit {
 
   @Post('accounts')
   postAccount(@Body() dto: AccountCreateOneBodyDto) {
-    return this.accountGrpcService.CreateAccount({ account: dto });
+    return this.accountGrpcService.CreateAccount(dto);
   }
 
   @Get('accounts')
   getAccounts(@Query() dto: AccountFindAllQueryDto) {
-    return this.accountGrpcService.ListAccounts({
-      page_size: dto.page_size ?? 10,
-    });
+    return this.accountGrpcService.ListAccounts(dto);
   }
 
   @Get('accounts/:id')
@@ -55,7 +57,7 @@ export class AccountController implements OnModuleInit {
 
   @Patch('accounts/:id')
   patchAccount(@Param('id') id: string, @Body() dto: AccountUpdateOneBodyDto) {
-    return this.accountGrpcService.UpdateAccount({ id, account: dto });
+    return this.accountGrpcService.UpdateAccount({ id, ...dto });
   }
 
   @Delete('accounts/:id')

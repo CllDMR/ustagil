@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { OrganizationDeletedOneEvent } from '../../event';
 import { OrganizationDeleteOneCommand } from './organization-delete-one.command';
 
@@ -13,23 +14,32 @@ export class OrganizationDeleteOneHandler
     private readonly organizationRepository: OrganizationMongooseRepository
   ) {}
 
-  async execute({ dto }: OrganizationDeleteOneCommand): Promise<void> {
+  async execute({
+    dto,
+  }: OrganizationDeleteOneCommand): Promise<OrganizationDomain> {
     const { id } = dto;
-    // const organization = await this.organizationRepository.findOneById(id);
 
-    // await this.organizationRepository.findOneAndReplace({}, organization);
+    const OrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(OrganizationDomain);
 
-    const organization = this.eventPublisher.mergeObjectContext(
-      new OrganizationDomain({
-        id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
-      })
+    const organizationDomain =
+      await this.organizationRepository.findOneAndRemove({
+        _id: new ObjectId(id),
+      });
+
+    const organizationMergedDomain = new OrganizationMergedDomain({
+      id: organizationDomain.id,
+      displayName: organizationDomain.displayName,
+      email: organizationDomain.email,
+      organization: organizationDomain.organization,
+      password: organizationDomain.password,
+    });
+
+    organizationMergedDomain.apply(
+      new OrganizationDeletedOneEvent(organizationMergedDomain.id)
     );
+    organizationMergedDomain.commit();
 
-    organization.apply(new OrganizationDeletedOneEvent(organization.id));
-    organization.commit();
+    return organizationMergedDomain;
   }
 }

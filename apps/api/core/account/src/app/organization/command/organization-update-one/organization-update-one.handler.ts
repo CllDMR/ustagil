@@ -13,26 +13,38 @@ export class OrganizationUpdateOneHandler
     private readonly organizationRepository: OrganizationMongooseRepository
   ) {}
 
-  async execute({ dto }: OrganizationUpdateOneCommand): Promise<void> {
+  async execute({
+    dto,
+  }: OrganizationUpdateOneCommand): Promise<OrganizationDomain> {
     const { id, displayName, email, organization } = dto;
 
-    const a_organization = this.eventPublisher.mergeObjectContext(
-      new OrganizationDomain({
-        id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
-      })
+    const OrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(OrganizationDomain);
+
+    const updatedOrganizationDomain =
+      await this.organizationRepository.findOneAndUpdate(
+        {},
+        new OrganizationDomain({
+          id,
+          displayName,
+          email,
+          organization,
+        })
+      );
+
+    const organizationMergedDomain = new OrganizationMergedDomain({
+      displayName: updatedOrganizationDomain.displayName,
+      email: updatedOrganizationDomain.email,
+      id: updatedOrganizationDomain.id,
+      organization: updatedOrganizationDomain.organization,
+      password: updatedOrganizationDomain.password,
+    });
+
+    organizationMergedDomain.apply(
+      new OrganizationUpdatedOneEvent(organizationMergedDomain.id)
     );
+    organizationMergedDomain.commit();
 
-    a_organization.displayName = displayName;
-    a_organization.email = email;
-    a_organization.organization = organization;
-
-    await this.organizationRepository.findOneAndReplace({}, a_organization);
-
-    a_organization.apply(new OrganizationUpdatedOneEvent(a_organization.id));
-    a_organization.commit();
+    return updatedOrganizationDomain;
   }
 }

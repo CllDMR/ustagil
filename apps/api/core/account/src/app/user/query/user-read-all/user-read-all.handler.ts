@@ -12,11 +12,15 @@ export class UserReadAllHandler implements IQueryHandler<UserReadAllQuery> {
   ) {}
 
   async execute({ dto }: UserReadAllQuery): Promise<UserDomain[]> {
-    const user = this.eventPublisher.mergeObjectContext(new UserDomain({}));
+    const userMergedDomain = this.eventPublisher.mergeObjectContext(
+      new UserDomain({})
+    );
 
-    user.apply(new UserReadedAllEvent());
-    user.commit();
+    const userDomains = await this.userRepository.findAll();
 
-    return await this.userRepository.findAll();
+    userMergedDomain.apply(new UserReadedAllEvent());
+    userMergedDomain.commit();
+
+    return userDomains;
   }
 }

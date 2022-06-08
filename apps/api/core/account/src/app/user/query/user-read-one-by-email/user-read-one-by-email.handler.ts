@@ -15,20 +15,22 @@ export class UserReadOneByEmailHandler
 
   async execute({ dto }: UserReadOneByEmailQuery) {
     const { email } = dto;
-    const userData = await this.userRepository.findOne({ email });
 
-    const user = this.eventPublisher.mergeObjectContext(
-      new UserDomain({
-        id: userData.id,
-        displayName: userData.displayName,
-        email: userData.email,
-        organization: userData.organization,
-        password: userData.password,
-      })
-    );
-    user.apply(new UserReadedOneByEmailEvent(user.id));
-    user.commit();
+    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
 
-    return user;
+    const foundUserDomain = await this.userRepository.findOne({ email });
+
+    const userMergedDomain = new UserMergedDomain({
+      displayName: foundUserDomain.displayName,
+      email: foundUserDomain.email,
+      id: foundUserDomain.id,
+      organization: foundUserDomain.organization,
+      password: foundUserDomain.password,
+    });
+
+    userMergedDomain.apply(new UserReadedOneByEmailEvent(userMergedDomain.id));
+    userMergedDomain.commit();
+
+    return userMergedDomain;
   }
 }

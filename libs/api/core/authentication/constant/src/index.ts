@@ -4,6 +4,9 @@ export const AUTHENTICATION_VALIDATE_ACCOUNT_MSMESSAGE =
   'authentication.validate.account';
 export const AUTHENTICATION_REGISTER_ACCOUNT_MSMESSAGE =
   'authentication.register.account';
-export const AUTHENTICATION_MS = 'authentication.microservice';
-export const AUTHENTICATION_MS_CLIENT_ID = 'authentication';
-export const AUTHENTICATION_MS_CONSUMER_GROUP_ID = 'authentication-consumer';
+export const AUTHENTICATION_MS_GRPC = 'authentication.microservice.grpc';
+export const AUTHENTICATION_MS_GRPC_URL = 'localhost:5005';
+export const AUTHENTICATION_MS_KAFKA = 'authentication.microservice.kafka';
+export const AUTHENTICATION_MS_KAFKA_CLIENT = 'authentication.kafka.client';
+export const AUTHENTICATION_MS_KAFKA_CONSUMER_GROUP =
+  'authentication.kafka.consumer';

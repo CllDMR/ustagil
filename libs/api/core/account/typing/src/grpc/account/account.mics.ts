@@ -7,24 +7,27 @@ interface Account {
 }
 
 export interface ListAccountsRequest {
-  page_size: number;
+  page_size?: number;
+  next_page_cursor?: string;
 }
 
 export interface ListAccountsResponse {
   accounts: Account[];
+  next_page_cursor: string;
 }
 
 export interface GetAccountRequest {
   id: string;
 }
 
-export interface CreateAccountRequest {
-  account: Omit<Account, 'id'>;
+export interface GetAccountByEmailRequest {
+  email: string;
 }
 
-export interface UpdateAccountRequest {
+export type CreateAccountRequest = Omit<Account, 'id'>;
+
+export interface UpdateAccountRequest extends Partial<Omit<Account, 'id'>> {
   id: string;
-  account: Partial<Omit<Account, 'id'>>;
 }
 
 export interface DeleteAccountRequest {

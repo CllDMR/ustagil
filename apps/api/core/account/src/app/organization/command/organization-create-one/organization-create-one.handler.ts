@@ -14,9 +14,15 @@ export class OrganizationCreateOneHandler
     private readonly organizationRepository: OrganizationMongooseRepository
   ) {}
 
-  async execute({ dto }: OrganizationCreateOneCommand): Promise<void> {
+  async execute({
+    dto,
+  }: OrganizationCreateOneCommand): Promise<OrganizationDomain> {
     const { displayName, email, organization, password } = dto;
-    const a_organization = this.eventPublisher.mergeObjectContext(
+
+    const OrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(OrganizationDomain);
+
+    const createdOrganizationDomain = await this.organizationRepository.create(
       new OrganizationDomain({
         id: new ObjectId().toHexString(),
         displayName: displayName,
@@ -26,9 +32,19 @@ export class OrganizationCreateOneHandler
       })
     );
 
-    await this.organizationRepository.create(a_organization);
+    const organizationMergedDomain = new OrganizationMergedDomain({
+      displayName: createdOrganizationDomain.displayName,
+      email: createdOrganizationDomain.email,
+      id: createdOrganizationDomain.id,
+      organization: createdOrganizationDomain.organization,
+      password: createdOrganizationDomain.password,
+    });
 
-    a_organization.apply(new OrganizationCreatedOneEvent(a_organization.id));
-    a_organization.commit();
+    organizationMergedDomain.apply(
+      new OrganizationCreatedOneEvent(organizationMergedDomain.id)
+    );
+    organizationMergedDomain.commit();
+
+    return organizationMergedDomain;
   }
 }

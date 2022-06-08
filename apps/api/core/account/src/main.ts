@@ -5,6 +5,12 @@ import {
   RpcException,
   Transport,
 } from '@nestjs/microservices';
+import {
+  ACCOUNT_MS_GRPC_URL,
+  ORGANIZATION_MS_GRPC_URL,
+  SUPER_ADMIN_MS_GRPC_URL,
+  USER_MS_GPRC_URL,
+} from '@ustagil/api/core/account/constant';
 import { join } from 'path';
 import { AppModule } from './app/app.module';
 
@@ -29,39 +35,54 @@ async function bootstrap() {
   const _accountMicroservice = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      url: 'localhost:5001',
+      url: ACCOUNT_MS_GRPC_URL,
       package: 'account',
       protoPath: join(__dirname, 'assets/account/account.proto'),
-    },
-  });
-  const _userMicroservice = app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.GRPC,
-    options: {
-      url: 'localhost:5002',
-      package: 'user',
-      protoPath: join(__dirname, 'assets/account/user.proto'),
+      loader: {
+        keepCase: true,
+      },
     },
   });
   const _organizationMicroservice =
     app.connectMicroservice<MicroserviceOptions>({
       transport: Transport.GRPC,
       options: {
-        url: 'localhost:5003',
+        url: ORGANIZATION_MS_GRPC_URL,
         package: 'organization',
         protoPath: join(__dirname, 'assets/account/organization.proto'),
+        loader: {
+          keepCase: true,
+        },
       },
     });
   const _superAdminMicroservice = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      url: 'localhost:5004',
+      url: SUPER_ADMIN_MS_GRPC_URL,
       package: 'superAdmin',
       protoPath: join(__dirname, 'assets/account/super_admin.proto'),
+      loader: {
+        keepCase: true,
+      },
+    },
+  });
+  const _userMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: USER_MS_GPRC_URL,
+      package: 'user',
+      protoPath: join(__dirname, 'assets/account/user.proto'),
+      loader: {
+        keepCase: true,
+      },
     },
   });
 
   await app.init();
   await app.startAllMicroservices();
+
+  // const qqqqqqq = app.get(ACCOUNT_MS_GRPC);
+  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ qqqqqqq', qqqqqqq);
 }
 
 bootstrap();

@@ -13,26 +13,32 @@ export class UserUpdateOneHandler
     private readonly userRepository: UserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserUpdateOneCommand): Promise<void> {
+  async execute({ dto }: UserUpdateOneCommand): Promise<UserDomain> {
     const { id, displayName, email, organization } = dto;
 
-    const user = this.eventPublisher.mergeObjectContext(
+    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
+
+    const updatedUserDomain = await this.userRepository.findOneAndUpdate(
+      {},
       new UserDomain({
         id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
+        displayName,
+        email,
+        organization,
       })
     );
 
-    user.displayName = displayName;
-    user.email = email;
-    user.organization = organization;
+    const userMergedDomain = new UserMergedDomain({
+      displayName: updatedUserDomain.displayName,
+      email: updatedUserDomain.email,
+      id: updatedUserDomain.id,
+      organization: updatedUserDomain.organization,
+      password: updatedUserDomain.password,
+    });
 
-    await this.userRepository.findOneAndReplace({}, user);
+    userMergedDomain.apply(new UserUpdatedOneEvent(userMergedDomain.id));
+    userMergedDomain.commit();
 
-    user.apply(new UserUpdatedOneEvent(user.id));
-    user.commit();
+    return updatedUserDomain;
   }
 }

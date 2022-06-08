@@ -20,8 +20,8 @@ export class CustomRpcException extends RpcException {
 export function isCustomRpcException(
   obj: unknown
 ): obj is { code: Status; details: string; metadata: Metadata } {
-  console.log('🚀 ~ file: custom-rpc.exception.ts ~ line 29 ~ obj');
-  console.log(obj);
+  // console.log('🚀 ~ file: custom-rpc.exception.ts ~ line 29 ~ obj');
+  // console.log(obj);
 
   if (
     typeof obj === 'object' &&
@@ -52,4 +52,20 @@ export function isCustomRpcError(obj: unknown): obj is ICustomRpcError {
     'errorCode' in obj &&
     'description' in obj
   );
+}
+
+export function fromRpcToCustomRpcException(err: unknown): CustomRpcException {
+  if (isCustomRpcException(err)) {
+    const error = JSON.parse(err.details);
+
+    if (isCustomRpcError(error)) {
+      return new CustomRpcException({
+        description: error.description,
+        errorCode: error.errorCode,
+        message: error.message,
+        rpcErrorCode: error.rpcErrorCode,
+        statusCode: error.statusCode,
+      });
+    }
+  }
 }

@@ -15,22 +15,27 @@ export class OrganizationReadOneByEmailHandler
 
   async execute({ dto }: OrganizationReadOneByEmailQuery) {
     const { email } = dto;
-    const organizationData = await this.organizationRepository.findOne({
+
+    const OrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(OrganizationDomain);
+
+    const foundOrganizationDomain = await this.organizationRepository.findOne({
       email,
     });
 
-    const organization = this.eventPublisher.mergeObjectContext(
-      new OrganizationDomain({
-        id: organizationData.id,
-        displayName: organizationData.displayName,
-        email: organizationData.email,
-        organization: organizationData.organization,
-        password: organizationData.password,
-      })
-    );
-    organization.apply(new OrganizationReadedOneByEmailEvent(organization.id));
-    organization.commit();
+    const organizationMergedDomain = new OrganizationMergedDomain({
+      displayName: foundOrganizationDomain.displayName,
+      email: foundOrganizationDomain.email,
+      id: foundOrganizationDomain.id,
+      organization: foundOrganizationDomain.organization,
+      password: foundOrganizationDomain.password,
+    });
 
-    return organization;
+    organizationMergedDomain.apply(
+      new OrganizationReadedOneByEmailEvent(organizationMergedDomain.id)
+    );
+    organizationMergedDomain.commit();
+
+    return organizationMergedDomain;
   }
 }

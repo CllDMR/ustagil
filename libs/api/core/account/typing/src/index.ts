@@ -6,6 +6,7 @@ export { IAccountGrpcController } from './grpc/account/account.controller.interf
 export {
   CreateAccountRequest,
   DeleteAccountRequest,
+  GetAccountByEmailRequest,
   GetAccountRequest,
   ListAccountsRequest,
   ListAccountsResponse,

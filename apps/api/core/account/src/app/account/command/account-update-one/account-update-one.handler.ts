@@ -13,26 +13,35 @@ export class AccountUpdateOneHandler
     private readonly accountRepository: AccountMongooseRepository
   ) {}
 
-  async execute({ dto }: AccountUpdateOneCommand): Promise<void> {
+  async execute({ dto }: AccountUpdateOneCommand): Promise<AccountDomain> {
     const { id, displayName, email, organization } = dto;
 
-    const account = this.eventPublisher.mergeObjectContext(
+    const AccountMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountDomain);
+
+    const updatedAccountDomain = await this.accountRepository.findOneAndUpdate(
+      {},
       new AccountDomain({
         id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
+        displayName,
+        email,
+        organization,
       })
     );
 
-    account.displayName = displayName;
-    account.email = email;
-    account.organization = organization;
+    const accountMergedDomain = new AccountMergedDomain({
+      displayName: updatedAccountDomain.displayName,
+      email: updatedAccountDomain.email,
+      id: updatedAccountDomain.id,
+      organization: updatedAccountDomain.organization,
+      password: updatedAccountDomain.password,
+    });
 
-    await this.accountRepository.findOneAndReplace({}, account);
+    accountMergedDomain.apply(
+      new AccountUpdatedOneEvent(accountMergedDomain.id)
+    );
+    accountMergedDomain.commit();
 
-    account.apply(new AccountUpdatedOneEvent(account.id));
-    account.commit();
+    return updatedAccountDomain;
   }
 }

@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { SuperAdminDeletedOneEvent } from '../../event';
 import { SuperAdminDeleteOneCommand } from './super_admin-delete-one.command';
 
@@ -10,26 +11,34 @@ export class SuperAdminDeleteOneHandler
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly super_adminRepository: SuperAdminMongooseRepository
+    private readonly superAdminRepository: SuperAdminMongooseRepository
   ) {}
 
-  async execute({ dto }: SuperAdminDeleteOneCommand): Promise<void> {
+  async execute({
+    dto,
+  }: SuperAdminDeleteOneCommand): Promise<SuperAdminDomain> {
     const { id } = dto;
-    // const super_admin = await this.super_adminRepository.findOneById(id);
 
-    // await this.super_adminRepository.findOneAndReplace({}, super_admin);
+    const SuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(SuperAdminDomain);
 
-    const super_admin = this.eventPublisher.mergeObjectContext(
-      new SuperAdminDomain({
-        id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
-      })
+    const superAdminDomain = await this.superAdminRepository.findOneAndRemove({
+      _id: new ObjectId(id),
+    });
+
+    const superAdminMergedDomain = new SuperAdminMergedDomain({
+      id: superAdminDomain.id,
+      displayName: superAdminDomain.displayName,
+      email: superAdminDomain.email,
+      organization: superAdminDomain.organization,
+      password: superAdminDomain.password,
+    });
+
+    superAdminMergedDomain.apply(
+      new SuperAdminDeletedOneEvent(superAdminMergedDomain.id)
     );
+    superAdminMergedDomain.commit();
 
-    super_admin.apply(new SuperAdminDeletedOneEvent(super_admin.id));
-    super_admin.commit();
+    return superAdminMergedDomain;
   }
 }

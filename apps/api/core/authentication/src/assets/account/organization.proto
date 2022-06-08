@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package organization;
+
+service OrganizationService {
+  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {}
+  rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
+  rpc CreateOrganization(CreateOrganizationRequest) returns (Organization) {}
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
+  rpc DeleteOrganization(DeleteOrganizationRequest) returns (Organization) {}
+}
+
+message Organization {
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
+}
+
+message ListOrganizationsRequest {
+  optional int32 page_size = 1;
+}
+
+message ListOrganizationsResponse {
+  repeated Organization organizations = 1;
+}
+
+message GetOrganizationRequest {
+  string id = 1;
+}
+
+message CreateOrganizationRequest {
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
+}
+
+message UpdateOrganizationRequest {
+  string id = 1;
+  optional string displayName = 2;
+  optional string email = 3;
+  optional string organization = 4;
+}
+
+message DeleteOrganizationRequest {
+  string id = 1;
+}

@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { UserDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { UserDeletedOneEvent } from '../../event';
 import { UserDeleteOneCommand } from './user-delete-one.command';
 
@@ -13,23 +14,26 @@ export class UserDeleteOneHandler
     private readonly userRepository: UserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserDeleteOneCommand): Promise<void> {
+  async execute({ dto }: UserDeleteOneCommand): Promise<UserDomain> {
     const { id } = dto;
-    // const user = await this.userRepository.findOneById(id);
 
-    // await this.userRepository.findOneAndReplace({}, user);
+    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
 
-    const user = this.eventPublisher.mergeObjectContext(
-      new UserDomain({
-        id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
-      })
-    );
+    const userDomain = await this.userRepository.findOneAndRemove({
+      _id: new ObjectId(id),
+    });
 
-    user.apply(new UserDeletedOneEvent(user.id));
-    user.commit();
+    const userMergedDomain = new UserMergedDomain({
+      id: userDomain.id,
+      displayName: userDomain.displayName,
+      email: userDomain.email,
+      organization: userDomain.organization,
+      password: userDomain.password,
+    });
+
+    userMergedDomain.apply(new UserDeletedOneEvent(userMergedDomain.id));
+    userMergedDomain.commit();
+
+    return userMergedDomain;
   }
 }

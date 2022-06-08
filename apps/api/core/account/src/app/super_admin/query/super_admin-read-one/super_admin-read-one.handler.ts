@@ -10,18 +10,32 @@ export class SuperAdminReadOneHandler
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly super_adminRepository: SuperAdminMongooseRepository
+    private readonly superAdminRepository: SuperAdminMongooseRepository
   ) {}
 
   async execute({ dto }: SuperAdminReadOneQuery): Promise<SuperAdminDomain> {
     const { id } = dto;
-    const super_admin = this.eventPublisher.mergeObjectContext(
-      new SuperAdminDomain({})
+
+    const SuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(SuperAdminDomain);
+
+    const foundSuperAdminDomain = await this.superAdminRepository.findOneById(
+      id
     );
 
-    super_admin.apply(new SuperAdminReadedOneEvent(id));
-    super_admin.commit();
+    const superAdminMergedDomain = new SuperAdminMergedDomain({
+      displayName: foundSuperAdminDomain.displayName,
+      email: foundSuperAdminDomain.email,
+      id: foundSuperAdminDomain.id,
+      organization: foundSuperAdminDomain.organization,
+      password: foundSuperAdminDomain.password,
+    });
 
-    return await this.super_adminRepository.findOneById(id);
+    superAdminMergedDomain.apply(
+      new SuperAdminReadedOneEvent(superAdminMergedDomain.id)
+    );
+    superAdminMergedDomain.commit();
+
+    return superAdminMergedDomain;
   }
 }

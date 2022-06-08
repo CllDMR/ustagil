@@ -12,6 +12,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { ISuperAdminGrpcController } from '@ustagil/api/core/account/typing';
 import {
   AllExceptionsFilter,
@@ -27,8 +28,11 @@ import {
 @Controller()
 export class SuperAdminController implements OnModuleInit {
   private superAdminGrpcService: ISuperAdminGrpcController;
-  @Inject('ACCOUNT_SUPER_ADMIN_GRPC_SERVICE')
-  private superAdminMSGrpcClient: ClientGrpc;
+
+  constructor(
+    @Inject(SUPER_ADMIN_MS_GRPC)
+    private readonly superAdminMSGrpcClient: ClientGrpc
+  ) {}
 
   onModuleInit() {
     this.superAdminGrpcService =

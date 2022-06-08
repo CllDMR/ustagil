@@ -3,7 +3,7 @@ import { HttpStatus } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { CustomRpcException } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { EntityDomainFactory } from '../factory/entity-domain.factory';
 import { IdentifiableSchema } from '../schema/identifiable.schema';
 import { BaseRepository } from './base.repository';
@@ -11,7 +11,7 @@ import { BaseRepository } from './base.repository';
 export abstract class MongooseRepository<
   TEntity extends IdentifiableSchema,
   TDomain extends AggregateRoot
-> implements BaseRepository<TEntity, TDomain>
+> implements BaseRepository<TDomain>
 {
   constructor(
     protected readonly entityModel: Model<TEntity>,
@@ -21,10 +21,22 @@ export abstract class MongooseRepository<
     >
   ) {}
 
-  async create(domain: TDomain): Promise<TEntity> {
-    const entity = await new this.entityModel(
-      this.entityDomainFactory.createEntityFromDomain(domain)
-    ).save();
+  async create(domain: TDomain): Promise<TDomain> {
+    let entity: TEntity;
+
+    try {
+      entity = await new this.entityModel(
+        this.entityDomainFactory.createEntityFromDomain(domain)
+      ).save();
+    } catch (err) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Someting went wrong while creating the entity.',
+        description: 'Wake up developer',
+      });
+    }
 
     if (!entity) {
       throw new CustomRpcException({
@@ -36,15 +48,29 @@ export abstract class MongooseRepository<
       });
     }
 
-    return entity;
+    return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 
-  async findAll(entityFilterQuery?: FilterQuery<TEntity>): Promise<TDomain[]> {
-    const entities = await this.entityModel.find(
-      entityFilterQuery,
-      {},
-      { lean: true }
-    );
+  async findAll(
+    entityFilterQuery?: FilterQuery<TEntity>,
+    queryOptions?: QueryOptions<TEntity>
+  ): Promise<TDomain[]> {
+    let entities: TEntity[];
+    try {
+      entities = await this.entityModel.find(
+        entityFilterQuery,
+        {},
+        { ...queryOptions, lean: true }
+      );
+    } catch (error) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Someting went wrong while finding the entities by filter.',
+        description: 'Wake up developer',
+      });
+    }
 
     return entities.map((e) =>
       this.entityDomainFactory.createDomainFromEntity(e)
@@ -52,11 +78,23 @@ export abstract class MongooseRepository<
   }
 
   async findOne(entityFilterQuery?: FilterQuery<TEntity>): Promise<TDomain> {
-    const entity = await this.entityModel.findOne(
-      entityFilterQuery,
-      {},
-      { lean: true }
-    );
+    let entity: TEntity;
+
+    try {
+      entity = await this.entityModel.findOne(
+        entityFilterQuery,
+        {},
+        { lean: true }
+      );
+    } catch (error) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Someting went wrong while finding the entity by filter.',
+        description: 'Wake up developer',
+      });
+    }
 
     if (!entity) {
       throw new CustomRpcException({
@@ -72,11 +110,23 @@ export abstract class MongooseRepository<
   }
 
   async findOneById(id: string): Promise<TDomain> {
-    const entity = await this.entityModel.findById(
-      new ObjectId(id),
-      {},
-      { lean: true }
-    );
+    let entity: TEntity;
+
+    try {
+      entity = await this.entityModel.findById(
+        new ObjectId(id),
+        {},
+        { lean: true }
+      );
+    } catch (error) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Someting went wrong while finding the entity by id.',
+        description: 'Wake up developer',
+      });
+    }
 
     if (!entity) {
       throw new CustomRpcException({
@@ -91,32 +141,76 @@ export abstract class MongooseRepository<
     return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 
-  async findOneAndReplace(
+  async findOneAndUpdate(
     entityFilterQuery: FilterQuery<TEntity>,
     domain: TDomain
   ): Promise<TDomain> {
-    const updatedEntityDocument = await this.entityModel.findOneAndReplace(
-      entityFilterQuery,
-      this.entityDomainFactory.createEntityFromDomain(domain),
-      {
-        new: true,
-        useFindAndModify: false,
-        lean: true,
-      }
-    );
+    let entity: TEntity;
 
-    if (!updatedEntityDocument) {
+    try {
+      entity = await this.entityModel.findOneAndUpdate(
+        entityFilterQuery,
+        this.entityDomainFactory.createEntityFromDomain(domain),
+        {
+          new: true,
+          useFindAndModify: false,
+          lean: true,
+        }
+      );
+    } catch (error) {
       throw new CustomRpcException({
         rpcErrorCode: Status.INTERNAL,
         statusCode: HttpStatus.BAD_REQUEST,
         errorCode: 'undefined for now',
-        message: 'Unable to find the entity to replace.',
+        message: 'Someting went wrong while updating the entity.',
         description: 'Wake up developer',
       });
     }
 
-    return this.entityDomainFactory.createDomainFromEntity(
-      updatedEntityDocument
-    );
+    if (!entity) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Unable to find the entity to update.',
+        description: 'Wake up developer',
+      });
+    }
+
+    return this.entityDomainFactory.createDomainFromEntity(entity);
+  }
+
+  async findOneAndRemove(
+    entityFilterQuery: FilterQuery<TEntity>
+  ): Promise<TDomain> {
+    let entity: TEntity;
+
+    try {
+      entity = await this.entityModel.findOneAndDelete(entityFilterQuery, {
+        new: true,
+        useFindAndModify: false,
+        lean: true,
+      });
+    } catch (error) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Someting went wrong while deleting the entity.',
+        description: 'Wake up developer',
+      });
+    }
+
+    if (!entity) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Unable to find the entity to delete.',
+        description: 'Wake up developer',
+      });
+    }
+
+    return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 }

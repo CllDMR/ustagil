@@ -10,17 +10,19 @@ export class SuperAdminReadAllHandler
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly super_adminRepository: SuperAdminMongooseRepository
+    private readonly superAdminRepository: SuperAdminMongooseRepository
   ) {}
 
   async execute({ dto }: SuperAdminReadAllQuery): Promise<SuperAdminDomain[]> {
-    const super_admin = this.eventPublisher.mergeObjectContext(
+    const superAdminMergedDomain = this.eventPublisher.mergeObjectContext(
       new SuperAdminDomain({})
     );
 
-    super_admin.apply(new SuperAdminReadedAllEvent());
-    super_admin.commit();
+    const superAdminDomains = await this.superAdminRepository.findAll();
 
-    return await this.super_adminRepository.findAll();
+    superAdminMergedDomain.apply(new SuperAdminReadedAllEvent());
+    superAdminMergedDomain.commit();
+
+    return superAdminDomains;
   }
 }

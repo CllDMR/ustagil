@@ -11,12 +11,18 @@ export class SuperAdminCreateOneHandler
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly super_adminRepository: SuperAdminMongooseRepository
+    private readonly superAdminRepository: SuperAdminMongooseRepository
   ) {}
 
-  async execute({ dto }: SuperAdminCreateOneCommand): Promise<void> {
+  async execute({
+    dto,
+  }: SuperAdminCreateOneCommand): Promise<SuperAdminDomain> {
     const { displayName, email, organization, password } = dto;
-    const super_admin = this.eventPublisher.mergeObjectContext(
+
+    const SuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(SuperAdminDomain);
+
+    const createdSuperAdminDomain = await this.superAdminRepository.create(
       new SuperAdminDomain({
         id: new ObjectId().toHexString(),
         displayName: displayName,
@@ -26,9 +32,19 @@ export class SuperAdminCreateOneHandler
       })
     );
 
-    await this.super_adminRepository.create(super_admin);
+    const superAdminMergedDomain = new SuperAdminMergedDomain({
+      displayName: createdSuperAdminDomain.displayName,
+      email: createdSuperAdminDomain.email,
+      id: createdSuperAdminDomain.id,
+      organization: createdSuperAdminDomain.organization,
+      password: createdSuperAdminDomain.password,
+    });
 
-    super_admin.apply(new SuperAdminCreatedOneEvent(super_admin.id));
-    super_admin.commit();
+    superAdminMergedDomain.apply(
+      new SuperAdminCreatedOneEvent(superAdminMergedDomain.id)
+    );
+    superAdminMergedDomain.commit();
+
+    return superAdminMergedDomain;
   }
 }

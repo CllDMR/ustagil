@@ -12,6 +12,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
 import {
   AllExceptionsFilter,
@@ -27,8 +28,11 @@ import {
 @Controller()
 export class OrganizationController implements OnModuleInit {
   private organizationGrpcService: IOrganizationGrpcController;
-  @Inject('ACCOUNT_ORGANIZATION_GRPC_SERVICE')
-  private organizationMSGrpcClient: ClientGrpc;
+
+  constructor(
+    @Inject(ORGANIZATION_MS_GRPC)
+    private readonly organizationMSGrpcClient: ClientGrpc
+  ) {}
 
   onModuleInit() {
     this.organizationGrpcService =

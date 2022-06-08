@@ -1,5 +1,6 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -15,7 +16,7 @@ interface ResponseBody {
   timestamp: string;
   statusCode: number;
   path: string;
-  message: string;
+  message: string[];
   errorCode: string;
   description: string;
 }
@@ -25,6 +26,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: Record<string, unknown>, host: ArgumentsHost): void {
+    console.log(
+      '🚀 ~ file: all-exceptions.filter.ts ~ line 29 ~ AllExceptionsFilter ~ exception',
+      exception
+    );
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
@@ -36,14 +41,24 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const timestamp: ResponseBody['timestamp'] = new Date().toISOString(),
       path: ResponseBody['path'] = httpAdapter.getRequestUrl(ctx.getRequest());
 
-    if (exception instanceof HttpException) {
+    if (exception instanceof BadRequestException) {
+      const error = exception.getResponse();
+
+      if (typeof error === 'object') {
+        const _error = error as {
+          statusCode: number;
+          message: string[];
+          error: string;
+        };
+        message = _error.message;
+      }
+    } else if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
-      message = exception.message;
+      message = [exception.message];
     } else if (isCustomRpcException(exception)) {
       const error = JSON.parse(exception.details);
-
       if (isCustomRpcError(error)) {
-        message = error.message;
+        message = [error.message];
         description = error.description;
         errorCode = error.errorCode;
         statusCode = error.statusCode;

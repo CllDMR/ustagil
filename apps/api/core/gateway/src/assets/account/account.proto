@@ -5,6 +5,7 @@ package account;
 service AccountService {
   rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {}
   rpc GetAccount(GetAccountRequest) returns (Account) {}
+  rpc GetAccountByEmail(GetAccountByEmailRequest) returns (Account) {}
   rpc CreateAccount(CreateAccountRequest) returns (Account) {}
   rpc UpdateAccount(UpdateAccountRequest) returns (Account) {}
   rpc DeleteAccount(DeleteAccountRequest) returns (Account) {}
@@ -15,18 +16,25 @@ message Account {
   string displayName = 2;
   string email = 3;
   string organization = 4;
+  optional string password = 5;
 }
 
 message ListAccountsRequest {
   optional int32 page_size = 1;
+  optional string next_page_cursor = 2;
 }
 
 message ListAccountsResponse {
   repeated Account accounts = 1;
+  string next_page_cursor = 2;
 }
 
 message GetAccountRequest {
   string id = 1;
+}
+
+message GetAccountByEmailRequest {
+  string email = 1;
 }
 
 message CreateAccountRequest {
@@ -34,6 +42,7 @@ message CreateAccountRequest {
   string displayName = 2;
   string email = 3;
   string organization = 4;
+  string password = 5;
 }
 
 message UpdateAccountRequest {

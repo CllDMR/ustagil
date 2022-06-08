@@ -14,9 +14,12 @@ export class UserCreateOneHandler
     private readonly userRepository: UserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserCreateOneCommand): Promise<void> {
+  async execute({ dto }: UserCreateOneCommand): Promise<UserDomain> {
     const { displayName, email, organization, password } = dto;
-    const user = this.eventPublisher.mergeObjectContext(
+
+    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
+
+    const createdUserDomain = await this.userRepository.create(
       new UserDomain({
         id: new ObjectId().toHexString(),
         displayName: displayName,
@@ -26,9 +29,17 @@ export class UserCreateOneHandler
       })
     );
 
-    await this.userRepository.create(user);
+    const userMergedDomain = new UserMergedDomain({
+      displayName: createdUserDomain.displayName,
+      email: createdUserDomain.email,
+      id: createdUserDomain.id,
+      organization: createdUserDomain.organization,
+      password: createdUserDomain.password,
+    });
 
-    user.apply(new UserCreatedOneEvent(user.id));
-    user.commit();
+    userMergedDomain.apply(new UserCreatedOneEvent(userMergedDomain.id));
+    userMergedDomain.commit();
+
+    return userMergedDomain;
   }
 }

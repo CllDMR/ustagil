@@ -14,9 +14,13 @@ export class AccountCreateOneHandler
     private readonly accountRepository: AccountMongooseRepository
   ) {}
 
-  async execute({ dto }: AccountCreateOneCommand): Promise<void> {
+  async execute({ dto }: AccountCreateOneCommand): Promise<AccountDomain> {
     const { displayName, email, organization, password } = dto;
-    const account = this.eventPublisher.mergeObjectContext(
+
+    const AccountMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountDomain);
+
+    const createdAccountDomain = await this.accountRepository.create(
       new AccountDomain({
         id: new ObjectId().toHexString(),
         displayName: displayName,
@@ -26,9 +30,19 @@ export class AccountCreateOneHandler
       })
     );
 
-    await this.accountRepository.create(account);
+    const accountMergedDomain = new AccountMergedDomain({
+      displayName: createdAccountDomain.displayName,
+      email: createdAccountDomain.email,
+      id: createdAccountDomain.id,
+      organization: createdAccountDomain.organization,
+      password: createdAccountDomain.password,
+    });
 
-    account.apply(new AccountCreatedOneEvent(account.id));
-    account.commit();
+    accountMergedDomain.apply(
+      new AccountCreatedOneEvent(accountMergedDomain.id)
+    );
+    accountMergedDomain.commit();
+
+    return accountMergedDomain;
   }
 }

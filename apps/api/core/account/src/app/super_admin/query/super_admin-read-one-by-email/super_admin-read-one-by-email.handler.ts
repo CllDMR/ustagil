@@ -15,20 +15,27 @@ export class SuperAdminReadOneByEmailHandler
 
   async execute({ dto }: SuperAdminReadOneByEmailQuery) {
     const { email } = dto;
-    const superAdminData = await this.superAdminRepository.findOne({ email });
 
-    const super_admin = this.eventPublisher.mergeObjectContext(
-      new SuperAdminDomain({
-        id: superAdminData.id,
-        displayName: superAdminData.displayName,
-        email: superAdminData.email,
-        organization: superAdminData.organization,
-        password: superAdminData.password,
-      })
+    const SuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(SuperAdminDomain);
+
+    const foundSuperAdminDomain = await this.superAdminRepository.findOne({
+      email,
+    });
+
+    const superAdminMergedDomain = new SuperAdminMergedDomain({
+      displayName: foundSuperAdminDomain.displayName,
+      email: foundSuperAdminDomain.email,
+      id: foundSuperAdminDomain.id,
+      organization: foundSuperAdminDomain.organization,
+      password: foundSuperAdminDomain.password,
+    });
+
+    superAdminMergedDomain.apply(
+      new SuperAdminReadedOneByEmailEvent(superAdminMergedDomain.id)
     );
-    super_admin.apply(new SuperAdminReadedOneByEmailEvent(super_admin.id));
-    super_admin.commit();
+    superAdminMergedDomain.commit();
 
-    return super_admin;
+    return superAdminMergedDomain;
   }
 }

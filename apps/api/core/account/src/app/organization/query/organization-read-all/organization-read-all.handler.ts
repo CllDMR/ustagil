@@ -16,13 +16,15 @@ export class OrganizationReadAllHandler
   async execute({
     dto,
   }: OrganizationReadAllQuery): Promise<OrganizationDomain[]> {
-    const organization = this.eventPublisher.mergeObjectContext(
+    const organizationMergedDomain = this.eventPublisher.mergeObjectContext(
       new OrganizationDomain({})
     );
 
-    organization.apply(new OrganizationReadedAllEvent());
-    organization.commit();
+    const organizationDomains = await this.organizationRepository.findAll();
 
-    return await this.organizationRepository.findAll();
+    organizationMergedDomain.apply(new OrganizationReadedAllEvent());
+    organizationMergedDomain.commit();
+
+    return organizationDomains;
   }
 }

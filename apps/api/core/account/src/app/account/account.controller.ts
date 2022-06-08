@@ -5,6 +5,7 @@ import {
   AccountDomain,
   CreateAccountRequest,
   DeleteAccountRequest,
+  GetAccountByEmailRequest,
   GetAccountRequest,
   IAccountGrpcController,
   ListAccountsRequest,
@@ -16,7 +17,11 @@ import {
   AccountDeleteOneCommand,
   AccountUpdateOneCommand,
 } from './command';
-import { AccountReadAllQuery, AccountReadOneQuery } from './query';
+import {
+  AccountReadAllQuery,
+  AccountReadOneByEmailQuery,
+  AccountReadOneQuery,
+} from './query';
 
 @Controller()
 export class AccountController implements IAccountGrpcController {
@@ -26,12 +31,15 @@ export class AccountController implements IAccountGrpcController {
   ) {}
 
   @GrpcMethod('AccountService')
-  async ListAccounts(data: ListAccountsRequest): Promise<ListAccountsResponse> {
-    const accounts = await this.queryBus.execute(new AccountReadAllQuery(data));
+  async GetAccountByEmail(
+    data: GetAccountByEmailRequest
+  ): Promise<AccountDomain> {
+    return await this.queryBus.execute(new AccountReadOneByEmailQuery(data));
+  }
 
-    return {
-      accounts,
-    };
+  @GrpcMethod('AccountService')
+  async ListAccounts(data: ListAccountsRequest): Promise<ListAccountsResponse> {
+    return await this.queryBus.execute(new AccountReadAllQuery(data));
   }
 
   @GrpcMethod('AccountService')
@@ -41,9 +49,7 @@ export class AccountController implements IAccountGrpcController {
 
   @GrpcMethod('AccountService')
   async CreateAccount(data: CreateAccountRequest): Promise<AccountDomain> {
-    return await this.commandBus.execute(
-      new AccountCreateOneCommand(data.account)
-    );
+    return await this.commandBus.execute(new AccountCreateOneCommand(data));
   }
 
   @GrpcMethod('AccountService')
@@ -51,7 +57,7 @@ export class AccountController implements IAccountGrpcController {
     return await this.commandBus.execute(
       new AccountUpdateOneCommand({
         id: data.id,
-        ...data.account,
+        ...data,
       })
     );
   }

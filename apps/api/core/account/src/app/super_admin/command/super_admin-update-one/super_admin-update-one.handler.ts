@@ -10,29 +10,41 @@ export class SuperAdminUpdateOneHandler
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly super_adminRepository: SuperAdminMongooseRepository
+    private readonly superAdminRepository: SuperAdminMongooseRepository
   ) {}
 
-  async execute({ dto }: SuperAdminUpdateOneCommand): Promise<void> {
+  async execute({
+    dto,
+  }: SuperAdminUpdateOneCommand): Promise<SuperAdminDomain> {
     const { id, displayName, email, organization } = dto;
 
-    const super_admin = this.eventPublisher.mergeObjectContext(
-      new SuperAdminDomain({
-        id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
-      })
+    const SuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(SuperAdminDomain);
+
+    const updatedSuperAdminDomain =
+      await this.superAdminRepository.findOneAndUpdate(
+        {},
+        new SuperAdminDomain({
+          id,
+          displayName,
+          email,
+          organization,
+        })
+      );
+
+    const superAdminMergedDomain = new SuperAdminMergedDomain({
+      displayName: updatedSuperAdminDomain.displayName,
+      email: updatedSuperAdminDomain.email,
+      id: updatedSuperAdminDomain.id,
+      organization: updatedSuperAdminDomain.organization,
+      password: updatedSuperAdminDomain.password,
+    });
+
+    superAdminMergedDomain.apply(
+      new SuperAdminUpdatedOneEvent(superAdminMergedDomain.id)
     );
+    superAdminMergedDomain.commit();
 
-    super_admin.displayName = displayName;
-    super_admin.email = email;
-    super_admin.organization = organization;
-
-    await this.super_adminRepository.findOneAndReplace({}, super_admin);
-
-    super_admin.apply(new SuperAdminUpdatedOneEvent(super_admin.id));
-    super_admin.commit();
+    return updatedSuperAdminDomain;
   }
 }

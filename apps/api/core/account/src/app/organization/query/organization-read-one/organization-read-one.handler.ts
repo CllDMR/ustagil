@@ -17,13 +17,26 @@ export class OrganizationReadOneHandler
     dto,
   }: OrganizationReadOneQuery): Promise<OrganizationDomain> {
     const { id } = dto;
-    const organization = this.eventPublisher.mergeObjectContext(
-      new OrganizationDomain({})
+
+    const OrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(OrganizationDomain);
+
+    const foundOrganizationDomain =
+      await this.organizationRepository.findOneById(id);
+
+    const organizationMergedDomain = new OrganizationMergedDomain({
+      displayName: foundOrganizationDomain.displayName,
+      email: foundOrganizationDomain.email,
+      id: foundOrganizationDomain.id,
+      organization: foundOrganizationDomain.organization,
+      password: foundOrganizationDomain.password,
+    });
+
+    organizationMergedDomain.apply(
+      new OrganizationReadedOneEvent(organizationMergedDomain.id)
     );
+    organizationMergedDomain.commit();
 
-    organization.apply(new OrganizationReadedOneEvent(id));
-    organization.commit();
-
-    return await this.organizationRepository.findOneById(id);
+    return organizationMergedDomain;
   }
 }
