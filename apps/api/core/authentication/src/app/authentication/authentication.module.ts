@@ -19,7 +19,7 @@ import { AuthenticationQueryHandlers } from './query';
     PassportModule,
     JwtModule.register({
       secret: 'secretKey',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '60m' },
     }),
     ClientsModule.register([
       {
