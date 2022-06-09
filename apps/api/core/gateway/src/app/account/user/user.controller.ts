@@ -10,14 +10,17 @@ import {
   Post,
   Query,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { USER_MS_GPRC } from '@ustagil/api/core/account/constant';
 import { IUserGrpcController } from '@ustagil/api/core/account/typing';
 import {
   CheckPolicies,
   CreateUserDomainPolicyHandler,
   DeleteUserDomainPolicyHandler,
+  PoliciesGuard,
   ReadUserDomainPolicyHandler,
   UpdateUserDomainPolicyHandler,
 } from '@ustagil/api/core/casl';
@@ -25,12 +28,14 @@ import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
+import { JwtAuthGuard } from '@ustagil/api/core/common/util';
 import {
   UserCreateOneBodyDto,
   UserFindAllQueryDto,
   UserUpdateOneBodyDto,
 } from './dtos';
 
+@UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
 export class UserController implements OnModuleInit {

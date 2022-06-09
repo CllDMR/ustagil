@@ -10,14 +10,17 @@ import {
   Post,
   Query,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
 import {
   CheckPolicies,
   CreateOrganizationDomainPolicyHandler,
   DeleteOrganizationDomainPolicyHandler,
+  PoliciesGuard,
   ReadOrganizationDomainPolicyHandler,
   UpdateOrganizationDomainPolicyHandler,
 } from '@ustagil/api/core/casl';
@@ -25,12 +28,14 @@ import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
+import { JwtAuthGuard } from '@ustagil/api/core/common/util';
 import {
   OrganizationCreateOneBodyDto,
   OrganizationFindAllQueryDto,
   OrganizationUpdateOneBodyDto,
 } from './dtos';
 
+@UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
 export class OrganizationController implements OnModuleInit {
