@@ -51,9 +51,7 @@ export class OrganizationController implements OnModuleInit {
   @CheckPolicies(new CreateOrganizationDomainPolicyHandler())
   @Post('account/organizations')
   postOrganization(@Body() dto: OrganizationCreateOneBodyDto) {
-    return this.organizationGrpcService.CreateOrganization({
-      organization: dto,
-    });
+    return this.organizationGrpcService.CreateOrganization(dto);
   }
 
   @CheckPolicies(new ReadOrganizationDomainPolicyHandler())
@@ -78,7 +76,7 @@ export class OrganizationController implements OnModuleInit {
   ) {
     return this.organizationGrpcService.UpdateOrganization({
       id,
-      organization: dto,
+      ...dto,
     });
   }
 

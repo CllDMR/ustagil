@@ -2,6 +2,7 @@ import { UserDomain } from '../../domains/user/user.domain';
 import {
   CreateUserRequest,
   DeleteUserRequest,
+  GetUserByEmailRequest,
   GetUserRequest,
   ListUsersRequest,
   ListUsersResponse,
@@ -17,6 +18,12 @@ export interface IUserGrpcController {
 
   GetUser(
     data: GetUserRequest
+    // metadata: Metadata
+    // call: ServerUnaryCall<GetUserRequest, UserDomain>
+  ): Promise<UserDomain>;
+
+  GetUserByEmail(
+    data: GetUserByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetUserRequest, UserDomain>
   ): Promise<UserDomain>;

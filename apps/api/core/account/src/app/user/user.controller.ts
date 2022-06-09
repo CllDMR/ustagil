@@ -4,6 +4,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import {
   CreateUserRequest,
   DeleteUserRequest,
+  GetUserByEmailRequest,
   GetUserRequest,
   IUserGrpcController,
   ListUsersRequest,
@@ -16,7 +17,11 @@ import {
   UserDeleteOneCommand,
   UserUpdateOneCommand,
 } from './command';
-import { UserReadAllQuery, UserReadOneQuery } from './query';
+import {
+  UserReadAllQuery,
+  UserReadOneByEmailQuery,
+  UserReadOneQuery,
+} from './query';
 
 @Controller()
 export class UserController implements IUserGrpcController {
@@ -27,11 +32,12 @@ export class UserController implements IUserGrpcController {
 
   @GrpcMethod('UserService')
   async ListUsers(data: ListUsersRequest): Promise<ListUsersResponse> {
-    const users = await this.queryBus.execute(new UserReadAllQuery(data));
+    return await this.queryBus.execute(new UserReadAllQuery(data));
+  }
 
-    return {
-      users,
-    };
+  @GrpcMethod('UserService')
+  async GetUserByEmail(data: GetUserByEmailRequest): Promise<UserDomain> {
+    return await this.queryBus.execute(new UserReadOneByEmailQuery(data));
   }
 
   @GrpcMethod('UserService')
@@ -41,7 +47,7 @@ export class UserController implements IUserGrpcController {
 
   @GrpcMethod('UserService')
   async CreateUser(data: CreateUserRequest): Promise<UserDomain> {
-    return await this.commandBus.execute(new UserCreateOneCommand(data.user));
+    return await this.commandBus.execute(new UserCreateOneCommand(data));
   }
 
   @GrpcMethod('UserService')
@@ -49,7 +55,7 @@ export class UserController implements IUserGrpcController {
     return await this.commandBus.execute(
       new UserUpdateOneCommand({
         id: data.id,
-        ...data.user,
+        ...data,
       })
     );
   }

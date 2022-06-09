@@ -51,7 +51,7 @@ export class SuperAdminController implements OnModuleInit {
   @CheckPolicies(new CreateSuperAdminDomainPolicyHandler())
   @Post('account/super_admins')
   postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
-    return this.superAdminGrpcService.CreateSuperAdmin({ super_admin: dto });
+    return this.superAdminGrpcService.CreateSuperAdmin(dto);
   }
 
   @CheckPolicies(new ReadSuperAdminDomainPolicyHandler())
@@ -76,7 +76,7 @@ export class SuperAdminController implements OnModuleInit {
   ) {
     return this.superAdminGrpcService.UpdateSuperAdmin({
       id,
-      super_admin: dto,
+      ...dto,
     });
   }
 

@@ -31,15 +31,15 @@ export class AccountController implements IAccountGrpcController {
   ) {}
 
   @GrpcMethod('AccountService')
+  async ListAccounts(data: ListAccountsRequest): Promise<ListAccountsResponse> {
+    return await this.queryBus.execute(new AccountReadAllQuery(data));
+  }
+
+  @GrpcMethod('AccountService')
   async GetAccountByEmail(
     data: GetAccountByEmailRequest
   ): Promise<AccountDomain> {
     return await this.queryBus.execute(new AccountReadOneByEmailQuery(data));
-  }
-
-  @GrpcMethod('AccountService')
-  async ListAccounts(data: ListAccountsRequest): Promise<ListAccountsResponse> {
-    return await this.queryBus.execute(new AccountReadAllQuery(data));
   }
 
   @GrpcMethod('AccountService')

@@ -49,7 +49,7 @@ export class UserController implements OnModuleInit {
   @CheckPolicies(new CreateUserDomainPolicyHandler())
   @Post('account/users')
   postUser(@Body() dto: UserCreateOneBodyDto) {
-    return this.userGrpcService.CreateUser({ user: dto });
+    return this.userGrpcService.CreateUser(dto);
   }
 
   @CheckPolicies(new ReadUserDomainPolicyHandler())
@@ -67,7 +67,7 @@ export class UserController implements OnModuleInit {
   @CheckPolicies(new UpdateUserDomainPolicyHandler())
   @Patch('account/users/:id')
   patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneBodyDto) {
-    return this.userGrpcService.UpdateUser({ id, user: dto });
+    return this.userGrpcService.UpdateUser({ id, ...dto });
   }
 
   @CheckPolicies(new DeleteUserDomainPolicyHandler())

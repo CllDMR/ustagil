@@ -2,6 +2,7 @@ import { SuperAdminDomain } from '../../domains/super_admin/super_admin.domain';
 import {
   CreateSuperAdminRequest,
   DeleteSuperAdminRequest,
+  GetSuperAdminByEmailRequest,
   GetSuperAdminRequest,
   ListSuperAdminsRequest,
   ListSuperAdminsResponse,
@@ -17,6 +18,12 @@ export interface ISuperAdminGrpcController {
 
   GetSuperAdmin(
     data: GetSuperAdminRequest
+    // metadata: Metadata
+    // call: ServerUnaryCall<GetSuperAdminRequest, SuperAdminDomain>
+  ): Promise<SuperAdminDomain>;
+
+  GetSuperAdminByEmail(
+    data: GetSuperAdminByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetSuperAdminRequest, SuperAdminDomain>
   ): Promise<SuperAdminDomain>;

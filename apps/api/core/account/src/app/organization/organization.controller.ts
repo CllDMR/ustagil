@@ -4,6 +4,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import {
   CreateOrganizationRequest,
   DeleteOrganizationRequest,
+  GetOrganizationByEmailRequest,
   GetOrganizationRequest,
   IOrganizationGrpcController,
   ListOrganizationsRequest,
@@ -16,7 +17,11 @@ import {
   OrganizationDeleteOneCommand,
   OrganizationUpdateOneCommand,
 } from './command';
-import { OrganizationReadAllQuery, OrganizationReadOneQuery } from './query';
+import {
+  OrganizationReadAllQuery,
+  OrganizationReadOneByEmailQuery,
+  OrganizationReadOneQuery,
+} from './query';
 
 @Controller()
 export class OrganizationController implements IOrganizationGrpcController {
@@ -29,13 +34,16 @@ export class OrganizationController implements IOrganizationGrpcController {
   async ListOrganizations(
     data: ListOrganizationsRequest
   ): Promise<ListOrganizationsResponse> {
-    const organizations = await this.queryBus.execute(
-      new OrganizationReadAllQuery(data)
-    );
+    return await this.queryBus.execute(new OrganizationReadAllQuery(data));
+  }
 
-    return {
-      organizations,
-    };
+  @GrpcMethod('OrganizationService')
+  async GetOrganizationByEmail(
+    data: GetOrganizationByEmailRequest
+  ): Promise<OrganizationDomain> {
+    return await this.queryBus.execute(
+      new OrganizationReadOneByEmailQuery(data)
+    );
   }
 
   @GrpcMethod('OrganizationService')
@@ -50,7 +58,7 @@ export class OrganizationController implements IOrganizationGrpcController {
     data: CreateOrganizationRequest
   ): Promise<OrganizationDomain> {
     return await this.commandBus.execute(
-      new OrganizationCreateOneCommand(data.organization)
+      new OrganizationCreateOneCommand(data)
     );
   }
 
@@ -61,7 +69,7 @@ export class OrganizationController implements IOrganizationGrpcController {
     return await this.commandBus.execute(
       new OrganizationUpdateOneCommand({
         id: data.id,
-        ...data.organization,
+        ...data,
       })
     );
   }
