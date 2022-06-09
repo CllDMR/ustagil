@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AccountModule } from './account/account/account.module';
 import { OrganizationModule } from './account/organization/organization.module';
@@ -22,6 +24,12 @@ import { AuthenticationModule } from './authentication/authentication.module';
         ttl: config.get('RATE_LIMIT_TTL'),
         limit: config.get('RATE_LIMIT_LIMIT'),
       }),
+    }),
+
+    PassportModule,
+    JwtModule.register({
+      secret: 'secretKey',
+      signOptions: { expiresIn: '60m' },
     }),
 
     AccountModule,

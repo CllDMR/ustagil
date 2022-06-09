@@ -15,6 +15,13 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { ISuperAdminGrpcController } from '@ustagil/api/core/account/typing';
 import {
+  CheckPolicies,
+  CreateSuperAdminDomainPolicyHandler,
+  DeleteSuperAdminDomainPolicyHandler,
+  ReadSuperAdminDomainPolicyHandler,
+  UpdateSuperAdminDomainPolicyHandler,
+} from '@ustagil/api/core/casl';
+import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
@@ -41,11 +48,13 @@ export class SuperAdminController implements OnModuleInit {
       );
   }
 
+  @CheckPolicies(new CreateSuperAdminDomainPolicyHandler())
   @Post('account/super_admins')
   postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
     return this.superAdminGrpcService.CreateSuperAdmin({ super_admin: dto });
   }
 
+  @CheckPolicies(new ReadSuperAdminDomainPolicyHandler())
   @Get('account/super_admins')
   getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
     return this.superAdminGrpcService.ListSuperAdmins({
@@ -53,11 +62,13 @@ export class SuperAdminController implements OnModuleInit {
     });
   }
 
+  @CheckPolicies(new ReadSuperAdminDomainPolicyHandler())
   @Get('account/super_admins/:id')
   getSuperAdmin(@Param('id') id: string) {
     return this.superAdminGrpcService.GetSuperAdmin({ id });
   }
 
+  @CheckPolicies(new UpdateSuperAdminDomainPolicyHandler())
   @Patch('account/super_admins/:id')
   patchSuperAdmin(
     @Param('id') id: string,
@@ -69,6 +80,7 @@ export class SuperAdminController implements OnModuleInit {
     });
   }
 
+  @CheckPolicies(new DeleteSuperAdminDomainPolicyHandler())
   @Delete('account/super_admins/:id')
   deleteSuperAdmin(@Param('id') id: string) {
     return this.superAdminGrpcService.DeleteSuperAdmin({ id });

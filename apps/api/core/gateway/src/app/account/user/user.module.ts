@@ -4,11 +4,13 @@ import {
   USER_MS_GPRC,
   USER_MS_GPRC_URL,
 } from '@ustagil/api/core/account/constant';
+import { ApiCoreCaslModule } from '@ustagil/api/core/casl';
 import { join } from 'path';
 import { UserController } from './user.controller';
 
 @Module({
   imports: [
+    ApiCoreCaslModule,
     ClientsModule.register([
       {
         name: USER_MS_GPRC,

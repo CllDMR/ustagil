@@ -4,11 +4,13 @@ import {
   ACCOUNT_MS_GRPC,
   ACCOUNT_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
+import { ApiCoreCaslModule } from '@ustagil/api/core/casl';
 import { join } from 'path';
 import { AccountController } from './account.controller';
 
 @Module({
   imports: [
+    ApiCoreCaslModule,
     ClientsModule.register([
       {
         name: ACCOUNT_MS_GRPC,

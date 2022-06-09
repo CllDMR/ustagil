@@ -1,7 +1,7 @@
 import { UserDomain } from '@ustagil/api/core/account/typing';
-import { Action } from './action.enum';
-import { AppAbility } from './casl-ability.factory';
-import { IPolicyHandler } from './policy-handler';
+import { Action } from '../../action.enum';
+import { AppAbility } from '../../casl-ability.factory';
+import { IPolicyHandler } from '../../policy-handler';
 
 export class CreateUserDomainPolicyHandler implements IPolicyHandler {
   handle(ability: AppAbility) {

@@ -15,6 +15,13 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
 import {
+  CheckPolicies,
+  CreateOrganizationDomainPolicyHandler,
+  DeleteOrganizationDomainPolicyHandler,
+  ReadOrganizationDomainPolicyHandler,
+  UpdateOrganizationDomainPolicyHandler,
+} from '@ustagil/api/core/casl';
+import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
@@ -41,6 +48,7 @@ export class OrganizationController implements OnModuleInit {
       );
   }
 
+  @CheckPolicies(new CreateOrganizationDomainPolicyHandler())
   @Post('account/organizations')
   postOrganization(@Body() dto: OrganizationCreateOneBodyDto) {
     return this.organizationGrpcService.CreateOrganization({
@@ -48,6 +56,7 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
+  @CheckPolicies(new ReadOrganizationDomainPolicyHandler())
   @Get('account/organizations')
   getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
     return this.organizationGrpcService.ListOrganizations({
@@ -55,11 +64,13 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
+  @CheckPolicies(new ReadOrganizationDomainPolicyHandler())
   @Get('account/organizations/:id')
   getOrganization(@Param('id') id: string) {
     return this.organizationGrpcService.GetOrganization({ id });
   }
 
+  @CheckPolicies(new UpdateOrganizationDomainPolicyHandler())
   @Patch('account/organizations/:id')
   patchOrganization(
     @Param('id') id: string,
@@ -71,6 +82,7 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
+  @CheckPolicies(new DeleteOrganizationDomainPolicyHandler())
   @Delete('account/organizations/:id')
   deleteOrganization(@Param('id') id: string) {
     return this.organizationGrpcService.DeleteOrganization({ id });
