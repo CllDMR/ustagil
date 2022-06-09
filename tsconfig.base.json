@@ -39,6 +39,7 @@
       "@ustagil/api/core/authentication/util": [
         "libs/api/core/authentication/util/src/index.ts"
       ],
+      "@ustagil/api/core/casl": ["libs/api/core/casl/src/index.ts"],
       "@ustagil/api/core/common/constant": [
         "libs/api/core/common/constant/src/index.ts"
       ],
