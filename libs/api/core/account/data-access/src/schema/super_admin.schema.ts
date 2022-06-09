@@ -9,7 +9,9 @@ export class SuperAdmin extends IdentifiableSchema {
   @Prop()
   readonly displayName: string;
 
-  @Prop()
+  @Prop({
+    unique: true,
+  })
   readonly email: string;
 
   @Prop()

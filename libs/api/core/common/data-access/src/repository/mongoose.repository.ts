@@ -2,7 +2,7 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { CustomRpcException } from '@ustagil/api/core/common/typing';
-import { ObjectId } from 'mongodb';
+import { MongoServerError, ObjectId } from 'mongodb';
 import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { EntityDomainFactory } from '../factory/entity-domain.factory';
 import { IdentifiableSchema } from '../schema/identifiable.schema';
@@ -29,13 +29,27 @@ export abstract class MongooseRepository<
         this.entityDomainFactory.createEntityFromDomain(domain)
       ).save();
     } catch (err) {
-      throw new CustomRpcException({
-        rpcErrorCode: Status.INTERNAL,
-        statusCode: HttpStatus.BAD_REQUEST,
-        errorCode: 'undefined for now',
-        message: 'Someting went wrong while creating the entity.',
-        description: 'Wake up developer',
-      });
+      if (err instanceof MongoServerError && err.code === 11000) {
+        const duplicatedKeys = Object.keys(err.keyPattern).reduce(
+          (prev, current) => prev + ', ' + current
+        );
+
+        throw new CustomRpcException({
+          rpcErrorCode: Status.INTERNAL,
+          statusCode: HttpStatus.BAD_REQUEST,
+          errorCode: 'undefined for now',
+          message: `Duplicated '${duplicatedKeys}' while creating the entity.`,
+          description: 'Wake up developer',
+        });
+      } else {
+        throw new CustomRpcException({
+          rpcErrorCode: Status.INTERNAL,
+          statusCode: HttpStatus.BAD_REQUEST,
+          errorCode: 'undefined for now',
+          message: 'Someting went wrong while creating the entity.',
+          description: 'Wake up developer',
+        });
+      }
     }
 
     if (!entity) {
