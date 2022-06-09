@@ -6,7 +6,7 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { UserDomain } from '../../account/typing/src/domains/user/user.domain';
+import { UserDomain } from '@ustagil/api/core/account/typing';
 import { Action } from './action.enum';
 import { MyRequest } from './typings';
 
