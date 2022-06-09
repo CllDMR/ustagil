@@ -1,43 +1,19 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import {
-  MicroserviceOptions,
-  RpcException,
-  Transport,
-} from '@nestjs/microservices';
-import {
-  AUTHENTICATION_MS_CLIENT_ID,
-  AUTHENTICATION_MS_CONSUMER_GROUP_ID,
-} from '@ustagil/api/core/authentication/constant';
+import { RpcException, Transport } from '@nestjs/microservices';
+import { AUTHENTICATION_MS_GRPC_URL } from '@ustagil/api/core/authentication/constant';
+import { join } from 'path';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.KAFKA,
-      options: {
-        client: {
-          brokers: ['pkc-zm3p0.eu-north-1.aws.confluent.cloud:9092'],
-          clientId: AUTHENTICATION_MS_CLIENT_ID,
-          ssl: true,
-          sasl: {
-            mechanism: 'plain',
-            username: 'FAXIQ2IFDM43YUGN',
-            password:
-              '9ftfRFxLckRPnfaGdD+7Ue3TaGsPM+/AsLdvRdhujiQ8o0t/WS8vOSV6OsNXsuyO',
-          },
-          connectionTimeout: 45000,
-        },
-        consumer: {
-          groupId: AUTHENTICATION_MS_CONSUMER_GROUP_ID,
-        },
-        subscribe: {
-          fromBeginning: true,
-        },
-      },
-    }
-  );
+  const app = await NestFactory.create(AppModule);
+
+  // const aqeqwe = app.get(ACCOUNT_MS_GRPC);
+  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ aqeqwe', aqeqwe);
+
+  // const asdasdad = app.get(AppModule);
+  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ asdasdad', asdasdad);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -52,7 +28,21 @@ async function bootstrap() {
       },
     })
   );
-  app.listen();
+
+  const _authenticationMicroservice = app.connectMicroservice({
+    transport: Transport.GRPC,
+    options: {
+      url: AUTHENTICATION_MS_GRPC_URL,
+      package: 'authentication',
+      protoPath: join(__dirname, 'assets/authentication.proto'),
+      loader: {
+        keepCase: true,
+      },
+    },
+  });
+
+  await app.init();
+  await app.startAllMicroservices();
 }
 
 bootstrap();

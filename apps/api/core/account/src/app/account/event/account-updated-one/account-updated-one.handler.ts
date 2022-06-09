@@ -5,7 +5,7 @@ import { AccountUpdatedOneEvent } from './account-updated-one.event';
 export class AccountUpdatedOneHandler
   implements IEventHandler<AccountUpdatedOneEvent>
 {
-  async handle({ accountId }: AccountUpdatedOneEvent): Promise<void> {
-    console.log('Updated account with id:', accountId);
+  async handle({ id }: AccountUpdatedOneEvent): Promise<void> {
+    console.log('Updated account with id:', id);
   }
 }

@@ -5,54 +5,17 @@ import {
   RpcException,
   Transport,
 } from '@nestjs/microservices';
+import {
+  ACCOUNT_MS_GRPC_URL,
+  ORGANIZATION_MS_GRPC_URL,
+  SUPER_ADMIN_MS_GRPC_URL,
+  USER_MS_GPRC_URL,
+} from '@ustagil/api/core/account/constant';
 import { join } from 'path';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  // const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-  //   AppModule,
-  //   {
-  //     transport: Transport.GRPC,
-  //     options: {
-  //       package: 'account',
-  //       protoPath: join(__dirname, 'account/account.proto'),
-  //     },
-  //   }
-  // );
-
   const app = await NestFactory.create(AppModule);
-
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.GRPC,
-    options: {
-      package: 'account',
-      protoPath: join(__dirname, 'assets/account/account.proto'),
-    },
-  });
-
-  // app.connectMicroservice<MicroserviceOptions>({
-  //   transport: Transport.KAFKA,
-  //   options: {
-  //     client: {
-  //       clientId: ACCOUNT_MS_KAFKA_CLIENT_ID,
-  //       brokers: ['pkc-zm3p0.eu-north-1.aws.confluent.cloud:9092'],
-  //       ssl: true,
-  //       sasl: {
-  //         mechanism: 'plain',
-  //         username: 'FAXIQ2IFDM43YUGN',
-  //         password:
-  //           '9ftfRFxLckRPnfaGdD+7Ue3TaGsPM+/AsLdvRdhujiQ8o0t/WS8vOSV6OsNXsuyO',
-  //       },
-  //       connectionTimeout: 45000,
-  //     },
-  //     consumer: {
-  //       groupId: ACCOUNT_MS_KAFKA_CONSUMER_GROUP_ID,
-  //     },
-  //     subscribe: {
-  //       fromBeginning: true,
-  //     },
-  //   },
-  // });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -69,7 +32,57 @@ async function bootstrap() {
     })
   );
 
+  const _accountMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: ACCOUNT_MS_GRPC_URL,
+      package: 'account',
+      protoPath: join(__dirname, 'assets/account/account.proto'),
+      loader: {
+        keepCase: true,
+      },
+    },
+  });
+  const _organizationMicroservice =
+    app.connectMicroservice<MicroserviceOptions>({
+      transport: Transport.GRPC,
+      options: {
+        url: ORGANIZATION_MS_GRPC_URL,
+        package: 'organization',
+        protoPath: join(__dirname, 'assets/account/organization.proto'),
+        loader: {
+          keepCase: true,
+        },
+      },
+    });
+  const _superAdminMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: SUPER_ADMIN_MS_GRPC_URL,
+      package: 'superAdmin',
+      protoPath: join(__dirname, 'assets/account/super_admin.proto'),
+      loader: {
+        keepCase: true,
+      },
+    },
+  });
+  const _userMicroservice = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      url: USER_MS_GPRC_URL,
+      package: 'user',
+      protoPath: join(__dirname, 'assets/account/user.proto'),
+      loader: {
+        keepCase: true,
+      },
+    },
+  });
+
+  await app.init();
   await app.startAllMicroservices();
+
+  // const qqqqqqq = app.get(ACCOUNT_MS_GRPC);
+  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ qqqqqqq', qqqqqqq);
 }
 
 bootstrap();

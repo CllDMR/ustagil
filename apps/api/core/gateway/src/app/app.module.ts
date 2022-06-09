@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { AccountModule } from './account/account.module';
+import { AccountModule } from './account/account/account.module';
+import { OrganizationModule } from './account/organization/organization.module';
+import { SuperAdminModule } from './account/super_admin/super_admin.module';
+import { UserModule } from './account/user/user.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
@@ -22,6 +25,9 @@ import { AuthenticationModule } from './authentication/authentication.module';
     }),
 
     AccountModule,
+    OrganizationModule,
+    SuperAdminModule,
+    UserModule,
     AuthenticationModule,
   ],
 })

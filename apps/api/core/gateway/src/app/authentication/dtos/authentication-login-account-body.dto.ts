@@ -1,10 +1,10 @@
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class AuthenticationLoginAccountBodyDto {
   @IsString()
   displayName: string;
 
-  @IsString()
+  @IsEmail()
   email: string;
 
   @IsString()

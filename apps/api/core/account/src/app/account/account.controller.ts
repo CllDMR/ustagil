@@ -1,26 +1,17 @@
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod } from '@nestjs/microservices';
 import {
-  ACCOUNT_CREATE_ONE_MSEVENT,
-  ACCOUNT_FIND_ALL_MSMESSAGE,
-  ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE,
-  ACCOUNT_FIND_ONE_MSMESSAGE,
-  ACCOUNT_REMOVE_ONE_MSEVENT,
-  ACCOUNT_UPDATE_ONE_MSEVENT,
-} from '@ustagil/api/core/account/constant';
-import {
-  AccountCreateOneMSEvent,
-  AccountDeleteOneMSEvent,
-  AccountFindAllMSMessage,
-  AccountFindOneByEmailMSMessage,
-  AccountFindOneMSMessage,
-  AccountUpdateOneMSEvent,
+  AccountDomain,
+  CreateAccountRequest,
+  DeleteAccountRequest,
+  GetAccountByEmailRequest,
+  GetAccountRequest,
+  IAccountGrpcController,
+  ListAccountsRequest,
+  ListAccountsResponse,
+  UpdateAccountRequest,
 } from '@ustagil/api/core/account/typing';
-import {
-  AllCustomRpcExceptionsFilter,
-  TimeoutErrorRpcExceptionsFilter,
-} from '@ustagil/api/core/common/typing';
 import {
   AccountCreateOneCommand,
   AccountDeleteOneCommand,
@@ -32,43 +23,47 @@ import {
   AccountReadOneQuery,
 } from './query';
 
-@UseFilters(AllCustomRpcExceptionsFilter, TimeoutErrorRpcExceptionsFilter)
 @Controller()
-export class AccountController {
+export class AccountController implements IAccountGrpcController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus
   ) {}
 
-  @EventPattern(ACCOUNT_CREATE_ONE_MSEVENT)
-  async createOne(
-    @Payload('value') dto: AccountCreateOneMSEvent
-  ): Promise<void> {
-    await this.commandBus.execute(new AccountCreateOneCommand(dto));
+  @GrpcMethod('AccountService')
+  async GetAccountByEmail(
+    data: GetAccountByEmailRequest
+  ): Promise<AccountDomain> {
+    return await this.queryBus.execute(new AccountReadOneByEmailQuery(data));
   }
 
-  @MessagePattern(ACCOUNT_FIND_ALL_MSMESSAGE)
-  async findAll(@Payload('value') dto: AccountFindAllMSMessage) {
-    return await this.queryBus.execute(new AccountReadAllQuery(dto));
+  @GrpcMethod('AccountService')
+  async ListAccounts(data: ListAccountsRequest): Promise<ListAccountsResponse> {
+    return await this.queryBus.execute(new AccountReadAllQuery(data));
   }
 
-  @MessagePattern(ACCOUNT_FIND_ONE_MSMESSAGE)
-  async findOne(@Payload('value') dto: AccountFindOneMSMessage) {
-    return await this.queryBus.execute(new AccountReadOneQuery(dto));
+  @GrpcMethod('AccountService')
+  async GetAccount(data: GetAccountRequest): Promise<AccountDomain> {
+    return await this.queryBus.execute(new AccountReadOneQuery(data));
   }
 
-  @MessagePattern(ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE)
-  async findOneByEmail(@Payload('value') dto: AccountFindOneByEmailMSMessage) {
-    return await this.queryBus.execute(new AccountReadOneByEmailQuery(dto));
+  @GrpcMethod('AccountService')
+  async CreateAccount(data: CreateAccountRequest): Promise<AccountDomain> {
+    return await this.commandBus.execute(new AccountCreateOneCommand(data));
   }
 
-  @EventPattern(ACCOUNT_UPDATE_ONE_MSEVENT)
-  async updateOne(@Payload('value') dto: AccountUpdateOneMSEvent) {
-    await this.commandBus.execute(new AccountUpdateOneCommand(dto));
+  @GrpcMethod('AccountService')
+  async UpdateAccount(data: UpdateAccountRequest): Promise<AccountDomain> {
+    return await this.commandBus.execute(
+      new AccountUpdateOneCommand({
+        id: data.id,
+        ...data,
+      })
+    );
   }
 
-  @EventPattern(ACCOUNT_REMOVE_ONE_MSEVENT)
-  async removeOne(@Payload('value') dto: AccountDeleteOneMSEvent) {
-    await this.commandBus.execute(new AccountDeleteOneCommand(dto));
+  @GrpcMethod('AccountService')
+  async DeleteAccount(data: DeleteAccountRequest): Promise<void> {
+    return await this.commandBus.execute(new AccountDeleteOneCommand(data));
   }
 }

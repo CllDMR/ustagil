@@ -1,58 +1,48 @@
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod } from '@nestjs/microservices';
+import { AccountDomain } from '@ustagil/api/core/account/typing';
 import {
-  AUTHENTICATION_LOGIN_ACCOUNT_MSMESSAGE,
-  AUTHENTICATION_REGISTER_ACCOUNT_MSMESSAGE,
-  AUTHENTICATION_VALIDATE_ACCOUNT_MSMESSAGE,
-} from '@ustagil/api/core/authentication/constant';
-import {
-  AuthenticationLoginAccountMSMessage,
-  AuthenticationRegisterAccountMSMessage,
-  AuthenticationValidateAccountMSMessage,
+  AuthenticationDomain,
+  IAuthenticationGrpcController,
+  LoginAccountRequest,
+  LoginAccountResponse,
+  RegisterAccountRequest,
+  ValidateAccountRequest,
 } from '@ustagil/api/core/authentication/typing';
-import {
-  AllCustomRpcExceptionsFilter,
-  TimeoutErrorRpcExceptionsFilter,
-} from '@ustagil/api/core/common/typing';
 import { AuthenticationRegisterAccountCommand } from './command';
 import {
   AuthenticationLoginAccountQuery,
   AuthenticationValidateAccountQuery,
 } from './query';
 
-@UseFilters(AllCustomRpcExceptionsFilter, TimeoutErrorRpcExceptionsFilter)
 @Controller()
-export class AuthenticationController {
+export class AuthenticationController implements IAuthenticationGrpcController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus
   ) {}
 
-  @MessagePattern(AUTHENTICATION_REGISTER_ACCOUNT_MSMESSAGE)
+  @GrpcMethod('AuthenticationService')
   async registerAccount(
-    @Payload('value') dto: AuthenticationRegisterAccountMSMessage
-  ) {
+    data: RegisterAccountRequest
+  ): Promise<AuthenticationDomain> {
     return await this.commandBus.execute(
-      new AuthenticationRegisterAccountCommand(dto)
+      new AuthenticationRegisterAccountCommand(data)
     );
   }
 
-  @MessagePattern(AUTHENTICATION_LOGIN_ACCOUNT_MSMESSAGE)
-  async loginAccount(
-    @Payload('value') dto: AuthenticationLoginAccountMSMessage
-  ) {
+  @GrpcMethod('AuthenticationService')
+  async loginAccount(data: LoginAccountRequest): Promise<LoginAccountResponse> {
     return await this.queryBus.execute(
-      new AuthenticationLoginAccountQuery(dto)
+      new AuthenticationLoginAccountQuery(data)
     );
   }
 
-  @MessagePattern(AUTHENTICATION_VALIDATE_ACCOUNT_MSMESSAGE)
-  async validateAccount(
-    @Payload('value') dto: AuthenticationValidateAccountMSMessage
-  ) {
+  @GrpcMethod('AuthenticationService')
+  async validateAccount(data: ValidateAccountRequest): Promise<AccountDomain> {
     return await this.queryBus.execute(
-      new AuthenticationValidateAccountQuery(dto)
+      new AuthenticationValidateAccountQuery(data)
     );
   }
 }

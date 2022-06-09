@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package superAdmin;
+
+service SuperAdminService {
+  rpc ListSuperAdmins(ListSuperAdminsRequest) returns (ListSuperAdminsResponse) {}
+  rpc GetSuperAdmin(GetSuperAdminRequest) returns (SuperAdmin) {}
+  rpc CreateSuperAdmin(CreateSuperAdminRequest) returns (SuperAdmin) {}
+  rpc UpdateSuperAdmin(UpdateSuperAdminRequest) returns (SuperAdmin) {}
+  rpc DeleteSuperAdmin(DeleteSuperAdminRequest) returns (SuperAdmin) {}
+}
+
+message SuperAdmin {
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
+}
+
+message ListSuperAdminsRequest {
+  optional int32 page_size = 1;
+}
+
+message ListSuperAdminsResponse {
+  repeated SuperAdmin super_admins = 1;
+}
+
+message GetSuperAdminRequest {
+  string id = 1;
+}
+
+message CreateSuperAdminRequest {
+  string id = 1;
+  string displayName = 2;
+  string email = 3;
+  string organization = 4;
+}
+
+message UpdateSuperAdminRequest {
+  string id = 1;
+  optional string displayName = 2;
+  optional string email = 3;
+  optional string organization = 4;
+}
+
+message DeleteSuperAdminRequest {
+  string id = 1;
+}

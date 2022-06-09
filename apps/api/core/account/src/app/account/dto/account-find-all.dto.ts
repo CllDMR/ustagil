@@ -1,11 +1,11 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsMongoId, IsNumber, IsOptional } from 'class-validator';
 
 export class AccountFindAllDto {
   @IsNumber()
   @IsOptional()
   page_size?: number;
 
-  @IsString()
+  @IsMongoId()
   @IsOptional()
-  page_token?: string;
+  next_page_cursor?: string;
 }

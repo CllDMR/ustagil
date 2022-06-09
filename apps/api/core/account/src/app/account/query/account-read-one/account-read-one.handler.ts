@@ -15,13 +15,25 @@ export class AccountReadOneHandler
 
   async execute({ dto }: AccountReadOneQuery): Promise<AccountDomain> {
     const { id } = dto;
-    const account = this.eventPublisher.mergeObjectContext(
-      new AccountDomain({})
+
+    const AccountMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountDomain);
+
+    const foundAccountDomain = await this.accountRepository.findOneById(id);
+
+    const accountMergedDomain = new AccountMergedDomain({
+      displayName: foundAccountDomain.displayName,
+      email: foundAccountDomain.email,
+      id: foundAccountDomain.id,
+      organization: foundAccountDomain.organization,
+      password: foundAccountDomain.password,
+    });
+
+    accountMergedDomain.apply(
+      new AccountReadedOneEvent(accountMergedDomain.id)
     );
+    accountMergedDomain.commit();
 
-    account.apply(new AccountReadedOneEvent(id));
-    account.commit();
-
-    return await this.accountRepository.findOneById(id);
+    return accountMergedDomain;
   }
 }

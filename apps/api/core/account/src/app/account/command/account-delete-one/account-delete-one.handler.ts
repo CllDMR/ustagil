@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { AccountMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { AccountDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { AccountDeletedOneEvent } from '../../event';
 import { AccountDeleteOneCommand } from './account-delete-one.command';
 
@@ -13,23 +14,29 @@ export class AccountDeleteOneHandler
     private readonly accountRepository: AccountMongooseRepository
   ) {}
 
-  async execute({ dto }: AccountDeleteOneCommand): Promise<void> {
+  async execute({ dto }: AccountDeleteOneCommand): Promise<AccountDomain> {
     const { id } = dto;
-    // const account = await this.accountRepository.findOneById(id);
 
-    // await this.accountRepository.findOneAndReplace({}, account);
+    const AccountMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountDomain);
 
-    const account = this.eventPublisher.mergeObjectContext(
-      new AccountDomain({
-        _id: id,
-        displayName: 'displayName',
-        email: 'email',
-        organization: 'organization',
-        password: 'password',
-      })
+    const accountDomain = await this.accountRepository.findOneAndRemove({
+      _id: new ObjectId(id),
+    });
+
+    const accountMergedDomain = new AccountMergedDomain({
+      id: accountDomain.id,
+      displayName: accountDomain.displayName,
+      email: accountDomain.email,
+      organization: accountDomain.organization,
+      password: accountDomain.password,
+    });
+
+    accountMergedDomain.apply(
+      new AccountDeletedOneEvent(accountMergedDomain.id)
     );
+    accountMergedDomain.commit();
 
-    account.apply(new AccountDeletedOneEvent(account._id));
-    account.commit();
+    return accountMergedDomain;
   }
 }

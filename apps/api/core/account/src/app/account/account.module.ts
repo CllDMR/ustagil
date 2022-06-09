@@ -7,7 +7,7 @@ import {
   AccountMongooseRepository,
   AccountSchema,
 } from '@ustagil/api/core/account/data-access';
-import { AccountGrpcController } from './account-grpc.controller';
+import { AccountController } from './account.controller';
 import { AccountCommandHandlers } from './command';
 import { AccountEventHandlers } from './event';
 import { AccountQueryHandlers } from './query';
@@ -22,10 +22,7 @@ import { AccountQueryHandlers } from './query';
     ]),
     CqrsModule,
   ],
-  controllers: [
-    // AccountController,
-    AccountGrpcController,
-  ],
+  controllers: [AccountController],
   providers: [
     AccountMongooseRepository,
     AccountEntityDomainFactory,

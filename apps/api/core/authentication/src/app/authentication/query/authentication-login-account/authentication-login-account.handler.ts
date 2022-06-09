@@ -1,8 +1,5 @@
-import { Inject } from '@nestjs/common';
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { ClientKafka } from '@nestjs/microservices';
-import { ACCOUNT_MS_KAFKA } from '@ustagil/api/core/account/constant';
 import { AuthenticationDomain } from '@ustagil/api/core/authentication/typing';
 import { AuthenticationLoginnedAccountEvent } from '../../event';
 import { AuthenticationLoginAccountQuery } from './authentication-login-account.query';
@@ -13,34 +10,35 @@ export class AuthenticationLoginAccountHandler
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(ACCOUNT_MS_KAFKA) private accountMSClient: ClientKafka,
-    private jwtService: JwtService
+    private readonly jwtService: JwtService
   ) {}
 
   async execute({ dto }: AuthenticationLoginAccountQuery) {
-    const { email, displayName, _id } = dto;
-    const authenticationDomain = new AuthenticationDomain({
+    const { email, displayName, id } = dto;
+
+    const Authentication =
+      this.eventPublisher.mergeClassContext(AuthenticationDomain);
+
+    const authenticationDomain = new Authentication({
       email,
       displayName,
     });
 
-    const authentication =
-      this.eventPublisher.mergeObjectContext(authenticationDomain);
+    const payload = {
+      sub: id,
+      email: authenticationDomain.email,
+      displayName: authenticationDomain.displayName,
+    };
 
-    authentication.apply(
+    authenticationDomain.apply(
       new AuthenticationLoginnedAccountEvent(
-        authentication.displayName,
-        authentication.email
+        authenticationDomain.displayName,
+        authenticationDomain.email
       )
     );
 
-    authentication.commit();
+    authenticationDomain.commit();
 
-    const payload = {
-      sub: _id,
-      email: authentication.email,
-      displayName: authentication.displayName,
-    };
     return {
       access_token: this.jwtService.sign(payload),
     };
