@@ -2,15 +2,16 @@ export { AccountDomain } from './domains/account/account.domain';
 export { OrganizationDomain } from './domains/organization/organization.domain';
 export { SuperAdminDomain } from './domains/super_admin/super_admin.domain';
 export { UserDomain } from './domains/user/user.domain';
+export * from './dto/account';
 export { IAccountGrpcController } from './grpc/account/account.controller.interface';
 export {
-  CreateAccountRequest,
-  DeleteAccountRequest,
-  GetAccountByEmailRequest,
-  GetAccountRequest,
-  ListAccountsRequest,
-  ListAccountsResponse,
-  UpdateAccountRequest,
+  AccountCreateOneRequest as CreateAccountRequest,
+  AccountDeleteOneRequest as DeleteAccountRequest,
+  AccountFindAllRequest as ListAccountsRequest,
+  AccountFindAllResponse as ListAccountsResponse,
+  AccountFindOneByEmailRequest as GetAccountByEmailRequest,
+  AccountFindOneRequest as GetAccountRequest,
+  AccountUpdateOneRequest as UpdateAccountRequest,
 } from './grpc/account/account.mics';
 export { IOrganizationGrpcController } from './grpc/organization/organization.controller.interface';
 export {

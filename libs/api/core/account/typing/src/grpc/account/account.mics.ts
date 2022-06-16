@@ -1,35 +1,39 @@
-interface Account {
+import { Role } from '@ustagil/api/core/common/typing';
+
+export interface AccountGrpc {
   id: string;
+  role: Role;
   displayName: string;
   email: string;
   organization: string;
   password: string;
 }
 
-export interface ListAccountsRequest {
+export interface AccountFindAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface ListAccountsResponse {
-  accounts: Account[];
+export interface AccountFindAllResponse {
+  accounts: AccountGrpc[];
   next_page_cursor: string;
 }
 
-export interface GetAccountRequest {
+export interface AccountFindOneRequest {
   id: string;
 }
 
-export interface GetAccountByEmailRequest {
+export interface AccountFindOneByEmailRequest {
   email: string;
 }
 
-export type CreateAccountRequest = Omit<Account, 'id'>;
+export type AccountCreateOneRequest = Omit<Omit<AccountGrpc, 'id'>, 'role'>;
 
-export interface UpdateAccountRequest extends Partial<Omit<Account, 'id'>> {
+export interface AccountUpdateOneRequest
+  extends Partial<Omit<Omit<AccountGrpc, 'id'>, 'role'>> {
   id: string;
 }
 
-export interface DeleteAccountRequest {
+export interface AccountDeleteOneRequest {
   id: string;
 }
