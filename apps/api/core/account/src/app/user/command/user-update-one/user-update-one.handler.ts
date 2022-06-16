@@ -28,13 +28,7 @@ export class UserUpdateOneHandler
       })
     );
 
-    const userMergedDomain = new UserMergedDomain({
-      displayName: updatedUserDomain.displayName,
-      email: updatedUserDomain.email,
-      id: updatedUserDomain.id,
-      organization: updatedUserDomain.organization,
-      password: updatedUserDomain.password,
-    });
+    const userMergedDomain = new UserMergedDomain(updatedUserDomain);
 
     userMergedDomain.apply(new UserUpdatedOneEvent(userMergedDomain.id));
     userMergedDomain.commit();

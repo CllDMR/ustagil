@@ -38,11 +38,6 @@ export class AuthenticationValidateAccountHandler
     const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
 
-    const authenticationMergedDomain = new AuthenticationMergedDomain({
-      email,
-      password,
-    });
-
     let accountDomain: AccountDomain;
 
     try {
@@ -55,8 +50,9 @@ export class AuthenticationValidateAccountHandler
       throw fromRpcToCustomRpcException(error);
     }
 
-    authenticationMergedDomain.displayName = accountDomain.displayName;
-    authenticationMergedDomain.organization = accountDomain.organization;
+    const authenticationMergedDomain = new AuthenticationMergedDomain(
+      accountDomain
+    );
 
     if (accountDomain.password !== password)
       throw new CustomRpcException({

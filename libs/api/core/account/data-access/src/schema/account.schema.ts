@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IdentifiableSchema } from '@ustagil/api/core/common/data-access';
+import { Role } from '@ustagil/api/core/common/typing';
 import { Document } from 'mongoose';
 
 export type AccountDocument = Account & Document;
@@ -17,8 +18,17 @@ export class Account extends IdentifiableSchema {
   @Prop()
   readonly organization: string;
 
-  @Prop()
+  @Prop({
+    select: false,
+  })
   readonly password: string;
+
+  @Prop({
+    type: Number,
+    enum: Role,
+    default: Role.ROLE_ACCOUNT,
+  })
+  readonly role: Role;
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);

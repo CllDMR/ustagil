@@ -22,18 +22,14 @@ export class OrganizationDeleteOneHandler
     const OrganizationMergedDomain =
       this.eventPublisher.mergeClassContext(OrganizationDomain);
 
-    const organizationDomain =
+    const deletedOrganizationDomain =
       await this.organizationRepository.findOneAndRemove({
         _id: new ObjectId(id),
       });
 
-    const organizationMergedDomain = new OrganizationMergedDomain({
-      id: organizationDomain.id,
-      displayName: organizationDomain.displayName,
-      email: organizationDomain.email,
-      organization: organizationDomain.organization,
-      password: organizationDomain.password,
-    });
+    const organizationMergedDomain = new OrganizationMergedDomain(
+      deletedOrganizationDomain
+    );
 
     organizationMergedDomain.apply(
       new OrganizationDeletedOneEvent(organizationMergedDomain.id)

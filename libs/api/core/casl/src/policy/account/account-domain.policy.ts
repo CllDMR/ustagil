@@ -1,28 +1,22 @@
 import { AccountDomain } from '@ustagil/api/core/account/typing';
-import { Action } from '../../action.enum';
-import { AppAbility } from '../../casl-ability.factory';
-import { IPolicyHandler } from '../../policy-handler';
+import { Action, PolicyRule } from '../../types';
 
-export class CreateAccountDomainPolicyHandler implements IPolicyHandler {
-  handle(ability: AppAbility) {
-    return ability.can(Action.Create, AccountDomain);
-  }
+export class AccountDomainCreatePolicyRule implements PolicyRule {
+  action = Action.Create;
+  subject = AccountDomain;
 }
 
-export class ReadAccountDomainPolicyHandler implements IPolicyHandler {
-  handle(ability: AppAbility) {
-    return ability.can(Action.Read, AccountDomain);
-  }
+export class AccountDomainReadPolicyRule implements PolicyRule {
+  action = Action.Read;
+  subject = AccountDomain;
 }
 
-export class UpdateAccountDomainPolicyHandler implements IPolicyHandler {
-  handle(ability: AppAbility) {
-    return ability.can(Action.Update, AccountDomain);
-  }
+export class AccountDomainUpdatePolicyRule implements PolicyRule {
+  action = Action.Update;
+  subject = AccountDomain;
 }
 
-export class DeleteAccountDomainPolicyHandler implements IPolicyHandler {
-  handle(ability: AppAbility) {
-    return ability.can(Action.Delete, AccountDomain);
-  }
+export class AccountDomainDeletePolicyRule implements PolicyRule {
+  action = Action.Delete;
+  subject = AccountDomain;
 }

@@ -23,13 +23,9 @@ export class SuperAdminReadOneByEmailHandler
       email,
     });
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain({
-      displayName: foundSuperAdminDomain.displayName,
-      email: foundSuperAdminDomain.email,
-      id: foundSuperAdminDomain.id,
-      organization: foundSuperAdminDomain.organization,
-      password: foundSuperAdminDomain.password,
-    });
+    const superAdminMergedDomain = new SuperAdminMergedDomain(
+      foundSuperAdminDomain
+    );
 
     superAdminMergedDomain.apply(
       new SuperAdminReadedOneByEmailEvent(superAdminMergedDomain.id)

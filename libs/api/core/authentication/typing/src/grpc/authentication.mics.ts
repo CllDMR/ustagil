@@ -1,3 +1,5 @@
+import { Role } from '@ustagil/api/core/common/typing';
+
 export interface RegisterAccountRequest {
   displayName: string;
   email: string;
@@ -9,6 +11,8 @@ export interface LoginAccountRequest {
   id: string;
   email: string;
   displayName: string;
+  role: Role;
+  organization: string;
 }
 
 export interface LoginAccountResponse {

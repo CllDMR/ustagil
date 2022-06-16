@@ -33,7 +33,7 @@ export class AuthenticationRegisterAccountHandler
   }: AuthenticationRegisterAccountCommand): Promise<AuthenticationDomain> {
     const { displayName, email, organization, password } = dto;
 
-    const Authentication =
+    const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
 
     try {
@@ -45,12 +45,8 @@ export class AuthenticationRegisterAccountHandler
           password,
         })) as unknown as Observable<AccountDomain>
       );
-      const authentication = new Authentication({
-        displayName: newAccount.displayName,
-        email: newAccount.email,
-        organization: newAccount.organization,
-        password: newAccount.password,
-      });
+
+      const authentication = new AuthenticationMergedDomain(newAccount);
 
       authentication.apply(
         new AuthenticationRegisteredAccountEvent(newAccount.id)

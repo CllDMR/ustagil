@@ -17,12 +17,12 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { ACCOUNT_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IAccountGrpcController } from '@ustagil/api/core/account/typing';
 import {
+  AccountDomainCreatePolicyRule,
+  AccountDomainDeletePolicyRule,
+  AccountDomainReadPolicyRule,
+  AccountDomainUpdatePolicyRule,
   CheckPolicies,
-  CreateAccountDomainPolicyHandler,
-  DeleteAccountDomainPolicyHandler,
   PoliciesGuard,
-  ReadAccountDomainPolicyHandler,
-  UpdateAccountDomainPolicyHandler,
 } from '@ustagil/api/core/casl';
 import {
   AllExceptionsFilter,
@@ -52,31 +52,31 @@ export class AccountController implements OnModuleInit {
       );
   }
 
-  @CheckPolicies(new CreateAccountDomainPolicyHandler())
+  @CheckPolicies(new AccountDomainCreatePolicyRule())
   @Post('accounts')
   postAccount(@Body() dto: AccountCreateOneBodyDto) {
     return this.accountGrpcService.CreateAccount(dto);
   }
 
-  @CheckPolicies(new ReadAccountDomainPolicyHandler())
+  @CheckPolicies(new AccountDomainReadPolicyRule())
   @Get('accounts')
   getAccounts(@Query() dto: AccountFindAllQueryDto) {
     return this.accountGrpcService.ListAccounts(dto);
   }
 
-  @CheckPolicies(new ReadAccountDomainPolicyHandler())
+  @CheckPolicies(new AccountDomainReadPolicyRule())
   @Get('accounts/:id')
   getAccount(@Param('id') id: string) {
     return this.accountGrpcService.GetAccount({ id });
   }
 
-  @CheckPolicies(new UpdateAccountDomainPolicyHandler())
+  @CheckPolicies(new AccountDomainUpdatePolicyRule())
   @Patch('accounts/:id')
   patchAccount(@Param('id') id: string, @Body() dto: AccountUpdateOneBodyDto) {
     return this.accountGrpcService.UpdateAccount({ id, ...dto });
   }
 
-  @CheckPolicies(new DeleteAccountDomainPolicyHandler())
+  @CheckPolicies(new AccountDomainDeletePolicyRule())
   @Delete('accounts/:id')
   deleteAccount(@Param('id') id: string) {
     return this.accountGrpcService.DeleteAccount({ id });

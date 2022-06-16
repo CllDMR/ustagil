@@ -19,15 +19,12 @@ export class AccountReadOneByEmailHandler
     const AccountMergedDomain =
       this.eventPublisher.mergeClassContext(AccountDomain);
 
-    const foundAccountDomain = await this.accountRepository.findOne({ email });
+    const foundAccountDomain = await this.accountRepository.findOne(
+      { email },
+      '+password'
+    );
 
-    const accountMergedDomain = new AccountMergedDomain({
-      displayName: foundAccountDomain.displayName,
-      email: foundAccountDomain.email,
-      id: foundAccountDomain.id,
-      organization: foundAccountDomain.organization,
-      password: foundAccountDomain.password,
-    });
+    const accountMergedDomain = new AccountMergedDomain(foundAccountDomain);
 
     accountMergedDomain.apply(
       new AccountReadedOneByEmailEvent(accountMergedDomain.id)

@@ -20,17 +20,11 @@ export class AccountDeleteOneHandler
     const AccountMergedDomain =
       this.eventPublisher.mergeClassContext(AccountDomain);
 
-    const accountDomain = await this.accountRepository.findOneAndRemove({
+    const deletedAccountDomain = await this.accountRepository.findOneAndRemove({
       _id: new ObjectId(id),
     });
 
-    const accountMergedDomain = new AccountMergedDomain({
-      id: accountDomain.id,
-      displayName: accountDomain.displayName,
-      email: accountDomain.email,
-      organization: accountDomain.organization,
-      password: accountDomain.password,
-    });
+    const accountMergedDomain = new AccountMergedDomain(deletedAccountDomain);
 
     accountMergedDomain.apply(
       new AccountDeletedOneEvent(accountMergedDomain.id)

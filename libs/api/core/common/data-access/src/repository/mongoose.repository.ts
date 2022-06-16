@@ -3,7 +3,7 @@ import { HttpStatus } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { CustomRpcException } from '@ustagil/api/core/common/typing';
 import { MongoServerError, ObjectId } from 'mongodb';
-import { FilterQuery, Model, QueryOptions } from 'mongoose';
+import { FilterQuery, Model, ProjectionType, QueryOptions } from 'mongoose';
 import { EntityDomainFactory } from '../factory/entity-domain.factory';
 import { IdentifiableSchema } from '../schema/identifiable.schema';
 import { BaseRepository } from './base.repository';
@@ -91,13 +91,16 @@ export abstract class MongooseRepository<
     );
   }
 
-  async findOne(entityFilterQuery?: FilterQuery<TEntity>): Promise<TDomain> {
+  async findOne(
+    entityFilterQuery?: FilterQuery<TEntity>,
+    entityProjectionType?: ProjectionType<TEntity>
+  ): Promise<TDomain> {
     let entity: TEntity;
 
     try {
       entity = await this.entityModel.findOne(
         entityFilterQuery,
-        {},
+        entityProjectionType,
         { lean: true }
       );
     } catch (error) {

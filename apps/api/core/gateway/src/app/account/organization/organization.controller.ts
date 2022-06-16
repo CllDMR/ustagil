@@ -18,11 +18,11 @@ import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
 import {
   CheckPolicies,
-  CreateOrganizationDomainPolicyHandler,
-  DeleteOrganizationDomainPolicyHandler,
+  OrganizationDomainCreatePolicyRule,
+  OrganizationDomainDeletePolicyRule,
+  OrganizationDomainReadPolicyRule,
+  OrganizationDomainUpdatePolicyRule,
   PoliciesGuard,
-  ReadOrganizationDomainPolicyHandler,
-  UpdateOrganizationDomainPolicyHandler,
 } from '@ustagil/api/core/casl';
 import {
   AllExceptionsFilter,
@@ -53,13 +53,13 @@ export class OrganizationController implements OnModuleInit {
       );
   }
 
-  @CheckPolicies(new CreateOrganizationDomainPolicyHandler())
+  @CheckPolicies(new OrganizationDomainCreatePolicyRule())
   @Post('account/organizations')
   postOrganization(@Body() dto: OrganizationCreateOneBodyDto) {
     return this.organizationGrpcService.CreateOrganization(dto);
   }
 
-  @CheckPolicies(new ReadOrganizationDomainPolicyHandler())
+  @CheckPolicies(new OrganizationDomainReadPolicyRule())
   @Get('account/organizations')
   getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
     return this.organizationGrpcService.ListOrganizations({
@@ -67,13 +67,13 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
-  @CheckPolicies(new ReadOrganizationDomainPolicyHandler())
+  @CheckPolicies(new OrganizationDomainReadPolicyRule())
   @Get('account/organizations/:id')
   getOrganization(@Param('id') id: string) {
     return this.organizationGrpcService.GetOrganization({ id });
   }
 
-  @CheckPolicies(new UpdateOrganizationDomainPolicyHandler())
+  @CheckPolicies(new OrganizationDomainUpdatePolicyRule())
   @Patch('account/organizations/:id')
   patchOrganization(
     @Param('id') id: string,
@@ -85,7 +85,7 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
-  @CheckPolicies(new DeleteOrganizationDomainPolicyHandler())
+  @CheckPolicies(new OrganizationDomainDeletePolicyRule())
   @Delete('account/organizations/:id')
   deleteOrganization(@Param('id') id: string) {
     return this.organizationGrpcService.DeleteOrganization({ id });

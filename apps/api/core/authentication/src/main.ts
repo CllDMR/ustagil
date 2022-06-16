@@ -8,12 +8,6 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // const aqeqwe = app.get(ACCOUNT_MS_GRPC);
-  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ aqeqwe', aqeqwe);
-
-  // const asdasdad = app.get(AppModule);
-  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ asdasdad', asdasdad);
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

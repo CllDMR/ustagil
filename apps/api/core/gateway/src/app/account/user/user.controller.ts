@@ -18,11 +18,11 @@ import { USER_MS_GPRC } from '@ustagil/api/core/account/constant';
 import { IUserGrpcController } from '@ustagil/api/core/account/typing';
 import {
   CheckPolicies,
-  CreateUserDomainPolicyHandler,
-  DeleteUserDomainPolicyHandler,
   PoliciesGuard,
-  ReadUserDomainPolicyHandler,
-  UpdateUserDomainPolicyHandler,
+  UserDomainCreatePolicyRule,
+  UserDomainDeletePolicyRule,
+  UserDomainReadPolicyRule,
+  UserDomainUpdatePolicyRule,
 } from '@ustagil/api/core/casl';
 import {
   AllExceptionsFilter,
@@ -51,31 +51,31 @@ export class UserController implements OnModuleInit {
       this.userMSGrpcClient.getService<IUserGrpcController>('UserService');
   }
 
-  @CheckPolicies(new CreateUserDomainPolicyHandler())
+  @CheckPolicies(new UserDomainCreatePolicyRule())
   @Post('account/users')
   postUser(@Body() dto: UserCreateOneBodyDto) {
     return this.userGrpcService.CreateUser(dto);
   }
 
-  @CheckPolicies(new ReadUserDomainPolicyHandler())
+  @CheckPolicies(new UserDomainReadPolicyRule())
   @Get('account/users')
   getUsers(@Query() dto: UserFindAllQueryDto) {
     return this.userGrpcService.ListUsers({ page_size: dto.page_size ?? 10 });
   }
 
-  @CheckPolicies(new ReadUserDomainPolicyHandler())
+  @CheckPolicies(new UserDomainReadPolicyRule())
   @Get('account/users/:id')
   getUser(@Param('id') id: string) {
     return this.userGrpcService.GetUser({ id });
   }
 
-  @CheckPolicies(new UpdateUserDomainPolicyHandler())
+  @CheckPolicies(new UserDomainUpdatePolicyRule())
   @Patch('account/users/:id')
   patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneBodyDto) {
     return this.userGrpcService.UpdateUser({ id, ...dto });
   }
 
-  @CheckPolicies(new DeleteUserDomainPolicyHandler())
+  @CheckPolicies(new UserDomainDeletePolicyRule())
   @Delete('account/users/:id')
   deleteUser(@Param('id') id: string) {
     return this.userGrpcService.DeleteUser({ id });

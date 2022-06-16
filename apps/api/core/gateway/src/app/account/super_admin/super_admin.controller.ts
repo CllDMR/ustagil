@@ -18,11 +18,11 @@ import { SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { ISuperAdminGrpcController } from '@ustagil/api/core/account/typing';
 import {
   CheckPolicies,
-  CreateSuperAdminDomainPolicyHandler,
-  DeleteSuperAdminDomainPolicyHandler,
   PoliciesGuard,
-  ReadSuperAdminDomainPolicyHandler,
-  UpdateSuperAdminDomainPolicyHandler,
+  SuperAdminDomainCreatePolicyRule,
+  SuperAdminDomainDeletePolicyRule,
+  SuperAdminDomainReadPolicyRule,
+  SuperAdminDomainUpdatePolicyRule,
 } from '@ustagil/api/core/casl';
 import {
   AllExceptionsFilter,
@@ -53,13 +53,13 @@ export class SuperAdminController implements OnModuleInit {
       );
   }
 
-  @CheckPolicies(new CreateSuperAdminDomainPolicyHandler())
+  @CheckPolicies(new SuperAdminDomainCreatePolicyRule())
   @Post('account/super_admins')
   postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
     return this.superAdminGrpcService.CreateSuperAdmin(dto);
   }
 
-  @CheckPolicies(new ReadSuperAdminDomainPolicyHandler())
+  @CheckPolicies(new SuperAdminDomainReadPolicyRule())
   @Get('account/super_admins')
   getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
     return this.superAdminGrpcService.ListSuperAdmins({
@@ -67,13 +67,13 @@ export class SuperAdminController implements OnModuleInit {
     });
   }
 
-  @CheckPolicies(new ReadSuperAdminDomainPolicyHandler())
+  @CheckPolicies(new SuperAdminDomainReadPolicyRule())
   @Get('account/super_admins/:id')
   getSuperAdmin(@Param('id') id: string) {
     return this.superAdminGrpcService.GetSuperAdmin({ id });
   }
 
-  @CheckPolicies(new UpdateSuperAdminDomainPolicyHandler())
+  @CheckPolicies(new SuperAdminDomainUpdatePolicyRule())
   @Patch('account/super_admins/:id')
   patchSuperAdmin(
     @Param('id') id: string,
@@ -85,7 +85,7 @@ export class SuperAdminController implements OnModuleInit {
     });
   }
 
-  @CheckPolicies(new DeleteSuperAdminDomainPolicyHandler())
+  @CheckPolicies(new SuperAdminDomainDeletePolicyRule())
   @Delete('account/super_admins/:id')
   deleteSuperAdmin(@Param('id') id: string) {
     return this.superAdminGrpcService.DeleteSuperAdmin({ id });
