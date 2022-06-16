@@ -165,9 +165,12 @@ export abstract class MongooseRepository<
     let entity: TEntity;
 
     try {
+      const { _id, ...updateEntity } =
+        this.entityDomainFactory.createEntityFromDomain(domain);
+
       entity = await this.entityModel.findOneAndUpdate(
         entityFilterQuery,
-        this.entityDomainFactory.createEntityFromDomain(domain),
+        updateEntity,
         {
           new: true,
           useFindAndModify: false,

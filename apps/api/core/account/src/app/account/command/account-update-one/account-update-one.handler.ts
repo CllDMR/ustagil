@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { AccountMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { AccountDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { AccountUpdatedOneEvent } from '../../event';
 import { AccountUpdateOneCommand } from './account-update-one.command';
 
@@ -20,9 +21,10 @@ export class AccountUpdateOneHandler
       this.eventPublisher.mergeClassContext(AccountDomain);
 
     const updatedAccountDomain = await this.accountRepository.findOneAndUpdate(
-      {},
+      {
+        _id: new ObjectId(id),
+      },
       new AccountDomain({
-        id,
         displayName,
         email,
         organization,
