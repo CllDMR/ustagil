@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { AccountDomain } from '../../domains/account/account.domain';
 import {
   AccountCreateOneRequest,
@@ -14,35 +15,35 @@ export interface IAccountGrpcController {
     data: AccountFindAllRequest
     // metadata: Metadata
     // call: ServerUnaryCall<ListAccountsRequest, ListAccountsResponse>
-  ): Promise<AccountFindAllResponse>;
+  ): Observable<AccountFindAllResponse>;
 
   GetAccount(
     data: AccountFindOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetAccountRequest, AccountDomain>
-  ): Promise<AccountDomain>;
+  ): Observable<AccountDomain>;
 
   GetAccountByEmail(
     data: AccountFindOneByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetAccountRequest, AccountDomain>
-  ): Promise<AccountDomain>;
+  ): Observable<AccountDomain>;
 
   CreateAccount(
     data: AccountCreateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<CreateAccountRequest, AccountDomain>
-  ): Promise<AccountDomain>;
+  ): Observable<AccountDomain>;
 
   UpdateAccount(
     data: AccountUpdateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<UpdateAccountRequest, AccountDomain>
-  ): Promise<AccountDomain>;
+  ): Observable<AccountDomain>;
 
   DeleteAccount(
     data: AccountDeleteOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<DeleteAccountRequest, void>
-  ): Promise<void>;
+  ): Observable<void>;
 }

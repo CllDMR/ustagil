@@ -1,4 +1,3 @@
-export { AccountResponseDomainFactory } from './account-response.factory';
 export { AccountCreateOneRequestBodyDto } from './create-one/request-body.dto';
 export { AccountCreateOneResponseBodyDto } from './create-one/response-body.dto';
 export { AccountDeleteOneResponseBodyDto } from './delete-one/response-body.dto';

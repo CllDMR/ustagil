@@ -11,21 +11,24 @@ import {
   Query,
   UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ACCOUNT_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
   AccountCreateOneRequestBodyDto,
-  AccountCreateOneResponseBodyDto,
   AccountFindAllRequestQueryDto,
-  AccountFindAllResponseBodyDto,
-  AccountFindOneResponseBodyDto,
-  AccountResponseDomainFactory,
   AccountUpdateOneRequestBodyDto,
-  AccountUpdateOneResponseBodyDto,
   IAccountGrpcController,
 } from '@ustagil/api/core/account/typing';
+import {
+  AccountCreateOneTransformInterceptor,
+  AccountDeleteOneTransformInterceptor,
+  AccountFindAllTransformInterceptor,
+  AccountFindOneTransformInterceptor,
+  AccountUpdateOneTransformInterceptor,
+} from '@ustagil/api/core/account/util';
 import {
   AccountDomainCreatePolicyRule,
   AccountDomainDeletePolicyRule,
@@ -47,8 +50,7 @@ export class AccountController implements OnModuleInit {
   private accountGrpcService: IAccountGrpcController;
 
   constructor(
-    @Inject(ACCOUNT_MS_GRPC) private readonly accountMSGrpcClient: ClientGrpc,
-    private accountResponseDomainFactory: AccountResponseDomainFactory
+    @Inject(ACCOUNT_MS_GRPC) private readonly accountMSGrpcClient: ClientGrpc
   ) {}
 
   onModuleInit() {
@@ -58,47 +60,41 @@ export class AccountController implements OnModuleInit {
       );
   }
 
+  @UseInterceptors(AccountCreateOneTransformInterceptor)
   @CheckPolicies(new AccountDomainCreatePolicyRule())
   @Post('accounts')
-  async postAccount(
-    @Body() dto: AccountCreateOneRequestBodyDto
-  ): Promise<AccountCreateOneResponseBodyDto> {
-    const data = await this.accountGrpcService.CreateAccount(dto);
-    return this.accountResponseDomainFactory.createResponseForCreateOne(data);
+  postAccount(@Body() dto: AccountCreateOneRequestBodyDto) {
+    return this.accountGrpcService.CreateAccount(dto);
   }
 
+  @UseInterceptors(AccountFindAllTransformInterceptor)
   @CheckPolicies(new AccountDomainReadPolicyRule())
   @Get('accounts')
-  async getAccounts(
-    @Query() dto: AccountFindAllRequestQueryDto
-  ): Promise<AccountFindAllResponseBodyDto> {
-    const data = await this.accountGrpcService.ListAccounts(dto);
-    return this.accountResponseDomainFactory.createResponseForFindAll(data);
+  getAccounts(@Query() dto: AccountFindAllRequestQueryDto) {
+    return this.accountGrpcService.ListAccounts(dto);
   }
 
+  @UseInterceptors(AccountFindOneTransformInterceptor)
   @CheckPolicies(new AccountDomainReadPolicyRule())
   @Get('accounts/:id')
-  async getAccount(
-    @Param('id') id: string
-  ): Promise<AccountFindOneResponseBodyDto> {
-    const data = await this.accountGrpcService.GetAccount({ id });
-    return this.accountResponseDomainFactory.createResponseForFindOne(data);
+  getAccount(@Param('id') id: string) {
+    return this.accountGrpcService.GetAccount({ id });
   }
 
+  @UseInterceptors(AccountUpdateOneTransformInterceptor)
   @CheckPolicies(new AccountDomainUpdatePolicyRule())
   @Patch('accounts/:id')
-  async patchAccount(
+  patchAccount(
     @Param('id') id: string,
     @Body() dto: AccountUpdateOneRequestBodyDto
-  ): Promise<AccountUpdateOneResponseBodyDto> {
-    const data = await this.accountGrpcService.UpdateAccount({ id, ...dto });
-    return this.accountResponseDomainFactory.createResponseForUpdateOne(data);
+  ) {
+    return this.accountGrpcService.UpdateAccount({ id, ...dto });
   }
 
+  @UseInterceptors(AccountDeleteOneTransformInterceptor)
   @CheckPolicies(new AccountDomainDeletePolicyRule())
   @Delete('accounts/:id')
-  async deleteAccount(@Param('id') id: string): Promise<void> {
-    return await this.accountGrpcService.DeleteAccount({ id });
-    // return this.accountResponseDomainFactory.createResponseForDeleteOne(data);
+  deleteAccount(@Param('id') id: string) {
+    return this.accountGrpcService.DeleteAccount({ id });
   }
 }

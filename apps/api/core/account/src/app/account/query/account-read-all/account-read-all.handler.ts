@@ -43,7 +43,7 @@ export class AccountReadAllHandler
     accountMergedDomain.apply(new AccountReadedAllEvent());
     accountMergedDomain.commit();
 
-    let new_next_page_cursor: string;
+    let new_next_page_cursor = '';
 
     if (accountDomains.length >= page_size + 1) {
       const nextAccount = accountDomains.pop();
