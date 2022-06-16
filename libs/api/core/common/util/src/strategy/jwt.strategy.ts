@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { JWTPayload, MyRequest } from '@ustagil/api/core/common/typing';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
@@ -12,11 +13,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: string; email: string; displayName: string }) {
-    return {
+  async validate(payload: JWTPayload) {
+    const reqUser: MyRequest['user'] = {
       id: payload.sub,
-      email: payload.email,
-      displayName: payload.displayName,
+      role: payload.role,
     };
+    return reqUser;
   }
 }

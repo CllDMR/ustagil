@@ -5,28 +5,45 @@ package organization;
 service OrganizationService {
   rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {}
   rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
+  rpc GetOrganizationByEmail(GetOrganizationByEmailRequest) returns (Organization) {}
   rpc CreateOrganization(CreateOrganizationRequest) returns (Organization) {}
   rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
   rpc DeleteOrganization(DeleteOrganizationRequest) returns (Organization) {}
 }
 
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_ORGANIZATION = 1;
+  ROLE_ACCOUNT = 2;
+  ROLE_SUPER_ADMIN = 3;
+  ROLE_USER = 4;
+}
+
 message Organization {
   string id = 1;
-  string displayName = 2;
-  string email = 3;
-  string organization = 4;
+  Role role = 2;
+  string displayName = 3;
+  string email = 4;
+  string organization = 5;
+  optional string password = 6;
 }
 
 message ListOrganizationsRequest {
   optional int32 page_size = 1;
+  optional string next_page_cursor = 2;
 }
 
 message ListOrganizationsResponse {
   repeated Organization organizations = 1;
+  string next_page_cursor = 2;
 }
 
 message GetOrganizationRequest {
   string id = 1;
+}
+
+message GetOrganizationByEmailRequest {
+  string email = 1;
 }
 
 message CreateOrganizationRequest {
@@ -34,6 +51,7 @@ message CreateOrganizationRequest {
   string displayName = 2;
   string email = 3;
   string organization = 4;
+  string password = 5;
 }
 
 message UpdateOrganizationRequest {

@@ -12,6 +12,7 @@
     "api-core-authentication-data-access": "libs/api/core/authentication/data-access",
     "api-core-authentication-typing": "libs/api/core/authentication/typing",
     "api-core-authentication-util": "libs/api/core/authentication/util",
+    "api-core-casl": "libs/api/core/casl",
     "api-core-common-constant": "libs/api/core/common/constant",
     "api-core-common-data-access": "libs/api/core/common/data-access",
     "api-core-common-typing": "libs/api/core/common/typing",

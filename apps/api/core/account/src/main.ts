@@ -80,9 +80,6 @@ async function bootstrap() {
 
   await app.init();
   await app.startAllMicroservices();
-
-  // const qqqqqqq = app.get(ACCOUNT_MS_GRPC);
-  // console.log('🚀 ~ file: main.ts ~ line 30 ~ bootstrap ~ qqqqqqq', qqqqqqq);
 }
 
 bootstrap();

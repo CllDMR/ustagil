@@ -1,6 +1,7 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationDomain } from '@ustagil/api/core/authentication/typing';
+import { JWTPayload } from '@ustagil/api/core/common/typing';
 import { AuthenticationLoginnedAccountEvent } from '../../event';
 import { AuthenticationLoginAccountQuery } from './authentication-login-account.query';
 
@@ -13,21 +14,24 @@ export class AuthenticationLoginAccountHandler
     private readonly jwtService: JwtService
   ) {}
 
-  async execute({ dto }: AuthenticationLoginAccountQuery) {
-    const { email, displayName, id } = dto;
+  async execute({ dto }: AuthenticationLoginAccountQuery): Promise<{
+    access_token: string;
+  }> {
+    const { displayName, email, id, organization, role } = dto;
 
-    const Authentication =
+    const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
 
-    const authenticationDomain = new Authentication({
-      email,
+    const authenticationDomain = new AuthenticationMergedDomain({
       displayName,
+      email,
+      organization,
+      role,
     });
 
-    const payload = {
+    const payload: JWTPayload = {
       sub: id,
-      email: authenticationDomain.email,
-      displayName: authenticationDomain.displayName,
+      role: authenticationDomain.role,
     };
 
     authenticationDomain.apply(

@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
 import { SuperAdminCreatedOneEvent } from '../../event';
 import { SuperAdminCreateOneCommand } from './super_admin-create-one.command';
@@ -25,6 +26,7 @@ export class SuperAdminCreateOneHandler
     const createdSuperAdminDomain = await this.superAdminRepository.create(
       new SuperAdminDomain({
         id: new ObjectId().toHexString(),
+        role: Role.ROLE_SUPER_ADMIN,
         displayName: displayName,
         email: email,
         organization: organization,
@@ -32,13 +34,9 @@ export class SuperAdminCreateOneHandler
       })
     );
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain({
-      displayName: createdSuperAdminDomain.displayName,
-      email: createdSuperAdminDomain.email,
-      id: createdSuperAdminDomain.id,
-      organization: createdSuperAdminDomain.organization,
-      password: createdSuperAdminDomain.password,
-    });
+    const superAdminMergedDomain = new SuperAdminMergedDomain(
+      createdSuperAdminDomain
+    );
 
     superAdminMergedDomain.apply(
       new SuperAdminCreatedOneEvent(superAdminMergedDomain.id)

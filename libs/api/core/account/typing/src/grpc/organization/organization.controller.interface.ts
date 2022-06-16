@@ -2,6 +2,7 @@ import { OrganizationDomain } from '../../domains/organization/organization.doma
 import {
   CreateOrganizationRequest,
   DeleteOrganizationRequest,
+  GetOrganizationByEmailRequest,
   GetOrganizationRequest,
   ListOrganizationsRequest,
   ListOrganizationsResponse,
@@ -17,6 +18,12 @@ export interface IOrganizationGrpcController {
 
   GetOrganization(
     data: GetOrganizationRequest
+    // metadata: Metadata
+    // call: ServerUnaryCall<GetOrganizationRequest, OrganizationDomain>
+  ): Promise<OrganizationDomain>;
+
+  GetOrganizationByEmail(
+    data: GetOrganizationByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetOrganizationRequest, OrganizationDomain>
   ): Promise<OrganizationDomain>;

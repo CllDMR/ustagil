@@ -22,17 +22,14 @@ export class SuperAdminDeleteOneHandler
     const SuperAdminMergedDomain =
       this.eventPublisher.mergeClassContext(SuperAdminDomain);
 
-    const superAdminDomain = await this.superAdminRepository.findOneAndRemove({
-      _id: new ObjectId(id),
-    });
+    const deletedSuperAdminDomain =
+      await this.superAdminRepository.findOneAndRemove({
+        _id: new ObjectId(id),
+      });
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain({
-      id: superAdminDomain.id,
-      displayName: superAdminDomain.displayName,
-      email: superAdminDomain.email,
-      organization: superAdminDomain.organization,
-      password: superAdminDomain.password,
-    });
+    const superAdminMergedDomain = new SuperAdminMergedDomain(
+      deletedSuperAdminDomain
+    );
 
     superAdminMergedDomain.apply(
       new SuperAdminDeletedOneEvent(superAdminMergedDomain.id)

@@ -32,13 +32,9 @@ export class OrganizationUpdateOneHandler
         })
       );
 
-    const organizationMergedDomain = new OrganizationMergedDomain({
-      displayName: updatedOrganizationDomain.displayName,
-      email: updatedOrganizationDomain.email,
-      id: updatedOrganizationDomain.id,
-      organization: updatedOrganizationDomain.organization,
-      password: updatedOrganizationDomain.password,
-    });
+    const organizationMergedDomain = new OrganizationMergedDomain(
+      updatedOrganizationDomain
+    );
 
     organizationMergedDomain.apply(
       new OrganizationUpdatedOneEvent(organizationMergedDomain.id)

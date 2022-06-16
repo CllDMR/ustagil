@@ -16,6 +16,7 @@ export { IOrganizationGrpcController } from './grpc/organization/organization.co
 export {
   CreateOrganizationRequest,
   DeleteOrganizationRequest,
+  GetOrganizationByEmailRequest,
   GetOrganizationRequest,
   ListOrganizationsRequest,
   ListOrganizationsResponse,
@@ -25,6 +26,7 @@ export { ISuperAdminGrpcController } from './grpc/super_admin/super_admin.contro
 export {
   CreateSuperAdminRequest,
   DeleteSuperAdminRequest,
+  GetSuperAdminByEmailRequest,
   GetSuperAdminRequest,
   ListSuperAdminsRequest,
   ListSuperAdminsResponse,
@@ -34,6 +36,7 @@ export { IUserGrpcController } from './grpc/user/user.controller.interface';
 export {
   CreateUserRequest,
   DeleteUserRequest,
+  GetUserByEmailRequest,
   GetUserRequest,
   ListUsersRequest,
   ListUsersResponse,

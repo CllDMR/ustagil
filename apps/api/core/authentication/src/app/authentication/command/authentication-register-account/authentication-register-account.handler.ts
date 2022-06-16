@@ -1,5 +1,4 @@
-import { Status } from '@grpc/grpc-js/build/src/constants';
-import { HttpStatus, Inject } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ACCOUNT_MS_GRPC } from '@ustagil/api/core/account/constant';
@@ -8,7 +7,7 @@ import {
   IAccountGrpcController,
 } from '@ustagil/api/core/account/typing';
 import { AuthenticationDomain } from '@ustagil/api/core/authentication/typing';
-import { CustomRpcException } from '@ustagil/api/core/common/typing';
+import { fromRpcToCustomRpcException } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
 import { AuthenticationRegisteredAccountEvent } from '../../event';
 import { AuthenticationRegisterAccountCommand } from './authentication-register-account.command';
@@ -34,51 +33,29 @@ export class AuthenticationRegisterAccountHandler
   }: AuthenticationRegisterAccountCommand): Promise<AuthenticationDomain> {
     const { displayName, email, organization, password } = dto;
 
-    const Authentication =
+    const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
 
-    let existingAccount;
-
     try {
-      existingAccount = await firstValueFrom(
-        (await this.accountGrpcService.GetAccountByEmail({
+      const newAccount = await firstValueFrom(
+        (await this.accountGrpcService.CreateAccount({
+          displayName,
           email,
+          organization,
+          password,
         })) as unknown as Observable<AccountDomain>
       );
-    } catch (err) {
-      void 0;
+
+      const authentication = new AuthenticationMergedDomain(newAccount);
+
+      authentication.apply(
+        new AuthenticationRegisteredAccountEvent(newAccount.id)
+      );
+      authentication.commit();
+
+      return authentication;
+    } catch (error) {
+      throw fromRpcToCustomRpcException(error);
     }
-
-    if (existingAccount)
-      throw new CustomRpcException({
-        description: 'Account already exist.',
-        errorCode: '',
-        message: 'Account already exist.',
-        rpcErrorCode: Status.INTERNAL,
-        statusCode: HttpStatus.BAD_REQUEST,
-      });
-
-    const newAccount = await firstValueFrom(
-      (await this.accountGrpcService.CreateAccount({
-        displayName,
-        email,
-        organization,
-        password,
-      })) as unknown as Observable<AccountDomain>
-    );
-
-    const authentication = new Authentication({
-      displayName: newAccount.displayName,
-      email: newAccount.email,
-      organization: newAccount.organization,
-      password: newAccount.password,
-    });
-
-    authentication.apply(
-      new AuthenticationRegisteredAccountEvent(newAccount.id)
-    );
-    authentication.commit();
-
-    return authentication;
   }
 }

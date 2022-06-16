@@ -8,19 +8,29 @@ service AuthenticationService {
   rpc ValidateAccount(ValidateAccountRequest) returns (Account) {}
 }
 
-message Authentication {
-  string displayName = 1;
-  string email = 2;
-  string organization = 3;
-  string password = 4;
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_ORGANIZATION = 1;
+  ROLE_ACCOUNT = 2;
+  ROLE_SUPER_ADMIN = 3;
+  ROLE_USER = 4;
 }
 
-message Account {
-  string id = 1;
+message Authentication {
+  Role role = 1;
   string displayName = 2;
   string email = 3;
   string organization = 4;
   string password = 5;
+}
+
+message Account {
+  string id = 1;
+  Role role = 2;
+  string displayName = 3;
+  string email = 4;
+  string organization = 5;
+  string password = 6;
 }
 
 message RegisterAccountRequest {
@@ -37,6 +47,8 @@ message LoginAccountRequest {
   string id = 1;
   string email = 2;
   string displayName = 3;
+  string organization = 4;
+  Role role = 5;
 }
 
 message LoginAccountResponse {

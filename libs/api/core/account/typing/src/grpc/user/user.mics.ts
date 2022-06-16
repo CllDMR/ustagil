@@ -7,24 +7,27 @@ interface User {
 }
 
 export interface ListUsersRequest {
-  page_size: number;
+  page_size?: number;
+  next_page_cursor?: string;
 }
 
 export interface ListUsersResponse {
   users: User[];
+  next_page_cursor: string;
 }
 
 export interface GetUserRequest {
   id: string;
 }
 
-export interface CreateUserRequest {
-  user: Omit<User, 'id'>;
+export interface GetUserByEmailRequest {
+  email: string;
 }
 
-export interface UpdateUserRequest {
+export type CreateUserRequest = Omit<User, 'id'>;
+
+export interface UpdateUserRequest extends Partial<Omit<User, 'id'>> {
   id: string;
-  user: Partial<Omit<User, 'id'>>;
 }
 
 export interface DeleteUserRequest {

@@ -32,13 +32,9 @@ export class SuperAdminUpdateOneHandler
         })
       );
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain({
-      displayName: updatedSuperAdminDomain.displayName,
-      email: updatedSuperAdminDomain.email,
-      id: updatedSuperAdminDomain.id,
-      organization: updatedSuperAdminDomain.organization,
-      password: updatedSuperAdminDomain.password,
-    });
+    const superAdminMergedDomain = new SuperAdminMergedDomain(
+      updatedSuperAdminDomain
+    );
 
     superAdminMergedDomain.apply(
       new SuperAdminUpdatedOneEvent(superAdminMergedDomain.id)

@@ -1,7 +1,9 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+import { Role } from '@ustagil/api/core/common/typing';
 
 export class SuperAdminDomain extends AggregateRoot {
   id: string;
+  role: Role;
   displayName: string;
   email: string;
   organization: string;
@@ -9,6 +11,7 @@ export class SuperAdminDomain extends AggregateRoot {
 
   constructor({
     id,
+    role,
     displayName,
     email,
     organization,
@@ -16,6 +19,7 @@ export class SuperAdminDomain extends AggregateRoot {
   }: Partial<SuperAdminDomain>) {
     super();
     this.id = id;
+    this.role = role;
     this.displayName = displayName;
     this.email = email;
     this.organization = organization;
@@ -25,6 +29,7 @@ export class SuperAdminDomain extends AggregateRoot {
   toString() {
     return JSON.stringify({
       id: this.id,
+      role: this.role,
       displayName: this.displayName,
       email: this.email,
       organization: this.organization,

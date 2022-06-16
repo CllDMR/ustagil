@@ -11,6 +11,7 @@ export class AccountEntityDomainFactory
   createEntityFromDomain(domain: AccountDomain): Account {
     return {
       _id: new ObjectId(domain.id),
+      role: domain.role,
       displayName: domain.displayName,
       email: domain.email,
       organization: domain.organization,
@@ -21,6 +22,7 @@ export class AccountEntityDomainFactory
   createDomainFromEntity(entity: Account): AccountDomain {
     return new AccountDomain({
       id: entity._id.toHexString(),
+      role: entity.role,
       displayName: entity.displayName,
       email: entity.email,
       organization: entity.organization,

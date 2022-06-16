@@ -24,13 +24,9 @@ export class OrganizationReadOneHandler
     const foundOrganizationDomain =
       await this.organizationRepository.findOneById(id);
 
-    const organizationMergedDomain = new OrganizationMergedDomain({
-      displayName: foundOrganizationDomain.displayName,
-      email: foundOrganizationDomain.email,
-      id: foundOrganizationDomain.id,
-      organization: foundOrganizationDomain.organization,
-      password: foundOrganizationDomain.password,
-    });
+    const organizationMergedDomain = new OrganizationMergedDomain(
+      foundOrganizationDomain
+    );
 
     organizationMergedDomain.apply(
       new OrganizationReadedOneEvent(organizationMergedDomain.id)

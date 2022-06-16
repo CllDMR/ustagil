@@ -19,17 +19,11 @@ export class UserDeleteOneHandler
 
     const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
 
-    const userDomain = await this.userRepository.findOneAndRemove({
+    const deletedUserDomain = await this.userRepository.findOneAndRemove({
       _id: new ObjectId(id),
     });
 
-    const userMergedDomain = new UserMergedDomain({
-      id: userDomain.id,
-      displayName: userDomain.displayName,
-      email: userDomain.email,
-      organization: userDomain.organization,
-      password: userDomain.password,
-    });
+    const userMergedDomain = new UserMergedDomain(deletedUserDomain);
 
     userMergedDomain.apply(new UserDeletedOneEvent(userMergedDomain.id));
     userMergedDomain.commit();

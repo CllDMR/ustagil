@@ -29,13 +29,7 @@ export class AccountUpdateOneHandler
       })
     );
 
-    const accountMergedDomain = new AccountMergedDomain({
-      displayName: updatedAccountDomain.displayName,
-      email: updatedAccountDomain.email,
-      id: updatedAccountDomain.id,
-      organization: updatedAccountDomain.organization,
-      password: updatedAccountDomain.password,
-    });
+    const accountMergedDomain = new AccountMergedDomain(updatedAccountDomain);
 
     accountMergedDomain.apply(
       new AccountUpdatedOneEvent(accountMergedDomain.id)

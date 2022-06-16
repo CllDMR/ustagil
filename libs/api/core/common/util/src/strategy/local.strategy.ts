@@ -34,7 +34,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       );
   }
 
-  async validate(email: string, password: string): Promise<any> {
+  async validate(
+    email: string,
+    password: string
+  ): Promise<AuthenticationDomain> {
     const authentication = await firstValueFrom(
       (await this.authenticationGrpcService.validateAccount({
         email,

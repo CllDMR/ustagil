@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { AccountMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { AccountDomain } from '@ustagil/api/core/account/typing';
+import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
 import { AccountCreatedOneEvent } from '../../event';
 import { AccountCreateOneCommand } from './account-create-one.command';
@@ -23,6 +24,7 @@ export class AccountCreateOneHandler
     const createdAccountDomain = await this.accountRepository.create(
       new AccountDomain({
         id: new ObjectId().toHexString(),
+        role: Role.ROLE_ACCOUNT,
         displayName: displayName,
         email: email,
         organization: organization,
@@ -30,13 +32,7 @@ export class AccountCreateOneHandler
       })
     );
 
-    const accountMergedDomain = new AccountMergedDomain({
-      displayName: createdAccountDomain.displayName,
-      email: createdAccountDomain.email,
-      id: createdAccountDomain.id,
-      organization: createdAccountDomain.organization,
-      password: createdAccountDomain.password,
-    });
+    const accountMergedDomain = new AccountMergedDomain(createdAccountDomain);
 
     accountMergedDomain.apply(
       new AccountCreatedOneEvent(accountMergedDomain.id)

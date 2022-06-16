@@ -4,6 +4,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import {
   CreateSuperAdminRequest,
   DeleteSuperAdminRequest,
+  GetSuperAdminByEmailRequest,
   GetSuperAdminRequest,
   ISuperAdminGrpcController,
   ListSuperAdminsRequest,
@@ -16,7 +17,11 @@ import {
   SuperAdminDeleteOneCommand,
   SuperAdminUpdateOneCommand,
 } from './command';
-import { SuperAdminReadAllQuery, SuperAdminReadOneQuery } from './query';
+import {
+  SuperAdminReadAllQuery,
+  SuperAdminReadOneByEmailQuery,
+  SuperAdminReadOneQuery,
+} from './query';
 
 @Controller()
 export class SuperAdminController implements ISuperAdminGrpcController {
@@ -29,13 +34,14 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   async ListSuperAdmins(
     data: ListSuperAdminsRequest
   ): Promise<ListSuperAdminsResponse> {
-    const super_admins = await this.queryBus.execute(
-      new SuperAdminReadAllQuery(data)
-    );
+    return await this.queryBus.execute(new SuperAdminReadAllQuery(data));
+  }
 
-    return {
-      super_admins,
-    };
+  @GrpcMethod('SuperAdminService')
+  async GetSuperAdminByEmail(
+    data: GetSuperAdminByEmailRequest
+  ): Promise<SuperAdminDomain> {
+    return await this.queryBus.execute(new SuperAdminReadOneByEmailQuery(data));
   }
 
   @GrpcMethod('SuperAdminService')
@@ -47,9 +53,7 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   async CreateSuperAdmin(
     data: CreateSuperAdminRequest
   ): Promise<SuperAdminDomain> {
-    return await this.commandBus.execute(
-      new SuperAdminCreateOneCommand(data.super_admin)
-    );
+    return await this.commandBus.execute(new SuperAdminCreateOneCommand(data));
   }
 
   @GrpcMethod('SuperAdminService')
@@ -59,7 +63,7 @@ export class SuperAdminController implements ISuperAdminGrpcController {
     return await this.commandBus.execute(
       new SuperAdminUpdateOneCommand({
         id: data.id,
-        ...data.super_admin,
+        ...data,
       })
     );
   }

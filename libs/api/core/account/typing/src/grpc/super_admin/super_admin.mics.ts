@@ -7,24 +7,28 @@ interface SuperAdmin {
 }
 
 export interface ListSuperAdminsRequest {
-  page_size: number;
+  page_size?: number;
+  next_page_cursor?: string;
 }
 
 export interface ListSuperAdminsResponse {
   super_admins: SuperAdmin[];
+  next_page_cursor: string;
 }
 
 export interface GetSuperAdminRequest {
   id: string;
 }
 
-export interface CreateSuperAdminRequest {
-  super_admin: Omit<SuperAdmin, 'id'>;
+export interface GetSuperAdminByEmailRequest {
+  email: string;
 }
 
-export interface UpdateSuperAdminRequest {
+export type CreateSuperAdminRequest = Omit<SuperAdmin, 'id'>;
+
+export interface UpdateSuperAdminRequest
+  extends Partial<Omit<SuperAdmin, 'id'>> {
   id: string;
-  super_admin: Partial<Omit<SuperAdmin, 'id'>>;
 }
 
 export interface DeleteSuperAdminRequest {

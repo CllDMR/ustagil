@@ -5,28 +5,45 @@ package superAdmin;
 service SuperAdminService {
   rpc ListSuperAdmins(ListSuperAdminsRequest) returns (ListSuperAdminsResponse) {}
   rpc GetSuperAdmin(GetSuperAdminRequest) returns (SuperAdmin) {}
+  rpc GetSuperAdminByEmail(GetSuperAdminByEmailRequest) returns (SuperAdmin) {}
   rpc CreateSuperAdmin(CreateSuperAdminRequest) returns (SuperAdmin) {}
   rpc UpdateSuperAdmin(UpdateSuperAdminRequest) returns (SuperAdmin) {}
   rpc DeleteSuperAdmin(DeleteSuperAdminRequest) returns (SuperAdmin) {}
 }
 
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_ORGANIZATION = 1;
+  ROLE_ACCOUNT = 2;
+  ROLE_SUPER_ADMIN = 3;
+  ROLE_USER = 4;
+}
+
 message SuperAdmin {
   string id = 1;
-  string displayName = 2;
-  string email = 3;
-  string organization = 4;
+  Role role = 2;
+  string displayName = 3;
+  string email = 4;
+  string organization = 5;
+  optional string password = 6;
 }
 
 message ListSuperAdminsRequest {
   optional int32 page_size = 1;
+  optional string next_page_cursor = 2;
 }
 
 message ListSuperAdminsResponse {
   repeated SuperAdmin super_admins = 1;
+  string next_page_cursor = 2;
 }
 
 message GetSuperAdminRequest {
   string id = 1;
+}
+
+message GetSuperAdminByEmailRequest {
+  string email = 1;
 }
 
 message CreateSuperAdminRequest {
@@ -34,6 +51,7 @@ message CreateSuperAdminRequest {
   string displayName = 2;
   string email = 3;
   string organization = 4;
+  string password = 5;
 }
 
 message UpdateSuperAdminRequest {

@@ -4,11 +4,13 @@ import {
   SUPER_ADMIN_MS_GRPC,
   SUPER_ADMIN_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
+import { ApiCoreCaslModule } from '@ustagil/api/core/casl';
 import { join } from 'path';
 import { SuperAdminController } from './super_admin.controller';
 
 @Module({
   imports: [
+    ApiCoreCaslModule,
     ClientsModule.register([
       {
         name: SUPER_ADMIN_MS_GRPC,

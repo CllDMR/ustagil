@@ -21,13 +21,7 @@ export class AccountReadOneHandler
 
     const foundAccountDomain = await this.accountRepository.findOneById(id);
 
-    const accountMergedDomain = new AccountMergedDomain({
-      displayName: foundAccountDomain.displayName,
-      email: foundAccountDomain.email,
-      id: foundAccountDomain.id,
-      organization: foundAccountDomain.organization,
-      password: foundAccountDomain.password,
-    });
+    const accountMergedDomain = new AccountMergedDomain(foundAccountDomain);
 
     accountMergedDomain.apply(
       new AccountReadedOneEvent(accountMergedDomain.id)

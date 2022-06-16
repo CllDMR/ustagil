@@ -23,13 +23,9 @@ export class OrganizationReadOneByEmailHandler
       email,
     });
 
-    const organizationMergedDomain = new OrganizationMergedDomain({
-      displayName: foundOrganizationDomain.displayName,
-      email: foundOrganizationDomain.email,
-      id: foundOrganizationDomain.id,
-      organization: foundOrganizationDomain.organization,
-      password: foundOrganizationDomain.password,
-    });
+    const organizationMergedDomain = new OrganizationMergedDomain(
+      foundOrganizationDomain
+    );
 
     organizationMergedDomain.apply(
       new OrganizationReadedOneByEmailEvent(organizationMergedDomain.id)

@@ -20,9 +20,6 @@ export class CustomRpcException extends RpcException {
 export function isCustomRpcException(
   obj: unknown
 ): obj is { code: Status; details: string; metadata: Metadata } {
-  // console.log('🚀 ~ file: custom-rpc.exception.ts ~ line 29 ~ obj');
-  // console.log(obj);
-
   if (
     typeof obj === 'object' &&
     obj !== null &&
