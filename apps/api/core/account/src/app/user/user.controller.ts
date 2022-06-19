@@ -26,8 +26,12 @@ import {
 @Controller()
 export class UserController implements IUserGrpcController {
   constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus
+    private readonly commandBus: CommandBus<
+      UserCreateOneCommand | UserDeleteOneCommand | UserUpdateOneCommand
+    >,
+    private readonly queryBus: QueryBus<
+      UserReadAllQuery | UserReadOneByEmailQuery | UserReadOneQuery
+    >
   ) {}
 
   @GrpcMethod('UserService')

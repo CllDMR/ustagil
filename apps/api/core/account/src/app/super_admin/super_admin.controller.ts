@@ -26,8 +26,16 @@ import {
 @Controller()
 export class SuperAdminController implements ISuperAdminGrpcController {
   constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus
+    private readonly commandBus: CommandBus<
+      | SuperAdminCreateOneCommand
+      | SuperAdminDeleteOneCommand
+      | SuperAdminUpdateOneCommand
+    >,
+    private readonly queryBus: QueryBus<
+      | SuperAdminReadAllQuery
+      | SuperAdminReadOneByEmailQuery
+      | SuperAdminReadOneQuery
+    >
   ) {}
 
   @GrpcMethod('SuperAdminService')

@@ -19,8 +19,10 @@ import {
 @Controller()
 export class AuthenticationController implements IAuthenticationGrpcController {
   constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus
+    private readonly commandBus: CommandBus<AuthenticationRegisterAccountCommand>,
+    private readonly queryBus: QueryBus<
+      AuthenticationLoginAccountQuery | AuthenticationValidateAccountQuery
+    >
   ) {}
 
   @GrpcMethod('AuthenticationService')

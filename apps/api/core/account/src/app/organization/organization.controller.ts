@@ -26,8 +26,16 @@ import {
 @Controller()
 export class OrganizationController implements IOrganizationGrpcController {
   constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus
+    private readonly commandBus: CommandBus<
+      | OrganizationCreateOneCommand
+      | OrganizationDeleteOneCommand
+      | OrganizationUpdateOneCommand
+    >,
+    private readonly queryBus: QueryBus<
+      | OrganizationReadAllQuery
+      | OrganizationReadOneByEmailQuery
+      | OrganizationReadOneQuery
+    >
   ) {}
 
   @GrpcMethod('OrganizationService')
