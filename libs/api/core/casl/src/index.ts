@@ -1,7 +1,11 @@
-export * from './api-core-casl.module';
-export * from './policies.guard';
-export * from './policy/account/account-domain.policy';
-export * from './policy/account/organization-domain.policy';
-export * from './policy/account/super-admin-domain.policy';
-export * from './policy/account/user-domain.policy';
-export * from './types';
+export { ApiCoreCaslModule } from './api-core-casl.module';
+export { PoliciesGuard } from './policies.guard';
+export * from './policy';
+export {
+  Action,
+  AppAbility,
+  CheckPolicies,
+  CHECK_POLICIES_KEY,
+  PolicyRule,
+  Subjects,
+} from './types';
