@@ -43,7 +43,7 @@ export class OrganizationReadAllHandler
     organizationMergedDomain.apply(new OrganizationReadedAllEvent());
     organizationMergedDomain.commit();
 
-    let new_next_page_cursor: string;
+    let new_next_page_cursor = '';
 
     if (organizationDomains.length >= page_size + 1) {
       const nextOrganization = organizationDomains.pop();

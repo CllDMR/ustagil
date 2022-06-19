@@ -1,10 +1,11 @@
 export { ISuperAdminGrpcController } from './super_admin.controller.interface';
 export {
-  CreateSuperAdminRequest,
-  DeleteSuperAdminRequest,
-  GetSuperAdminByEmailRequest,
-  GetSuperAdminRequest,
-  ListSuperAdminsRequest,
-  ListSuperAdminsResponse,
-  UpdateSuperAdminRequest,
+  SuperAdminCreateOneRequest,
+  SuperAdminDeleteOneRequest,
+  SuperAdminFindAllRequest,
+  SuperAdminFindAllResponse,
+  SuperAdminFindOneByEmailRequest,
+  SuperAdminFindOneRequest,
+  SuperAdminGrpc,
+  SuperAdminUpdateOneRequest,
 } from './super_admin.mics';

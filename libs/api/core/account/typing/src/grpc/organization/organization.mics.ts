@@ -1,36 +1,42 @@
-interface Organization {
+import { Role } from '@ustagil/api/core/common/typing';
+
+export interface OrganizationGrpc {
   id: string;
+  role: Role;
   displayName: string;
   email: string;
   organization: string;
   password: string;
 }
 
-export interface ListOrganizationsRequest {
+export interface OrganizationFindAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface ListOrganizationsResponse {
-  users: Organization[];
+export interface OrganizationFindAllResponse {
+  organizations: OrganizationGrpc[];
   next_page_cursor: string;
 }
 
-export interface GetOrganizationRequest {
+export interface OrganizationFindOneRequest {
   id: string;
 }
 
-export interface GetOrganizationByEmailRequest {
+export interface OrganizationFindOneByEmailRequest {
   email: string;
 }
 
-export type CreateOrganizationRequest = Omit<Organization, 'id'>;
+export type OrganizationCreateOneRequest = Omit<
+  Omit<OrganizationGrpc, 'id'>,
+  'role'
+>;
 
-export interface UpdateOrganizationRequest
-  extends Partial<Omit<Organization, 'id'>> {
+export interface OrganizationUpdateOneRequest
+  extends Partial<Omit<Omit<OrganizationGrpc, 'id'>, 'role'>> {
   id: string;
 }
 
-export interface DeleteOrganizationRequest {
+export interface OrganizationDeleteOneRequest {
   id: string;
 }

@@ -43,7 +43,7 @@ export class SuperAdminReadAllHandler
     superAdminMergedDomain.apply(new SuperAdminReadedAllEvent());
     superAdminMergedDomain.commit();
 
-    let new_next_page_cursor: string;
+    let new_next_page_cursor = '';
 
     if (superAdminDomains.length >= page_size + 1) {
       const nextSuperAdmin = superAdminDomains.pop();

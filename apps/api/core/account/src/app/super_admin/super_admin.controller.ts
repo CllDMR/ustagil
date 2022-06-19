@@ -2,16 +2,15 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  CreateSuperAdminRequest,
-  DeleteSuperAdminRequest,
-  GetSuperAdminByEmailRequest,
-  GetSuperAdminRequest,
   ISuperAdminGrpcController,
-  ListSuperAdminsRequest,
-  ListSuperAdminsResponse,
-  SuperAdminDomain,
-  UpdateSuperAdminRequest,
+  SuperAdminCreateOneRequest,
+  SuperAdminDeleteOneRequest,
+  SuperAdminFindAllRequest,
+  SuperAdminFindOneByEmailRequest,
+  SuperAdminFindOneRequest,
+  SuperAdminUpdateOneRequest,
 } from '@ustagil/api/core/account/typing';
+import { from } from 'rxjs';
 import {
   SuperAdminCreateOneCommand,
   SuperAdminDeleteOneCommand,
@@ -39,45 +38,39 @@ export class SuperAdminController implements ISuperAdminGrpcController {
   ) {}
 
   @GrpcMethod('SuperAdminService')
-  async ListSuperAdmins(
-    data: ListSuperAdminsRequest
-  ): Promise<ListSuperAdminsResponse> {
-    return await this.queryBus.execute(new SuperAdminReadAllQuery(data));
+  ListSuperAdmins(data: SuperAdminFindAllRequest) {
+    return from(this.queryBus.execute(new SuperAdminReadAllQuery(data)));
   }
 
   @GrpcMethod('SuperAdminService')
-  async GetSuperAdminByEmail(
-    data: GetSuperAdminByEmailRequest
-  ): Promise<SuperAdminDomain> {
-    return await this.queryBus.execute(new SuperAdminReadOneByEmailQuery(data));
+  GetSuperAdminByEmail(data: SuperAdminFindOneByEmailRequest) {
+    return from(this.queryBus.execute(new SuperAdminReadOneByEmailQuery(data)));
   }
 
   @GrpcMethod('SuperAdminService')
-  async GetSuperAdmin(data: GetSuperAdminRequest): Promise<SuperAdminDomain> {
-    return await this.queryBus.execute(new SuperAdminReadOneQuery(data));
+  GetSuperAdmin(data: SuperAdminFindOneRequest) {
+    return from(this.queryBus.execute(new SuperAdminReadOneQuery(data)));
   }
 
   @GrpcMethod('SuperAdminService')
-  async CreateSuperAdmin(
-    data: CreateSuperAdminRequest
-  ): Promise<SuperAdminDomain> {
-    return await this.commandBus.execute(new SuperAdminCreateOneCommand(data));
+  CreateSuperAdmin(data: SuperAdminCreateOneRequest) {
+    return from(this.commandBus.execute(new SuperAdminCreateOneCommand(data)));
   }
 
   @GrpcMethod('SuperAdminService')
-  async UpdateSuperAdmin(
-    data: UpdateSuperAdminRequest
-  ): Promise<SuperAdminDomain> {
-    return await this.commandBus.execute(
-      new SuperAdminUpdateOneCommand({
-        id: data.id,
-        ...data,
-      })
+  UpdateSuperAdmin(data: SuperAdminUpdateOneRequest) {
+    return from(
+      this.commandBus.execute(
+        new SuperAdminUpdateOneCommand({
+          id: data.id,
+          ...data,
+        })
+      )
     );
   }
 
   @GrpcMethod('SuperAdminService')
-  async DeleteSuperAdmin(data: DeleteSuperAdminRequest): Promise<void> {
-    return await this.commandBus.execute(new SuperAdminDeleteOneCommand(data));
+  DeleteSuperAdmin(data: SuperAdminDeleteOneRequest) {
+    return from(this.commandBus.execute(new SuperAdminDeleteOneCommand(data)));
   }
 }

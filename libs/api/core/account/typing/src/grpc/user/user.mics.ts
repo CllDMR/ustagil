@@ -1,35 +1,39 @@
-interface User {
+import { Role } from '@ustagil/api/core/common/typing';
+
+export interface UserGrpc {
   id: string;
+  role: Role;
   displayName: string;
   email: string;
   organization: string;
   password: string;
 }
 
-export interface ListUsersRequest {
+export interface UserFindAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface ListUsersResponse {
-  users: User[];
+export interface UserFindAllResponse {
+  users: UserGrpc[];
   next_page_cursor: string;
 }
 
-export interface GetUserRequest {
+export interface UserFindOneRequest {
   id: string;
 }
 
-export interface GetUserByEmailRequest {
+export interface UserFindOneByEmailRequest {
   email: string;
 }
 
-export type CreateUserRequest = Omit<User, 'id'>;
+export type UserCreateOneRequest = Omit<Omit<UserGrpc, 'id'>, 'role'>;
 
-export interface UpdateUserRequest extends Partial<Omit<User, 'id'>> {
+export interface UserUpdateOneRequest
+  extends Partial<Omit<Omit<UserGrpc, 'id'>, 'role'>> {
   id: string;
 }
 
-export interface DeleteUserRequest {
+export interface UserDeleteOneRequest {
   id: string;
 }

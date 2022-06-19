@@ -41,7 +41,7 @@ export class UserReadAllHandler implements IQueryHandler<UserReadAllQuery> {
     userMergedDomain.apply(new UserReadedAllEvent());
     userMergedDomain.commit();
 
-    let new_next_page_cursor: string;
+    let new_next_page_cursor = '';
 
     if (userDomains.length >= page_size + 1) {
       const nextUser = userDomains.pop();

@@ -1,48 +1,49 @@
+import { Observable } from 'rxjs';
 import { UserDomain } from '../../domains/user/user.domain';
 import {
-  CreateUserRequest,
-  DeleteUserRequest,
-  GetUserByEmailRequest,
-  GetUserRequest,
-  ListUsersRequest,
-  ListUsersResponse,
-  UpdateUserRequest,
+  UserCreateOneRequest,
+  UserDeleteOneRequest,
+  UserFindAllRequest,
+  UserFindAllResponse,
+  UserFindOneByEmailRequest,
+  UserFindOneRequest,
+  UserUpdateOneRequest,
 } from './user.mics';
 
 export interface IUserGrpcController {
   ListUsers(
-    data: ListUsersRequest
+    data: UserFindAllRequest
     // metadata: Metadata
     // call: ServerUnaryCall<ListUsersRequest, ListUsersResponse>
-  ): Promise<ListUsersResponse>;
+  ): Observable<UserFindAllResponse>;
 
   GetUser(
-    data: GetUserRequest
+    data: UserFindOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetUserRequest, UserDomain>
-  ): Promise<UserDomain>;
+  ): Observable<UserDomain>;
 
   GetUserByEmail(
-    data: GetUserByEmailRequest
+    data: UserFindOneByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetUserRequest, UserDomain>
-  ): Promise<UserDomain>;
+  ): Observable<UserDomain>;
 
   CreateUser(
-    data: CreateUserRequest
+    data: UserCreateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<CreateUserRequest, UserDomain>
-  ): Promise<UserDomain>;
+  ): Observable<UserDomain>;
 
   UpdateUser(
-    data: UpdateUserRequest
+    data: UserUpdateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<UpdateUserRequest, UserDomain>
-  ): Promise<UserDomain>;
+  ): Observable<UserDomain>;
 
   DeleteUser(
-    data: DeleteUserRequest
+    data: UserDeleteOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<DeleteUserRequest, void>
-  ): Promise<void>;
+  ): Observable<void>;
 }

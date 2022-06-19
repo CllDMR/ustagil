@@ -1,36 +1,42 @@
-interface SuperAdmin {
+import { Role } from '@ustagil/api/core/common/typing';
+
+export interface SuperAdminGrpc {
   id: string;
+  role: Role;
   displayName: string;
   email: string;
   organization: string;
   password: string;
 }
 
-export interface ListSuperAdminsRequest {
+export interface SuperAdminFindAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface ListSuperAdminsResponse {
-  super_admins: SuperAdmin[];
+export interface SuperAdminFindAllResponse {
+  superAdmins: SuperAdminGrpc[];
   next_page_cursor: string;
 }
 
-export interface GetSuperAdminRequest {
+export interface SuperAdminFindOneRequest {
   id: string;
 }
 
-export interface GetSuperAdminByEmailRequest {
+export interface SuperAdminFindOneByEmailRequest {
   email: string;
 }
 
-export type CreateSuperAdminRequest = Omit<SuperAdmin, 'id'>;
+export type SuperAdminCreateOneRequest = Omit<
+  Omit<SuperAdminGrpc, 'id'>,
+  'role'
+>;
 
-export interface UpdateSuperAdminRequest
-  extends Partial<Omit<SuperAdmin, 'id'>> {
+export interface SuperAdminUpdateOneRequest
+  extends Partial<Omit<Omit<SuperAdminGrpc, 'id'>, 'role'>> {
   id: string;
 }
 
-export interface DeleteSuperAdminRequest {
+export interface SuperAdminDeleteOneRequest {
   id: string;
 }

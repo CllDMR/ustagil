@@ -2,16 +2,15 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  CreateUserRequest,
-  DeleteUserRequest,
-  GetUserByEmailRequest,
-  GetUserRequest,
   IUserGrpcController,
-  ListUsersRequest,
-  ListUsersResponse,
-  UpdateUserRequest,
-  UserDomain,
+  UserCreateOneRequest,
+  UserDeleteOneRequest,
+  UserFindAllRequest,
+  UserFindOneByEmailRequest,
+  UserFindOneRequest,
+  UserUpdateOneRequest,
 } from '@ustagil/api/core/account/typing';
+import { from } from 'rxjs';
 import {
   UserCreateOneCommand,
   UserDeleteOneCommand,
@@ -35,37 +34,39 @@ export class UserController implements IUserGrpcController {
   ) {}
 
   @GrpcMethod('UserService')
-  async ListUsers(data: ListUsersRequest): Promise<ListUsersResponse> {
-    return await this.queryBus.execute(new UserReadAllQuery(data));
+  ListUsers(data: UserFindAllRequest) {
+    return from(this.queryBus.execute(new UserReadAllQuery(data)));
   }
 
   @GrpcMethod('UserService')
-  async GetUserByEmail(data: GetUserByEmailRequest): Promise<UserDomain> {
-    return await this.queryBus.execute(new UserReadOneByEmailQuery(data));
+  GetUserByEmail(data: UserFindOneByEmailRequest) {
+    return from(this.queryBus.execute(new UserReadOneByEmailQuery(data)));
   }
 
   @GrpcMethod('UserService')
-  async GetUser(data: GetUserRequest): Promise<UserDomain> {
-    return await this.queryBus.execute(new UserReadOneQuery(data));
+  GetUser(data: UserFindOneRequest) {
+    return from(this.queryBus.execute(new UserReadOneQuery(data)));
   }
 
   @GrpcMethod('UserService')
-  async CreateUser(data: CreateUserRequest): Promise<UserDomain> {
-    return await this.commandBus.execute(new UserCreateOneCommand(data));
+  CreateUser(data: UserCreateOneRequest) {
+    return from(this.commandBus.execute(new UserCreateOneCommand(data)));
   }
 
   @GrpcMethod('UserService')
-  async UpdateUser(data: UpdateUserRequest): Promise<UserDomain> {
-    return await this.commandBus.execute(
-      new UserUpdateOneCommand({
-        id: data.id,
-        ...data,
-      })
+  UpdateUser(data: UserUpdateOneRequest) {
+    return from(
+      this.commandBus.execute(
+        new UserUpdateOneCommand({
+          id: data.id,
+          ...data,
+        })
+      )
     );
   }
 
   @GrpcMethod('UserService')
-  async DeleteUser(data: DeleteUserRequest): Promise<void> {
-    return await this.commandBus.execute(new UserDeleteOneCommand(data));
+  DeleteUser(data: UserDeleteOneRequest) {
+    return from(this.commandBus.execute(new UserDeleteOneCommand(data)));
   }
 }

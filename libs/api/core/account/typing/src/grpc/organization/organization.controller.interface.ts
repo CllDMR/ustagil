@@ -1,48 +1,49 @@
+import { Observable } from 'rxjs';
 import { OrganizationDomain } from '../../domains/organization/organization.domain';
 import {
-  CreateOrganizationRequest,
-  DeleteOrganizationRequest,
-  GetOrganizationByEmailRequest,
-  GetOrganizationRequest,
-  ListOrganizationsRequest,
-  ListOrganizationsResponse,
-  UpdateOrganizationRequest,
+  OrganizationCreateOneRequest,
+  OrganizationDeleteOneRequest,
+  OrganizationFindAllRequest,
+  OrganizationFindAllResponse,
+  OrganizationFindOneByEmailRequest,
+  OrganizationFindOneRequest,
+  OrganizationUpdateOneRequest,
 } from './organization.mics';
 
 export interface IOrganizationGrpcController {
   ListOrganizations(
-    data: ListOrganizationsRequest
+    data: OrganizationFindAllRequest
     // metadata: Metadata
     // call: ServerUnaryCall<ListOrganizationsRequest, ListOrganizationsResponse>
-  ): Promise<ListOrganizationsResponse>;
+  ): Observable<OrganizationFindAllResponse>;
 
   GetOrganization(
-    data: GetOrganizationRequest
+    data: OrganizationFindOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetOrganizationRequest, OrganizationDomain>
-  ): Promise<OrganizationDomain>;
+  ): Observable<OrganizationDomain>;
 
   GetOrganizationByEmail(
-    data: GetOrganizationByEmailRequest
+    data: OrganizationFindOneByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetOrganizationRequest, OrganizationDomain>
-  ): Promise<OrganizationDomain>;
+  ): Observable<OrganizationDomain>;
 
   CreateOrganization(
-    data: CreateOrganizationRequest
+    data: OrganizationCreateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<CreateOrganizationRequest, OrganizationDomain>
-  ): Promise<OrganizationDomain>;
+  ): Observable<OrganizationDomain>;
 
   UpdateOrganization(
-    data: UpdateOrganizationRequest
+    data: OrganizationUpdateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<UpdateOrganizationRequest, OrganizationDomain>
-  ): Promise<OrganizationDomain>;
+  ): Observable<OrganizationDomain>;
 
   DeleteOrganization(
-    data: DeleteOrganizationRequest
+    data: OrganizationDeleteOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<DeleteOrganizationRequest, void>
-  ): Promise<void>;
+  ): Observable<void>;
 }

@@ -1,48 +1,49 @@
+import { Observable } from 'rxjs';
 import { SuperAdminDomain } from '../../domains/super_admin/super_admin.domain';
 import {
-  CreateSuperAdminRequest,
-  DeleteSuperAdminRequest,
-  GetSuperAdminByEmailRequest,
-  GetSuperAdminRequest,
-  ListSuperAdminsRequest,
-  ListSuperAdminsResponse,
-  UpdateSuperAdminRequest,
+  SuperAdminCreateOneRequest,
+  SuperAdminDeleteOneRequest,
+  SuperAdminFindAllRequest,
+  SuperAdminFindAllResponse,
+  SuperAdminFindOneByEmailRequest,
+  SuperAdminFindOneRequest,
+  SuperAdminUpdateOneRequest,
 } from './super_admin.mics';
 
 export interface ISuperAdminGrpcController {
   ListSuperAdmins(
-    data: ListSuperAdminsRequest
+    data: SuperAdminFindAllRequest
     // metadata: Metadata
     // call: ServerUnaryCall<ListSuperAdminsRequest, ListSuperAdminsResponse>
-  ): Promise<ListSuperAdminsResponse>;
+  ): Observable<SuperAdminFindAllResponse>;
 
   GetSuperAdmin(
-    data: GetSuperAdminRequest
+    data: SuperAdminFindOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetSuperAdminRequest, SuperAdminDomain>
-  ): Promise<SuperAdminDomain>;
+  ): Observable<SuperAdminDomain>;
 
   GetSuperAdminByEmail(
-    data: GetSuperAdminByEmailRequest
+    data: SuperAdminFindOneByEmailRequest
     // metadata: Metadata
     // call: ServerUnaryCall<GetSuperAdminRequest, SuperAdminDomain>
-  ): Promise<SuperAdminDomain>;
+  ): Observable<SuperAdminDomain>;
 
   CreateSuperAdmin(
-    data: CreateSuperAdminRequest
+    data: SuperAdminCreateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<CreateSuperAdminRequest, SuperAdminDomain>
-  ): Promise<SuperAdminDomain>;
+  ): Observable<SuperAdminDomain>;
 
   UpdateSuperAdmin(
-    data: UpdateSuperAdminRequest
+    data: SuperAdminUpdateOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<UpdateSuperAdminRequest, SuperAdminDomain>
-  ): Promise<SuperAdminDomain>;
+  ): Observable<SuperAdminDomain>;
 
   DeleteSuperAdmin(
-    data: DeleteSuperAdminRequest
+    data: SuperAdminDeleteOneRequest
     // metadata: Metadata
     // call: ServerUnaryCall<DeleteSuperAdminRequest, void>
-  ): Promise<void>;
+  ): Observable<void>;
 }

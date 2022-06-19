@@ -2,16 +2,15 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  CreateOrganizationRequest,
-  DeleteOrganizationRequest,
-  GetOrganizationByEmailRequest,
-  GetOrganizationRequest,
   IOrganizationGrpcController,
-  ListOrganizationsRequest,
-  ListOrganizationsResponse,
-  OrganizationDomain,
-  UpdateOrganizationRequest,
+  OrganizationCreateOneRequest,
+  OrganizationDeleteOneRequest,
+  OrganizationFindAllRequest,
+  OrganizationFindOneByEmailRequest,
+  OrganizationFindOneRequest,
+  OrganizationUpdateOneRequest,
 } from '@ustagil/api/core/account/typing';
+import { from } from 'rxjs';
 import {
   OrganizationCreateOneCommand,
   OrganizationDeleteOneCommand,
@@ -39,53 +38,45 @@ export class OrganizationController implements IOrganizationGrpcController {
   ) {}
 
   @GrpcMethod('OrganizationService')
-  async ListOrganizations(
-    data: ListOrganizationsRequest
-  ): Promise<ListOrganizationsResponse> {
-    return await this.queryBus.execute(new OrganizationReadAllQuery(data));
+  ListOrganizations(data: OrganizationFindAllRequest) {
+    return from(this.queryBus.execute(new OrganizationReadAllQuery(data)));
   }
 
   @GrpcMethod('OrganizationService')
-  async GetOrganizationByEmail(
-    data: GetOrganizationByEmailRequest
-  ): Promise<OrganizationDomain> {
-    return await this.queryBus.execute(
-      new OrganizationReadOneByEmailQuery(data)
+  GetOrganizationByEmail(data: OrganizationFindOneByEmailRequest) {
+    return from(
+      this.queryBus.execute(new OrganizationReadOneByEmailQuery(data))
     );
   }
 
   @GrpcMethod('OrganizationService')
-  async GetOrganization(
-    data: GetOrganizationRequest
-  ): Promise<OrganizationDomain> {
-    return await this.queryBus.execute(new OrganizationReadOneQuery(data));
+  GetOrganization(data: OrganizationFindOneRequest) {
+    return from(this.queryBus.execute(new OrganizationReadOneQuery(data)));
   }
 
   @GrpcMethod('OrganizationService')
-  async CreateOrganization(
-    data: CreateOrganizationRequest
-  ): Promise<OrganizationDomain> {
-    return await this.commandBus.execute(
-      new OrganizationCreateOneCommand(data)
+  CreateOrganization(data: OrganizationCreateOneRequest) {
+    return from(
+      this.commandBus.execute(new OrganizationCreateOneCommand(data))
     );
   }
 
   @GrpcMethod('OrganizationService')
-  async UpdateOrganization(
-    data: UpdateOrganizationRequest
-  ): Promise<OrganizationDomain> {
-    return await this.commandBus.execute(
-      new OrganizationUpdateOneCommand({
-        id: data.id,
-        ...data,
-      })
+  UpdateOrganization(data: OrganizationUpdateOneRequest) {
+    return from(
+      this.commandBus.execute(
+        new OrganizationUpdateOneCommand({
+          id: data.id,
+          ...data,
+        })
+      )
     );
   }
 
   @GrpcMethod('OrganizationService')
-  async DeleteOrganization(data: DeleteOrganizationRequest): Promise<void> {
-    return await this.commandBus.execute(
-      new OrganizationDeleteOneCommand(data)
+  DeleteOrganization(data: OrganizationDeleteOneRequest) {
+    return from(
+      this.commandBus.execute(new OrganizationDeleteOneCommand(data))
     );
   }
 }

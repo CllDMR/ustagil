@@ -1,10 +1,11 @@
 export { IUserGrpcController } from './user.controller.interface';
 export {
-  CreateUserRequest,
-  DeleteUserRequest,
-  GetUserByEmailRequest,
-  GetUserRequest,
-  ListUsersRequest,
-  ListUsersResponse,
-  UpdateUserRequest,
+  UserCreateOneRequest,
+  UserDeleteOneRequest,
+  UserFindAllRequest,
+  UserFindAllResponse,
+  UserFindOneByEmailRequest,
+  UserFindOneRequest,
+  UserGrpc,
+  UserUpdateOneRequest,
 } from './user.mics';

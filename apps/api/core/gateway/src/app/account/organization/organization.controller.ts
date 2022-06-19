@@ -11,11 +11,18 @@ import {
   Query,
   UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
+import {
+  OrganizationCreateOneTransformInterceptor,
+  OrganizationDeleteOneTransformInterceptor,
+  OrganizationFindOneTransformInterceptor,
+  OrganizationUpdateOneTransformInterceptor,
+} from '@ustagil/api/core/account/util';
 import {
   CheckPolicies,
   OrganizationDomainCreatePolicyRule,
@@ -53,12 +60,14 @@ export class OrganizationController implements OnModuleInit {
       );
   }
 
+  @UseInterceptors(OrganizationCreateOneTransformInterceptor)
   @CheckPolicies(new OrganizationDomainCreatePolicyRule())
   @Post('account/organizations')
   postOrganization(@Body() dto: OrganizationCreateOneBodyDto) {
     return this.organizationGrpcService.CreateOrganization(dto);
   }
 
+  @UseInterceptors(OrganizationFindOneTransformInterceptor)
   @CheckPolicies(new OrganizationDomainReadPolicyRule())
   @Get('account/organizations')
   getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
@@ -67,12 +76,14 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
+  @UseInterceptors(OrganizationFindOneTransformInterceptor)
   @CheckPolicies(new OrganizationDomainReadPolicyRule())
   @Get('account/organizations/:id')
   getOrganization(@Param('id') id: string) {
     return this.organizationGrpcService.GetOrganization({ id });
   }
 
+  @UseInterceptors(OrganizationUpdateOneTransformInterceptor)
   @CheckPolicies(new OrganizationDomainUpdatePolicyRule())
   @Patch('account/organizations/:id')
   patchOrganization(
@@ -85,6 +96,7 @@ export class OrganizationController implements OnModuleInit {
     });
   }
 
+  @UseInterceptors(OrganizationDeleteOneTransformInterceptor)
   @CheckPolicies(new OrganizationDomainDeletePolicyRule())
   @Delete('account/organizations/:id')
   deleteOrganization(@Param('id') id: string) {

@@ -23,13 +23,14 @@ export class AccountFindAllTransformInterceptor
     return next.handle().pipe(
       map((data) => {
         const resBody: AccountFindAllResponseBodyDto = {
-          accounts: data.accounts.map((account) => ({
-            id: account.id,
-            role: account.role,
-            displayName: account.displayName,
-            email: account.email,
-            organization: account.organization,
-          })),
+          accounts:
+            data?.accounts?.map((account) => ({
+              id: account.id,
+              role: account.role,
+              displayName: account.displayName,
+              email: account.email,
+              organization: account.organization,
+            })) ?? [],
           next_page_cursor: data.next_page_cursor,
         };
 

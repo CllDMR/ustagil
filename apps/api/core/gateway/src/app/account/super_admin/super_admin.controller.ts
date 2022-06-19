@@ -11,11 +11,19 @@ import {
   Query,
   UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { ISuperAdminGrpcController } from '@ustagil/api/core/account/typing';
+import {
+  SuperAdminCreateOneTransformInterceptor,
+  SuperAdminDeleteOneTransformInterceptor,
+  SuperAdminFindAllTransformInterceptor,
+  SuperAdminFindOneTransformInterceptor,
+  SuperAdminUpdateOneTransformInterceptor,
+} from '@ustagil/api/core/account/util';
 import {
   CheckPolicies,
   PoliciesGuard,
@@ -53,12 +61,14 @@ export class SuperAdminController implements OnModuleInit {
       );
   }
 
+  @UseInterceptors(SuperAdminCreateOneTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainCreatePolicyRule())
   @Post('account/super_admins')
   postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
     return this.superAdminGrpcService.CreateSuperAdmin(dto);
   }
 
+  @UseInterceptors(SuperAdminFindAllTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainReadPolicyRule())
   @Get('account/super_admins')
   getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
@@ -67,12 +77,14 @@ export class SuperAdminController implements OnModuleInit {
     });
   }
 
+  @UseInterceptors(SuperAdminFindOneTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainReadPolicyRule())
   @Get('account/super_admins/:id')
   getSuperAdmin(@Param('id') id: string) {
     return this.superAdminGrpcService.GetSuperAdmin({ id });
   }
 
+  @UseInterceptors(SuperAdminUpdateOneTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainUpdatePolicyRule())
   @Patch('account/super_admins/:id')
   patchSuperAdmin(
@@ -85,6 +97,7 @@ export class SuperAdminController implements OnModuleInit {
     });
   }
 
+  @UseInterceptors(SuperAdminDeleteOneTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainDeletePolicyRule())
   @Delete('account/super_admins/:id')
   deleteSuperAdmin(@Param('id') id: string) {

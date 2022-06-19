@@ -1,10 +1,11 @@
 export { IOrganizationGrpcController } from './organization.controller.interface';
 export {
-  CreateOrganizationRequest,
-  DeleteOrganizationRequest,
-  GetOrganizationByEmailRequest,
-  GetOrganizationRequest,
-  ListOrganizationsRequest,
-  ListOrganizationsResponse,
-  UpdateOrganizationRequest,
+  OrganizationCreateOneRequest,
+  OrganizationDeleteOneRequest,
+  OrganizationFindAllRequest,
+  OrganizationFindAllResponse,
+  OrganizationFindOneByEmailRequest,
+  OrganizationFindOneRequest,
+  OrganizationGrpc,
+  OrganizationUpdateOneRequest,
 } from './organization.mics';
