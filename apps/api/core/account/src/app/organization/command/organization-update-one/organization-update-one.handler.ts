@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { OrganizationUpdatedOneEvent } from '../../event';
 import { OrganizationUpdateOneCommand } from './organization-update-one.command';
 
@@ -23,9 +24,10 @@ export class OrganizationUpdateOneHandler
 
     const updatedOrganizationDomain =
       await this.organizationRepository.findOneAndUpdate(
-        {},
+        {
+          _id: new ObjectId(id),
+        },
         new OrganizationDomain({
-          id,
           displayName,
           email,
           organization,

@@ -27,7 +27,7 @@ export class SuperAdminFindAllTransformInterceptor
       map((data) => {
         const resBody: SuperAdminFindAllResponseBodyDto = {
           super_admins:
-            data?.superAdmins?.map((superAdmin) => ({
+            data?.super_admins?.map((superAdmin) => ({
               id: superAdmin.id,
               role: superAdmin.role,
               displayName: superAdmin.displayName,

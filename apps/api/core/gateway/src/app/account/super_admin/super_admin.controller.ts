@@ -72,9 +72,7 @@ export class SuperAdminController implements OnModuleInit {
   @CheckPolicies(new SuperAdminDomainReadPolicyRule())
   @Get('account/super_admins')
   getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
-    return this.superAdminGrpcService.ListSuperAdmins({
-      page_size: dto.page_size ?? 10,
-    });
+    return this.superAdminGrpcService.ListSuperAdmins(dto);
   }
 
   @UseInterceptors(SuperAdminFindOneTransformInterceptor)

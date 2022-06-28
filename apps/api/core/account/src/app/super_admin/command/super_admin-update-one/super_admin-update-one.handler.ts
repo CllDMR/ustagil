@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { ObjectId } from 'mongodb';
 import { SuperAdminUpdatedOneEvent } from '../../event';
 import { SuperAdminUpdateOneCommand } from './super_admin-update-one.command';
 
@@ -23,9 +24,10 @@ export class SuperAdminUpdateOneHandler
 
     const updatedSuperAdminDomain =
       await this.superAdminRepository.findOneAndUpdate(
-        {},
+        {
+          _id: new ObjectId(id),
+        },
         new SuperAdminDomain({
-          id,
           displayName,
           email,
           organization,

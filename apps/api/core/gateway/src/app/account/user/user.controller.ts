@@ -70,7 +70,7 @@ export class UserController implements OnModuleInit {
   @CheckPolicies(new UserDomainReadPolicyRule())
   @Get('account/users')
   getUsers(@Query() dto: UserFindAllQueryDto) {
-    return this.userGrpcService.ListUsers({ page_size: dto.page_size ?? 10 });
+    return this.userGrpcService.ListUsers(dto);
   }
 
   @UseInterceptors(UserFindOneTransformInterceptor)

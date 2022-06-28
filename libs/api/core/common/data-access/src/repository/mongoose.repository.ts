@@ -162,6 +162,16 @@ export abstract class MongooseRepository<
     entityFilterQuery: FilterQuery<TEntity>,
     domain: TDomain
   ): Promise<TDomain> {
+    if (!entityFilterQuery) {
+      throw new CustomRpcException({
+        rpcErrorCode: Status.INTERNAL,
+        statusCode: HttpStatus.BAD_REQUEST,
+        errorCode: 'undefined for now',
+        message: 'Please define entityFilterQuery while updating the entity.',
+        description: 'Wake up developer',
+      });
+    }
+
     let entity: TEntity;
 
     try {

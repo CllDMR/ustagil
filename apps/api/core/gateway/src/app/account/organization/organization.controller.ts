@@ -20,6 +20,7 @@ import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
 import {
   OrganizationCreateOneTransformInterceptor,
   OrganizationDeleteOneTransformInterceptor,
+  OrganizationFindAllTransformInterceptor,
   OrganizationFindOneTransformInterceptor,
   OrganizationUpdateOneTransformInterceptor,
 } from '@ustagil/api/core/account/util';
@@ -67,13 +68,11 @@ export class OrganizationController implements OnModuleInit {
     return this.organizationGrpcService.CreateOrganization(dto);
   }
 
-  @UseInterceptors(OrganizationFindOneTransformInterceptor)
+  @UseInterceptors(OrganizationFindAllTransformInterceptor)
   @CheckPolicies(new OrganizationDomainReadPolicyRule())
   @Get('account/organizations')
   getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
-    return this.organizationGrpcService.ListOrganizations({
-      page_size: dto.page_size ?? 10,
-    });
+    return this.organizationGrpcService.ListOrganizations(dto);
   }
 
   @UseInterceptors(OrganizationFindOneTransformInterceptor)

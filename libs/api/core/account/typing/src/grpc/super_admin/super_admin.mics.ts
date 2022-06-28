@@ -15,7 +15,7 @@ export interface SuperAdminFindAllRequest {
 }
 
 export interface SuperAdminFindAllResponse {
-  superAdmins: SuperAdminGrpc[];
+  super_admins: SuperAdminGrpc[];
   next_page_cursor: string;
 }
 
