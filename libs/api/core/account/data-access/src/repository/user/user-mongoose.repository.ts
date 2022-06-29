@@ -11,9 +11,9 @@ export class UserMongooseRepository extends MongooseRepository<
   UserDomain
 > {
   constructor(
-    @InjectModel(User.name) accountModel,
-    accountEntityDomainFactory: UserEntityDomainFactory
+    @InjectModel(User.name) userModel,
+    userEntityDomainFactory: UserEntityDomainFactory
   ) {
-    super(accountModel, accountEntityDomainFactory);
+    super(userModel, userEntityDomainFactory);
   }
 }

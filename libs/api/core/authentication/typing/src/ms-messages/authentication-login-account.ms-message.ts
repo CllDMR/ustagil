@@ -1,4 +1,4 @@
-import { AccountDomain } from '@ustagil/api/core/account/typing';
+import { BaseDomain } from '@ustagil/api/core/account/typing';
 import { IsMongoId, IsString } from 'class-validator';
 
 export class AuthenticationLoginAccountMSMessage {
@@ -12,9 +12,9 @@ export class AuthenticationLoginAccountMSMessage {
   displayName: string;
 
   constructor(
-    id: AccountDomain['id'],
-    email: AccountDomain['email'],
-    displayName: AccountDomain['displayName']
+    id: BaseDomain['id'],
+    email: BaseDomain['email'],
+    displayName: BaseDomain['displayName']
   ) {
     this.id = id;
     this.email = email;

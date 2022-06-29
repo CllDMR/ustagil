@@ -3,8 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PassportModule } from '@nestjs/passport';
 import {
-  ACCOUNT_MS_GRPC,
-  ACCOUNT_MS_GRPC_URL,
+  BASE_MS_GRPC,
+  BASE_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
 import {
   AUTHENTICATION_MS_GRPC,
@@ -30,12 +30,12 @@ import { AuthenticationController } from './authentication.controller';
         },
       },
       {
-        name: ACCOUNT_MS_GRPC,
+        name: BASE_MS_GRPC,
         transport: Transport.GRPC,
         options: {
-          url: ACCOUNT_MS_GRPC_URL,
-          package: 'account',
-          protoPath: join(__dirname, 'assets/account/account.proto'),
+          url: BASE_MS_GRPC_URL,
+          package: 'base',
+          protoPath: join(__dirname, 'assets/account/base.proto'),
           loader: {
             keepCase: true,
           },

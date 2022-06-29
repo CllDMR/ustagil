@@ -6,7 +6,7 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import {
-  ACCOUNT_MS_GRPC_URL,
+  BASE_MS_GRPC_URL,
   ORGANIZATION_MS_GRPC_URL,
   SUPER_ADMIN_MS_GRPC_URL,
   USER_MS_GPRC_URL,
@@ -32,12 +32,12 @@ async function bootstrap() {
     })
   );
 
-  const _accountMicroservice = app.connectMicroservice<MicroserviceOptions>({
+  const _baseMicroservice = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      url: ACCOUNT_MS_GRPC_URL,
-      package: 'account',
-      protoPath: join(__dirname, 'assets/account/account.proto'),
+      url: BASE_MS_GRPC_URL,
+      package: 'base',
+      protoPath: join(__dirname, 'assets/account/base.proto'),
       loader: {
         keepCase: true,
       },

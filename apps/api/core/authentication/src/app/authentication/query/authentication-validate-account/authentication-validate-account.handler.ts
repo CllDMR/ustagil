@@ -2,10 +2,10 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { ACCOUNT_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  AccountDomain,
-  IAccountGrpcController,
+  BaseDomain,
+  IBaseGrpcController,
 } from '@ustagil/api/core/account/typing';
 import { AuthenticationDomain } from '@ustagil/api/core/authentication/typing';
 import {
@@ -20,16 +20,14 @@ import { AuthenticationValidateAccountQuery } from './authentication-validate-ac
 export class AuthenticationValidateAccountHandler
   implements IQueryHandler<AuthenticationValidateAccountQuery>
 {
-  private readonly accountGrpcService: IAccountGrpcController;
+  private readonly baseGrpcService: IBaseGrpcController;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(ACCOUNT_MS_GRPC) private readonly accountMSGrpcClient: ClientGrpc
+    @Inject(BASE_MS_GRPC) private readonly baseMSGrpcClient: ClientGrpc
   ) {
-    this.accountGrpcService =
-      this.accountMSGrpcClient.getService<IAccountGrpcController>(
-        'AccountService'
-      );
+    this.baseGrpcService =
+      this.baseMSGrpcClient.getService<IBaseGrpcController>('BaseService');
   }
 
   async execute({ dto }: AuthenticationValidateAccountQuery) {
@@ -38,23 +36,23 @@ export class AuthenticationValidateAccountHandler
     const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
 
-    let accountDomain: AccountDomain;
+    let baseDomain: BaseDomain;
 
     try {
-      accountDomain = await firstValueFrom(
-        (await this.accountGrpcService.GetAccountByEmail({
+      baseDomain = await firstValueFrom(
+        (await this.baseGrpcService.GetBaseByEmail({
           email,
-        })) as unknown as Observable<AccountDomain>
+        })) as unknown as Observable<BaseDomain>
       );
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }
 
     const authenticationMergedDomain = new AuthenticationMergedDomain(
-      accountDomain
+      baseDomain
     );
 
-    if (accountDomain.password !== password)
+    if (baseDomain.password !== password)
       throw new CustomRpcException({
         description: 'Could not find account.',
         errorCode: '',
@@ -64,7 +62,7 @@ export class AuthenticationValidateAccountHandler
       });
 
     authenticationMergedDomain.apply(
-      new AuthenticationValidatedAccountEvent(accountDomain.id)
+      new AuthenticationValidatedAccountEvent(baseDomain.id)
     );
 
     authenticationMergedDomain.commit();
@@ -75,7 +73,7 @@ export class AuthenticationValidateAccountHandler
 
 // const account = await firstValueFrom(
 //   this.accountMSClient
-//     .send<AccountDomain, AccountFindOneByEmailMSMessage>(
+//     .send<BaseDomain, AccountFindOneByEmailMSMessage>(
 //       ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE,
 //       new AccountFindOneByEmailMSMessage(authentication.email)
 //     )

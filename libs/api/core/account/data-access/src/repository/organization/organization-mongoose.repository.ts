@@ -11,9 +11,9 @@ export class OrganizationMongooseRepository extends MongooseRepository<
   OrganizationDomain
 > {
   constructor(
-    @InjectModel(Organization.name) accountModel,
-    accountEntityDomainFactory: OrganizationEntityDomainFactory
+    @InjectModel(Organization.name) organizationModel,
+    organizationEntityDomainFactory: OrganizationEntityDomainFactory
   ) {
-    super(accountModel, accountEntityDomainFactory);
+    super(organizationModel, organizationEntityDomainFactory);
   }
 }

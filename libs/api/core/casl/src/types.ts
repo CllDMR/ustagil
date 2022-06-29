@@ -1,7 +1,7 @@
 import { Ability, InferSubjects } from '@casl/ability';
 import { SetMetadata } from '@nestjs/common';
 import {
-  AccountDomain,
+  BaseDomain,
   OrganizationDomain,
   SuperAdminDomain,
   UserDomain,
@@ -17,7 +17,7 @@ export enum Action {
 
 export type Subjects =
   | InferSubjects<
-      | typeof AccountDomain
+      | typeof BaseDomain
       | typeof UserDomain
       | typeof OrganizationDomain
       | typeof SuperAdminDomain

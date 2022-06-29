@@ -11,9 +11,9 @@ export class SuperAdminMongooseRepository extends MongooseRepository<
   SuperAdminDomain
 > {
   constructor(
-    @InjectModel(SuperAdmin.name) accountModel,
-    accountEntityDomainFactory: SuperAdminEntityDomainFactory
+    @InjectModel(SuperAdmin.name) superAdminModel,
+    superAdminEntityDomainFactory: SuperAdminEntityDomainFactory
   ) {
-    super(accountModel, accountEntityDomainFactory);
+    super(superAdminModel, superAdminEntityDomainFactory);
   }
 }

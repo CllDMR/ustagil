@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
-import { AccountDomain } from '@ustagil/api/core/account/typing';
+import { BaseDomain } from '@ustagil/api/core/account/typing';
 import {
   AuthenticationDomain,
   IAuthenticationGrpcController,
@@ -42,7 +42,7 @@ export class AuthenticationController implements IAuthenticationGrpcController {
   }
 
   @GrpcMethod('AuthenticationService')
-  async validateAccount(data: ValidateAccountRequest): Promise<AccountDomain> {
+  async validateAccount(data: ValidateAccountRequest): Promise<BaseDomain> {
     return await this.queryBus.execute(
       new AuthenticationValidateAccountQuery(data)
     );

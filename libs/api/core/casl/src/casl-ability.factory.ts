@@ -32,8 +32,8 @@ export class CaslAbilityFactory {
 
     // Role Base Authorization Example
 
-    // if (account.role === Role.ROLE_ACCOUNT) {
-    //   cannot(Action.Read, [AccountDomain]).because('Sanane lan');
+    // if (account.role === Role.ROLE_BASE) {
+    //   cannot(Action.Read, [BaseDomain]).because('Sanane lan');
     // } else if (account.role === Role.ROLE_ORGANIZATION) {
     //   cannot(Action.Read, [OrganizationDomain]);
     // } else if (account.role === Role.ROLE_SUPER_ADMIN) {

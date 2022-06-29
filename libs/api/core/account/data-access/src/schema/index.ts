@@ -1,4 +1,4 @@
-export { Account, AccountDocument, AccountSchema } from './account.schema';
+export { Base, BaseDocument, BaseSchema } from './base.schema';
 export {
   Organization,
   OrganizationDocument,

@@ -1,9 +1,9 @@
 export {
-  AccountDomainCreatePolicyRule,
-  AccountDomainDeletePolicyRule,
-  AccountDomainReadPolicyRule,
-  AccountDomainUpdatePolicyRule,
-} from './account/account-domain.policy';
+  BaseDomainCreatePolicyRule,
+  BaseDomainDeletePolicyRule,
+  BaseDomainReadPolicyRule,
+  BaseDomainUpdatePolicyRule,
+} from './account/base-domain.policy';
 export {
   OrganizationDomainCreatePolicyRule,
   OrganizationDomainDeletePolicyRule,

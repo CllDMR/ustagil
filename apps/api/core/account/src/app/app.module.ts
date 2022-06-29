@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AccountModule } from './account/account.module';
+import { BaseModule } from './base/base.module';
 import { OrganizationModule } from './organization/organization.module';
 import { SuperAdminModule } from './super_admin/super_admin.module';
 import { UserModule } from './user/user.module';
@@ -24,7 +24,7 @@ import { UserModule } from './user/user.module';
       }),
     }),
 
-    AccountModule,
+    BaseModule,
     OrganizationModule,
     SuperAdminModule,
     UserModule,

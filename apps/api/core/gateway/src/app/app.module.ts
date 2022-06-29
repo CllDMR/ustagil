@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { AccountModule } from './account/account/account.module';
+import { BaseModule } from './account/base/base.module';
 import { OrganizationModule } from './account/organization/organization.module';
 import { SuperAdminModule } from './account/super_admin/super_admin.module';
 import { UserModule } from './account/user/user.module';
@@ -32,7 +32,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
       signOptions: { expiresIn: '60m' },
     }),
 
-    AccountModule,
+    BaseModule,
     OrganizationModule,
     SuperAdminModule,
     UserModule,

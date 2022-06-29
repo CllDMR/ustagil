@@ -1,10 +1,10 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { ACCOUNT_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  AccountDomain,
-  IAccountGrpcController,
+  BaseDomain,
+  IBaseGrpcController,
 } from '@ustagil/api/core/account/typing';
 import { AuthenticationDomain } from '@ustagil/api/core/authentication/typing';
 import { fromRpcToCustomRpcException } from '@ustagil/api/core/common/typing';
@@ -16,16 +16,14 @@ import { AuthenticationRegisterAccountCommand } from './authentication-register-
 export class AuthenticationRegisterAccountHandler
   implements ICommandHandler<AuthenticationRegisterAccountCommand>
 {
-  private readonly accountGrpcService: IAccountGrpcController;
+  private readonly baseGrpcService: IBaseGrpcController;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(ACCOUNT_MS_GRPC) private accountMSGrpcClient: ClientGrpc
+    @Inject(BASE_MS_GRPC) private baseMSGrpcClient: ClientGrpc
   ) {
-    this.accountGrpcService =
-      this.accountMSGrpcClient.getService<IAccountGrpcController>(
-        'AccountService'
-      );
+    this.baseGrpcService =
+      this.baseMSGrpcClient.getService<IBaseGrpcController>('BaseService');
   }
 
   async execute({
@@ -37,19 +35,19 @@ export class AuthenticationRegisterAccountHandler
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
 
     try {
-      const newAccount = await firstValueFrom(
-        (await this.accountGrpcService.CreateAccount({
+      const newBase = await firstValueFrom(
+        (await this.baseGrpcService.CreateBase({
           displayName,
           email,
           organization,
           password,
-        })) as unknown as Observable<AccountDomain>
+        })) as unknown as Observable<BaseDomain>
       );
 
-      const authentication = new AuthenticationMergedDomain(newAccount);
+      const authentication = new AuthenticationMergedDomain(newBase);
 
       authentication.apply(
-        new AuthenticationRegisteredAccountEvent(newAccount.id)
+        new AuthenticationRegisteredAccountEvent(newBase.id)
       );
       authentication.commit();
 
