@@ -1,35 +1,34 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { OrganizationDomain } from '@ustagil/api/core/account/typing';
-import { OrganizationReadedOneEvent } from '../../event';
-import { OrganizationReadOneQuery } from './organization-read-one.query';
+import { OrganizationReadedOneByEmailEvent } from '../../event';
+import { OrganizationReadOneByEmailQuery } from './read-one-by-email.query';
 
-@QueryHandler(OrganizationReadOneQuery)
-export class OrganizationReadOneHandler
-  implements IQueryHandler<OrganizationReadOneQuery>
+@QueryHandler(OrganizationReadOneByEmailQuery)
+export class OrganizationReadOneByEmailHandler
+  implements IQueryHandler<OrganizationReadOneByEmailQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
     private readonly organizationRepository: OrganizationMongooseRepository
   ) {}
 
-  async execute({
-    dto,
-  }: OrganizationReadOneQuery): Promise<OrganizationDomain> {
-    const { id } = dto;
+  async execute({ dto }: OrganizationReadOneByEmailQuery) {
+    const { email } = dto;
 
     const OrganizationMergedDomain =
       this.eventPublisher.mergeClassContext(OrganizationDomain);
 
-    const foundOrganizationDomain =
-      await this.organizationRepository.findOneById(id);
+    const foundOrganizationDomain = await this.organizationRepository.findOne({
+      email,
+    });
 
     const organizationMergedDomain = new OrganizationMergedDomain(
       foundOrganizationDomain
     );
 
     organizationMergedDomain.apply(
-      new OrganizationReadedOneEvent(organizationMergedDomain.id)
+      new OrganizationReadedOneByEmailEvent(organizationMergedDomain.id)
     );
     organizationMergedDomain.commit();
 

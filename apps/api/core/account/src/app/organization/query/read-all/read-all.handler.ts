@@ -3,7 +3,7 @@ import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-a
 import { OrganizationDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { OrganizationReadedAllEvent } from '../../event';
-import { OrganizationReadAllQuery } from './organization-read-all.query';
+import { OrganizationReadAllQuery } from './read-all.query';
 
 @QueryHandler(OrganizationReadAllQuery)
 export class OrganizationReadAllHandler

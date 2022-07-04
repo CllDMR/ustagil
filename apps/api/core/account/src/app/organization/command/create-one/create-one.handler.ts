@@ -4,7 +4,7 @@ import { OrganizationDomain } from '@ustagil/api/core/account/typing';
 import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
 import { OrganizationCreatedOneEvent } from '../../event';
-import { OrganizationCreateOneCommand } from './organization-create-one.command';
+import { OrganizationCreateOneCommand } from './create-one.command';
 
 @CommandHandler(OrganizationCreateOneCommand)
 export class OrganizationCreateOneHandler

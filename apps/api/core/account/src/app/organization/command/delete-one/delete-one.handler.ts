@@ -3,7 +3,7 @@ import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-a
 import { OrganizationDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { OrganizationDeletedOneEvent } from '../../event';
-import { OrganizationDeleteOneCommand } from './organization-delete-one.command';
+import { OrganizationDeleteOneCommand } from './delete-one.command';
 
 @CommandHandler(OrganizationDeleteOneCommand)
 export class OrganizationDeleteOneHandler

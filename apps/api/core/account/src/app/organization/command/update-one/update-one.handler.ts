@@ -3,7 +3,7 @@ import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-a
 import { OrganizationDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { OrganizationUpdatedOneEvent } from '../../event';
-import { OrganizationUpdateOneCommand } from './organization-update-one.command';
+import { OrganizationUpdateOneCommand } from './update-one.command';
 
 @CommandHandler(OrganizationUpdateOneCommand)
 export class OrganizationUpdateOneHandler

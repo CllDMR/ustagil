@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { OrganizationReadedOneEvent } from './organization-readed-one.event';
+import { OrganizationReadedOneEvent } from './readed-one.event';
 
 @EventsHandler(OrganizationReadedOneEvent)
 export class OrganizationReadedOneHandler
