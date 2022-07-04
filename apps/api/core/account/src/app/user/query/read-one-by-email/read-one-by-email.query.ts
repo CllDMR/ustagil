@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
-import { UserFindOneByEmailDto } from './read-one-by-email.dto';
+import { UserFindOneByEmailQueryDto } from './read-one-by-email.dto';
 
 export class UserReadOneByEmailQuery implements IQuery {
-  constructor(public readonly dto: UserFindOneByEmailDto) {}
+  constructor(public readonly dto: UserFindOneByEmailQueryDto) {}
 }

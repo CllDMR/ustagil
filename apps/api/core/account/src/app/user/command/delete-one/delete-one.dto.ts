@@ -1,6 +1,6 @@
 import { IsMongoId } from 'class-validator';
 
-export class UserDeleteOneDto {
+export class UserDeleteOneCommandDto {
   @IsMongoId()
   id: string;
 }
