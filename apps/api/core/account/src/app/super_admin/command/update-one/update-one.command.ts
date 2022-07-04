@@ -1,6 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
-import { SuperAdminUpdateOneDto } from './update-one.dto';
+import { SuperAdminUpdateOneCommandDto } from './update-one.dto';
 
 export class SuperAdminUpdateOneCommand implements ICommand {
-  constructor(public readonly dto: SuperAdminUpdateOneDto) {}
+  constructor(public readonly dto: SuperAdminUpdateOneCommandDto) {}
 }

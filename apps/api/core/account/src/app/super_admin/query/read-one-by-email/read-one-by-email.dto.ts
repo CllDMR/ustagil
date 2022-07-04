@@ -1,6 +1,6 @@
 import { IsEmail } from 'class-validator';
 
-export class SuperAdminFindOneByEmailDto {
+export class SuperAdminFindOneByEmailQueryDto {
   @IsEmail()
   email: string;
 }
