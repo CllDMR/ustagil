@@ -7,16 +7,20 @@ import {
   Request,
   UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { AUTHENTICATION_MS_GRPC } from '@ustagil/api/core/authentication/constant';
-import { IAuthenticationGrpcController } from '@ustagil/api/core/authentication/typing';
+import {
+  IAuthenticationGrpcController,
+  RegisterRequestBodyDto,
+} from '@ustagil/api/core/authentication/typing';
+import { RegisterTransformInterceptor } from '@ustagil/api/core/authentication/util';
 import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
-import { AuthenticationRegisterAccountBodyDto } from './dtos';
 
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
@@ -42,8 +46,9 @@ export class AuthenticationController {
     return this.authenticationGrpcService.loginAccount(account);
   }
 
+  @UseInterceptors(RegisterTransformInterceptor)
   @Post('register')
-  registerAccount(@Body() dto: AuthenticationRegisterAccountBodyDto) {
+  registerAccount(@Body() dto: RegisterRequestBodyDto) {
     return this.authenticationGrpcService.registerAccount(dto);
   }
 

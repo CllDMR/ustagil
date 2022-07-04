@@ -1,6 +1,6 @@
 import { IsEmail, IsString } from 'class-validator';
 
-export class AuthenticationRegisterAccountBodyDto {
+export class RegisterRequestBodyDto {
   @IsString()
   displayName: string;
 
@@ -8,8 +8,8 @@ export class AuthenticationRegisterAccountBodyDto {
   email: string;
 
   @IsString()
-  organization: string;
+  password: string;
 
   @IsString()
-  password: string;
+  organization: string;
 }
