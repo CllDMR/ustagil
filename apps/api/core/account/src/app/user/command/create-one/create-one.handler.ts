@@ -4,7 +4,7 @@ import { UserDomain } from '@ustagil/api/core/account/typing';
 import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
 import { UserCreatedOneEvent } from '../../event';
-import { UserCreateOneCommand } from './user-create-one.command';
+import { UserCreateOneCommand } from './create-one.command';
 
 @CommandHandler(UserCreateOneCommand)
 export class UserCreateOneHandler

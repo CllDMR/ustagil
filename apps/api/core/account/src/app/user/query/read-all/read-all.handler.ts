@@ -3,7 +3,7 @@ import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { UserDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { UserReadedAllEvent } from '../../event';
-import { UserReadAllQuery } from './user-read-all.query';
+import { UserReadAllQuery } from './read-all.query';
 
 @QueryHandler(UserReadAllQuery)
 export class UserReadAllHandler implements IQueryHandler<UserReadAllQuery> {

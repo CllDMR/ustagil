@@ -3,7 +3,7 @@ import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { UserDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { UserUpdatedOneEvent } from '../../event';
-import { UserUpdateOneCommand } from './user-update-one.command';
+import { UserUpdateOneCommand } from './update-one.command';
 
 @CommandHandler(UserUpdateOneCommand)
 export class UserUpdateOneHandler

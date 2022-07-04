@@ -1,6 +1,6 @@
-import { UserReadAllHandler } from './user-read-all/user-read-all.handler';
-import { UserReadOneByEmailHandler } from './user-read-one-by-email/user-read-one-by-email.handler';
-import { UserReadOneHandler } from './user-read-one/user-read-one.handler';
+import { UserReadAllHandler } from './read-all/read-all.handler';
+import { UserReadOneByEmailHandler } from './read-one-by-email/read-one-by-email.handler';
+import { UserReadOneHandler } from './read-one/read-one.handler';
 
 export const UserQueryHandlers = [
   UserReadAllHandler,
@@ -8,6 +8,6 @@ export const UserQueryHandlers = [
   UserReadOneByEmailHandler,
 ];
 
-export { UserReadAllQuery } from './user-read-all/user-read-all.query';
-export { UserReadOneByEmailQuery } from './user-read-one-by-email/user-read-one-by-email.query';
-export { UserReadOneQuery } from './user-read-one/user-read-one.query';
+export { UserReadAllQuery } from './read-all/read-all.query';
+export { UserReadOneByEmailQuery } from './read-one-by-email/read-one-by-email.query';
+export { UserReadOneQuery } from './read-one/read-one.query';

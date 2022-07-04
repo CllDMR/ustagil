@@ -1,6 +1,6 @@
-import { UserCreateOneHandler } from './user-create-one/user-create-one.handler';
-import { UserDeleteOneHandler } from './user-delete-one/user-delete-one.handler';
-import { UserUpdateOneHandler } from './user-update-one/user-update-one.handler';
+import { UserCreateOneHandler } from './create-one/create-one.handler';
+import { UserDeleteOneHandler } from './delete-one/delete-one.handler';
+import { UserUpdateOneHandler } from './update-one/update-one.handler';
 
 export const UserCommandHandlers = [
   UserCreateOneHandler,
@@ -8,6 +8,6 @@ export const UserCommandHandlers = [
   UserDeleteOneHandler,
 ];
 
-export { UserCreateOneCommand } from './user-create-one/user-create-one.command';
-export { UserDeleteOneCommand } from './user-delete-one/user-delete-one.command';
-export { UserUpdateOneCommand } from './user-update-one/user-update-one.command';
+export { UserCreateOneCommand } from './create-one/create-one.command';
+export { UserDeleteOneCommand } from './delete-one/delete-one.command';
+export { UserUpdateOneCommand } from './update-one/update-one.command';

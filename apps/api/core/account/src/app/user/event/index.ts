@@ -1,9 +1,9 @@
-import { UserCreatedOneHandler } from './user-created-one/user-created-one.handler';
-import { UserDeletedOneHandler } from './user-deleted-one/user-deleted-one.handler';
-import { UserReadedAllHandler } from './user-readed-all/user-readed-all.handler';
-import { UserReadedOneByEmailHandler } from './user-readed-one-by-email/user-readed-one-by-email.handler';
-import { UserReadedOneHandler } from './user-readed-one/user-readed-one.handler';
-import { UserUpdatedOneHandler } from './user-updated-one/user-updated-one.handler';
+import { UserCreatedOneHandler } from './created-one/created-one.handler';
+import { UserDeletedOneHandler } from './deleted-one/deleted-one.handler';
+import { UserReadedAllHandler } from './readed-all/readed-all.handler';
+import { UserReadedOneByEmailHandler } from './readed-one-by-email/readed-one-by-email.handler';
+import { UserReadedOneHandler } from './readed-one/readed-one.handler';
+import { UserUpdatedOneHandler } from './updated-one/updated-one.handler';
 
 export const UserEventHandlers = [
   UserCreatedOneHandler,
@@ -14,9 +14,9 @@ export const UserEventHandlers = [
   UserReadedOneByEmailHandler,
 ];
 
-export { UserCreatedOneEvent } from './user-created-one/user-created-one.event';
-export { UserDeletedOneEvent } from './user-deleted-one/user-deleted-one.event';
-export { UserReadedAllEvent } from './user-readed-all/user-readed-all.event';
-export { UserReadedOneByEmailEvent } from './user-readed-one-by-email/user-readed-one-by-email.event';
-export { UserReadedOneEvent } from './user-readed-one/user-readed-one.event';
-export { UserUpdatedOneEvent } from './user-updated-one/user-updated-one.event';
+export { UserCreatedOneEvent } from './created-one/created-one.event';
+export { UserDeletedOneEvent } from './deleted-one/deleted-one.event';
+export { UserReadedAllEvent } from './readed-all/readed-all.event';
+export { UserReadedOneByEmailEvent } from './readed-one-by-email/readed-one-by-email.event';
+export { UserReadedOneEvent } from './readed-one/readed-one.event';
+export { UserUpdatedOneEvent } from './updated-one/updated-one.event';

@@ -3,7 +3,7 @@ import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { UserDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { UserDeletedOneEvent } from '../../event';
-import { UserDeleteOneCommand } from './user-delete-one.command';
+import { UserDeleteOneCommand } from './delete-one.command';
 
 @CommandHandler(UserDeleteOneCommand)
 export class UserDeleteOneHandler

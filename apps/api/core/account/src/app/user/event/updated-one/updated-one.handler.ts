@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { UserUpdatedOneEvent } from './user-updated-one.event';
+import { UserUpdatedOneEvent } from './updated-one.event';
 
 @EventsHandler(UserUpdatedOneEvent)
 export class UserUpdatedOneHandler

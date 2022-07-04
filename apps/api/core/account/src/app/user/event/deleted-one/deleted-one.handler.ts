@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { UserDeletedOneEvent } from './user-deleted-one.event';
+import { UserDeletedOneEvent } from './deleted-one.event';
 
 @EventsHandler(UserDeletedOneEvent)
 export class UserDeletedOneHandler

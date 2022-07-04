@@ -2,7 +2,7 @@ import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { UserDomain } from '@ustagil/api/core/account/typing';
 import { UserReadedOneByEmailEvent } from '../../event';
-import { UserReadOneByEmailQuery } from './user-read-one-by-email.query';
+import { UserReadOneByEmailQuery } from './read-one-by-email.query';
 
 @QueryHandler(UserReadOneByEmailQuery)
 export class UserReadOneByEmailHandler
