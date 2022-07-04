@@ -8,7 +8,7 @@ import {
   BaseFindOneByEmailRequest,
   BaseFindOneRequest,
   BaseUpdateOneRequest,
-  IBaseGrpcController,
+  IAccountBaseGrpcService,
 } from '@ustagil/api/core/account/typing';
 import { from } from 'rxjs';
 import {
@@ -23,7 +23,7 @@ import {
 } from './query';
 
 @Controller()
-export class BaseController implements IBaseGrpcController {
+export class BaseController implements IAccountBaseGrpcService {
   constructor(
     private readonly commandBus: CommandBus<
       BaseCreateOneCommand | BaseDeleteOneCommand | BaseUpdateOneCommand

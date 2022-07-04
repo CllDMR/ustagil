@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  IOrganizationGrpcController,
+  IAccountOrganizationGrpcService,
   OrganizationCreateOneRequest,
   OrganizationDeleteOneRequest,
   OrganizationFindAllRequest,
@@ -23,7 +23,7 @@ import {
 } from './query';
 
 @Controller()
-export class OrganizationController implements IOrganizationGrpcController {
+export class OrganizationController implements IAccountOrganizationGrpcService {
   constructor(
     private readonly commandBus: CommandBus<
       | OrganizationCreateOneCommand

@@ -1,4 +1,4 @@
-export { IBaseGrpcController } from './base.controller.interface';
+export { IAccountBaseGrpcService } from './base.controller.interface';
 export {
   BaseCreateOneRequest,
   BaseDeleteOneRequest,

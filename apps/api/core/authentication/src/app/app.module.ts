@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthenticationModule } from './authentication/authentication.module';
+import { BaseModule } from './base/base.module';
+import { OrganizationModule } from './organization/organization.module';
+import { SuperAdminModule } from './super_admin/super_admin.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -10,7 +13,10 @@ import { AuthenticationModule } from './authentication/authentication.module';
       cache: true,
     }),
 
-    AuthenticationModule,
+    BaseModule,
+    OrganizationModule,
+    SuperAdminModule,
+    UserModule,
   ],
 })
 export class AppModule {}

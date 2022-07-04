@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PassportStrategy } from '@nestjs/passport';
 import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
-import { IBaseGrpcController } from '@ustagil/api/core/account/typing';
+import { IAccountBaseGrpcService } from '@ustagil/api/core/account/typing';
 import { AUTHENTICATION_MS_GRPC } from '@ustagil/api/core/authentication/constant';
 import {
   AuthenticationDomain,
@@ -14,7 +14,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   private readonly authenticationGrpcService: IAuthenticationGrpcController;
-  private readonly baseGrpcService: IBaseGrpcController;
+  private readonly baseGrpcService: IAccountBaseGrpcService;
 
   constructor(
     @Inject(AUTHENTICATION_MS_GRPC)
@@ -29,7 +29,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         'AuthenticationService'
       );
     this.baseGrpcService =
-      this.baseClientGrpc.getService<IBaseGrpcController>('BaseService');
+      this.baseClientGrpc.getService<IAccountBaseGrpcService>('BaseService');
   }
 
   async validate(

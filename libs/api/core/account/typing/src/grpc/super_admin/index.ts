@@ -1,4 +1,4 @@
-export { ISuperAdminGrpcController } from './super_admin.controller.interface';
+export { IAccountSuperAdminGrpcService } from './super_admin.controller.interface';
 export {
   SuperAdminCreateOneRequest,
   SuperAdminDeleteOneRequest,

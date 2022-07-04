@@ -1,1 +1,1 @@
-export { AuthenticationDomain } from './authentication.domain';
+export { AuthenticationBaseDomain } from './base/base.domain';

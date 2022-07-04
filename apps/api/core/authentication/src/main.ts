@@ -23,12 +23,12 @@ async function bootstrap() {
     })
   );
 
-  const _authenticationMicroservice = app.connectMicroservice({
+  const _authenticationBaseMicroservice = app.connectMicroservice({
     transport: Transport.GRPC,
     options: {
       url: AUTHENTICATION_MS_GRPC_URL,
-      package: 'authentication',
-      protoPath: join(__dirname, 'assets/authentication.proto'),
+      package: 'authenticationBase',
+      protoPath: join(__dirname, 'assets/authentication/base.proto'),
       loader: {
         keepCase: true,
       },

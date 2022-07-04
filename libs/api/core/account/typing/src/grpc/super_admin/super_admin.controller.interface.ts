@@ -10,7 +10,7 @@ import {
   SuperAdminUpdateOneRequest,
 } from './super_admin.mics';
 
-export interface ISuperAdminGrpcController {
+export interface IAccountSuperAdminGrpcService {
   ListSuperAdmins(
     data: SuperAdminFindAllRequest
     // metadata: Metadata

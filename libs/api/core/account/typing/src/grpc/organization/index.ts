@@ -1,4 +1,4 @@
-export { IOrganizationGrpcController } from './organization.controller.interface';
+export { IAccountOrganizationGrpcService } from './organization.controller.interface';
 export {
   OrganizationCreateOneRequest,
   OrganizationDeleteOneRequest,

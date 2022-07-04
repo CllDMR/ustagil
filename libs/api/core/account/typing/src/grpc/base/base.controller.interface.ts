@@ -10,7 +10,7 @@ import {
   BaseUpdateOneRequest,
 } from './base.mics';
 
-export interface IBaseGrpcController {
+export interface IAccountBaseGrpcService {
   ListBases(
     data: BaseFindAllRequest
     // metadata: Metadata

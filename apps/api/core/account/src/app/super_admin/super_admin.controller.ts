@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  ISuperAdminGrpcController,
+  IAccountSuperAdminGrpcService,
   SuperAdminCreateOneRequest,
   SuperAdminDeleteOneRequest,
   SuperAdminFindAllRequest,
@@ -23,7 +23,7 @@ import {
 } from './query';
 
 @Controller()
-export class SuperAdminController implements ISuperAdminGrpcController {
+export class SuperAdminController implements IAccountSuperAdminGrpcService {
   constructor(
     private readonly commandBus: CommandBus<
       | SuperAdminCreateOneCommand

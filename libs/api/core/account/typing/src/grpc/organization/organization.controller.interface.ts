@@ -10,7 +10,7 @@ import {
   OrganizationUpdateOneRequest,
 } from './organization.mics';
 
-export interface IOrganizationGrpcController {
+export interface IAccountOrganizationGrpcService {
   ListOrganizations(
     data: OrganizationFindAllRequest
     // metadata: Metadata
