@@ -16,7 +16,12 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { USER_MS_GPRC } from '@ustagil/api/core/account/constant';
-import { IUserGrpcController } from '@ustagil/api/core/account/typing';
+import {
+  IUserGrpcController,
+  UserCreateOneRequestBodyDto,
+  UserFindAllRequestQueryDto,
+  UserUpdateOneRequestBodyDto,
+} from '@ustagil/api/core/account/typing';
 import {
   UserCreateOneTransformInterceptor,
   UserDeleteOneTransformInterceptor,
@@ -37,11 +42,6 @@ import {
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard } from '@ustagil/api/core/common/util';
-import {
-  UserCreateOneBodyDto,
-  UserFindAllQueryDto,
-  UserUpdateOneBodyDto,
-} from './dtos';
 
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
@@ -62,14 +62,14 @@ export class UserController implements OnModuleInit {
   @UseInterceptors(UserCreateOneTransformInterceptor)
   @CheckPolicies(new UserDomainCreatePolicyRule())
   @Post('account/users')
-  postUser(@Body() dto: UserCreateOneBodyDto) {
+  postUser(@Body() dto: UserCreateOneRequestBodyDto) {
     return this.userGrpcService.CreateUser(dto);
   }
 
   @UseInterceptors(UserFindAllTransformInterceptor)
   @CheckPolicies(new UserDomainReadPolicyRule())
   @Get('account/users')
-  getUsers(@Query() dto: UserFindAllQueryDto) {
+  getUsers(@Query() dto: UserFindAllRequestQueryDto) {
     return this.userGrpcService.ListUsers(dto);
   }
 
@@ -83,7 +83,7 @@ export class UserController implements OnModuleInit {
   @UseInterceptors(UserUpdateOneTransformInterceptor)
   @CheckPolicies(new UserDomainUpdatePolicyRule())
   @Patch('account/users/:id')
-  patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneBodyDto) {
+  patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneRequestBodyDto) {
     return this.userGrpcService.UpdateUser({ id, ...dto });
   }
 

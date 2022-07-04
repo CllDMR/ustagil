@@ -16,7 +16,12 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
-import { ISuperAdminGrpcController } from '@ustagil/api/core/account/typing';
+import {
+  ISuperAdminGrpcController,
+  SuperAdminCreateOneRequestBodyDto,
+  SuperAdminFindAllRequestQueryDto,
+  SuperAdminUpdateOneRequestBodyDto,
+} from '@ustagil/api/core/account/typing';
 import {
   SuperAdminCreateOneTransformInterceptor,
   SuperAdminDeleteOneTransformInterceptor,
@@ -37,11 +42,6 @@ import {
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard } from '@ustagil/api/core/common/util';
-import {
-  SuperAdminCreateOneBodyDto,
-  SuperAdminFindAllQueryDto,
-  SuperAdminUpdateOneBodyDto,
-} from './dtos';
 
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
@@ -64,14 +64,14 @@ export class SuperAdminController implements OnModuleInit {
   @UseInterceptors(SuperAdminCreateOneTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainCreatePolicyRule())
   @Post('account/super_admins')
-  postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
+  postSuperAdmin(@Body() dto: SuperAdminCreateOneRequestBodyDto) {
     return this.superAdminGrpcService.CreateSuperAdmin(dto);
   }
 
   @UseInterceptors(SuperAdminFindAllTransformInterceptor)
   @CheckPolicies(new SuperAdminDomainReadPolicyRule())
   @Get('account/super_admins')
-  getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
+  getSuperAdmins(@Query() dto: SuperAdminFindAllRequestQueryDto) {
     return this.superAdminGrpcService.ListSuperAdmins(dto);
   }
 
@@ -87,7 +87,7 @@ export class SuperAdminController implements OnModuleInit {
   @Patch('account/super_admins/:id')
   patchSuperAdmin(
     @Param('id') id: string,
-    @Body() dto: SuperAdminUpdateOneBodyDto
+    @Body() dto: SuperAdminUpdateOneRequestBodyDto
   ) {
     return this.superAdminGrpcService.UpdateSuperAdmin({
       id,

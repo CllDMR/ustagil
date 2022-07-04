@@ -16,7 +16,12 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
-import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
+import {
+  IOrganizationGrpcController,
+  OrganizationCreateOneRequestBodyDto,
+  OrganizationFindAllRequestQueryDto,
+  OrganizationUpdateOneRequestBodyDto,
+} from '@ustagil/api/core/account/typing';
 import {
   OrganizationCreateOneTransformInterceptor,
   OrganizationDeleteOneTransformInterceptor,
@@ -37,11 +42,6 @@ import {
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard } from '@ustagil/api/core/common/util';
-import {
-  OrganizationCreateOneBodyDto,
-  OrganizationFindAllQueryDto,
-  OrganizationUpdateOneBodyDto,
-} from './dtos';
 
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
@@ -64,14 +64,14 @@ export class OrganizationController implements OnModuleInit {
   @UseInterceptors(OrganizationCreateOneTransformInterceptor)
   @CheckPolicies(new OrganizationDomainCreatePolicyRule())
   @Post('account/organizations')
-  postOrganization(@Body() dto: OrganizationCreateOneBodyDto) {
+  postOrganization(@Body() dto: OrganizationCreateOneRequestBodyDto) {
     return this.organizationGrpcService.CreateOrganization(dto);
   }
 
   @UseInterceptors(OrganizationFindAllTransformInterceptor)
   @CheckPolicies(new OrganizationDomainReadPolicyRule())
   @Get('account/organizations')
-  getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
+  getOrganizations(@Query() dto: OrganizationFindAllRequestQueryDto) {
     return this.organizationGrpcService.ListOrganizations(dto);
   }
 
@@ -87,7 +87,7 @@ export class OrganizationController implements OnModuleInit {
   @Patch('account/organizations/:id')
   patchOrganization(
     @Param('id') id: string,
-    @Body() dto: OrganizationUpdateOneBodyDto
+    @Body() dto: OrganizationUpdateOneRequestBodyDto
   ) {
     return this.organizationGrpcService.UpdateOrganization({
       id,
