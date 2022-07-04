@@ -16,7 +16,7 @@ export class UserCreateOneHandler
   ) {}
 
   async execute({ dto }: UserCreateOneCommand): Promise<UserDomain> {
-    const { displayName, email, organization, password } = dto;
+    const { displayName, email, password } = dto;
 
     const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
 
@@ -26,7 +26,6 @@ export class UserCreateOneHandler
         role: Role.ROLE_USER,
         displayName: displayName,
         email: email,
-        organization: organization,
         password: password,
       })
     );

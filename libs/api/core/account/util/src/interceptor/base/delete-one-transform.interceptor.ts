@@ -23,10 +23,10 @@ export class BaseDeleteOneTransformInterceptor
       map((data) => {
         const resBody: BaseDeleteOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,
-          organization: data.organization,
         };
 
         return resBody;

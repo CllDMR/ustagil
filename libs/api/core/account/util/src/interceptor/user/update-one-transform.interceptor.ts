@@ -23,10 +23,10 @@ export class UserUpdateOneTransformInterceptor
       map((data) => {
         const resBody: UserUpdateOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,
-          organization: data.organization,
         };
 
         return resBody;

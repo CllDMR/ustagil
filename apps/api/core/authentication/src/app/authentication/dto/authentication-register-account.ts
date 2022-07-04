@@ -8,8 +8,5 @@ export class AuthenticationRegisterAccountDto {
   email: string;
 
   @IsString()
-  organization: string;
-
-  @IsString()
   password: string;
 }

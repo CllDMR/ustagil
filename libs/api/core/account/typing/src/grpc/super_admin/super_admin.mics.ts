@@ -1,11 +1,11 @@
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
 export interface SuperAdminGrpc {
   id: string;
+  kind: AccountKind;
   role: Role;
   displayName: string;
   email: string;
-  organization: string;
   password: string;
 }
 
@@ -28,12 +28,12 @@ export interface SuperAdminFindOneByEmailRequest {
 }
 
 export type SuperAdminCreateOneRequest = Omit<
-  Omit<SuperAdminGrpc, 'id'>,
-  'role'
+  Omit<Omit<SuperAdminGrpc, 'id'>, 'role'>,
+  'kind'
 >;
 
 export interface SuperAdminUpdateOneRequest
-  extends Partial<Omit<Omit<SuperAdminGrpc, 'id'>, 'role'>> {
+  extends Partial<SuperAdminCreateOneRequest> {
   id: string;
 }
 

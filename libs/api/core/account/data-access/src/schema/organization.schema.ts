@@ -5,30 +5,16 @@ import { Document } from 'mongoose';
 
 export type OrganizationDocument = Organization & Document;
 
-@Schema({ collection: 'organizations' })
+@Schema()
 export class Organization extends IdentifiableSchema {
-  @Prop()
+  readonly kind: string;
+  readonly role: Role;
   readonly displayName: string;
-
-  @Prop({
-    unique: true,
-  })
   readonly email: string;
+  readonly password: string;
 
   @Prop()
   readonly organization: string;
-
-  @Prop({
-    select: false,
-  })
-  readonly password: string;
-
-  @Prop({
-    type: Number,
-    enum: Role,
-    default: Role.ROLE_ORGANIZATION,
-  })
-  readonly role: Role;
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization);

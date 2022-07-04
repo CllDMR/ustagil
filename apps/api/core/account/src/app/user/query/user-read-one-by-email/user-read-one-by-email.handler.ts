@@ -20,13 +20,7 @@ export class UserReadOneByEmailHandler
 
     const foundUserDomain = await this.userRepository.findOne({ email });
 
-    const userMergedDomain = new UserMergedDomain({
-      displayName: foundUserDomain.displayName,
-      email: foundUserDomain.email,
-      id: foundUserDomain.id,
-      organization: foundUserDomain.organization,
-      password: foundUserDomain.password,
-    });
+    const userMergedDomain = new UserMergedDomain(foundUserDomain);
 
     userMergedDomain.apply(new UserReadedOneByEmailEvent(userMergedDomain.id));
     userMergedDomain.commit();

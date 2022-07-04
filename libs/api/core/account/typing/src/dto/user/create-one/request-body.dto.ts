@@ -8,8 +8,5 @@ export class UserCreateOneRequestBodyDto {
   email: string;
 
   @IsString()
-  organization: string;
-
-  @IsString()
   password: string;
 }

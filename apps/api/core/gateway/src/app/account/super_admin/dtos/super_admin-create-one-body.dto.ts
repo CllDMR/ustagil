@@ -8,8 +8,5 @@ export class SuperAdminCreateOneBodyDto {
   email: string;
 
   @IsString()
-  organization: string;
-
-  @IsString()
   password: string;
 }

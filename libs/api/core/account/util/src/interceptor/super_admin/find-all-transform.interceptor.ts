@@ -29,10 +29,10 @@ export class SuperAdminFindAllTransformInterceptor
           super_admins:
             data?.super_admins?.map((superAdmin) => ({
               id: superAdmin.id,
+              kind: superAdmin.kind,
               role: superAdmin.role,
               displayName: superAdmin.displayName,
               email: superAdmin.email,
-              organization: superAdmin.organization,
             })) ?? [],
           next_page_cursor: data.next_page_cursor,
         };

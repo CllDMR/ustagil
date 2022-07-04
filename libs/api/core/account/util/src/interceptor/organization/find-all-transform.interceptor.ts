@@ -29,6 +29,7 @@ export class OrganizationFindAllTransformInterceptor
           organizations:
             data?.organizations?.map((organization) => ({
               id: organization.id,
+              kind: organization.kind,
               role: organization.role,
               displayName: organization.displayName,
               email: organization.email,

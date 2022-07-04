@@ -1,13 +1,8 @@
-import { AggregateRoot } from '@nestjs/cqrs';
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind } from '@ustagil/api/core/common/typing';
+import { BaseDomain } from '../base/base.domain';
 
-export class OrganizationDomain extends AggregateRoot {
-  id: string;
-  role: Role;
-  displayName: string;
-  email: string;
+export class OrganizationDomain extends BaseDomain {
   organization: string;
-  password: string;
 
   constructor({
     id,
@@ -17,23 +12,18 @@ export class OrganizationDomain extends AggregateRoot {
     organization,
     password,
   }: Partial<OrganizationDomain>) {
-    super();
-    this.id = id;
-    this.role = role;
-    this.displayName = displayName;
-    this.email = email;
+    super({
+      id,
+      kind: AccountKind.ACCOUNT_KIND_ORGANIZATION,
+      role,
+      displayName,
+      email,
+      password,
+    });
     this.organization = organization;
-    this.password = password;
   }
 
   toString() {
-    return JSON.stringify({
-      id: this.id,
-      role: this.role,
-      displayName: this.displayName,
-      email: this.email,
-      organization: this.organization,
-      password: this.password,
-    });
+    return super.toString({ organization: this.organization });
   }
 }

@@ -25,10 +25,10 @@ export class BaseFindAllTransformInterceptor
           bases:
             data?.bases?.map((base) => ({
               id: base.id,
+              kind: base.kind,
               role: base.role,
               displayName: base.displayName,
               email: base.email,
-              organization: base.organization,
             })) ?? [],
           next_page_cursor: data.next_page_cursor,
         };

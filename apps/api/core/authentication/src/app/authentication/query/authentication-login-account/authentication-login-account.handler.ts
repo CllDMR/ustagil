@@ -17,7 +17,7 @@ export class AuthenticationLoginAccountHandler
   async execute({ dto }: AuthenticationLoginAccountQuery): Promise<{
     access_token: string;
   }> {
-    const { displayName, email, id, organization, role } = dto;
+    const { displayName, email, id, role } = dto;
 
     const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
@@ -25,7 +25,6 @@ export class AuthenticationLoginAccountHandler
     const authenticationDomain = new AuthenticationMergedDomain({
       displayName,
       email,
-      organization,
       role,
     });
 

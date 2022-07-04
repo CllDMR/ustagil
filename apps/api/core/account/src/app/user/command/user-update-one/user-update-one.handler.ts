@@ -15,7 +15,7 @@ export class UserUpdateOneHandler
   ) {}
 
   async execute({ dto }: UserUpdateOneCommand): Promise<UserDomain> {
-    const { id, displayName, email, organization } = dto;
+    const { id, displayName, email } = dto;
 
     const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
 
@@ -26,7 +26,6 @@ export class UserUpdateOneHandler
       new UserDomain({
         displayName,
         email,
-        organization,
       })
     );
 

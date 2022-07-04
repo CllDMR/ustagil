@@ -25,10 +25,10 @@ export class UserFindAllTransformInterceptor
           users:
             data?.users?.map((user) => ({
               id: user.id,
+              kind: user.kind,
               role: user.role,
               displayName: user.displayName,
               email: user.email,
-              organization: user.organization,
             })) ?? [],
           next_page_cursor: data.next_page_cursor,
         };

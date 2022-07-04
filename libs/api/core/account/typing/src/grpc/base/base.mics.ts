@@ -1,11 +1,11 @@
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
 export interface BaseGrpc {
   id: string;
+  kind: AccountKind;
   role: Role;
   displayName: string;
   email: string;
-  organization: string;
   password: string;
 }
 
@@ -27,10 +27,12 @@ export interface BaseFindOneByEmailRequest {
   email: string;
 }
 
-export type BaseCreateOneRequest = Omit<Omit<BaseGrpc, 'id'>, 'role'>;
+export type BaseCreateOneRequest = Omit<
+  Omit<Omit<BaseGrpc, 'id'>, 'role'>,
+  'kind'
+>;
 
-export interface BaseUpdateOneRequest
-  extends Partial<Omit<Omit<BaseGrpc, 'id'>, 'role'>> {
+export interface BaseUpdateOneRequest extends Partial<BaseCreateOneRequest> {
   id: string;
 }
 

@@ -17,7 +17,7 @@ export class SuperAdminUpdateOneHandler
   async execute({
     dto,
   }: SuperAdminUpdateOneCommand): Promise<SuperAdminDomain> {
-    const { id, displayName, email, organization } = dto;
+    const { id, displayName, email } = dto;
 
     const SuperAdminMergedDomain =
       this.eventPublisher.mergeClassContext(SuperAdminDomain);
@@ -30,7 +30,6 @@ export class SuperAdminUpdateOneHandler
         new SuperAdminDomain({
           displayName,
           email,
-          organization,
         })
       );
 

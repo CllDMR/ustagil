@@ -24,10 +24,10 @@ export class SuperAdminCreateOneTransformInterceptor
       map((data) => {
         const resBody: SuperAdminCreateOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,
-          organization: data.organization,
         };
 
         return resBody;

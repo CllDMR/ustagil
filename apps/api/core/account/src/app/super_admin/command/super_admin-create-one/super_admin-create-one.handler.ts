@@ -18,7 +18,7 @@ export class SuperAdminCreateOneHandler
   async execute({
     dto,
   }: SuperAdminCreateOneCommand): Promise<SuperAdminDomain> {
-    const { displayName, email, organization, password } = dto;
+    const { displayName, email, password } = dto;
 
     const SuperAdminMergedDomain =
       this.eventPublisher.mergeClassContext(SuperAdminDomain);
@@ -29,7 +29,6 @@ export class SuperAdminCreateOneHandler
         role: Role.ROLE_SUPER_ADMIN,
         displayName: displayName,
         email: email,
-        organization: organization,
         password: password,
       })
     );

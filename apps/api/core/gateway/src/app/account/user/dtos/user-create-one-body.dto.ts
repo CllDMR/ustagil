@@ -8,8 +8,5 @@ export class UserCreateOneBodyDto {
   email: string;
 
   @IsString()
-  organization: string;
-
-  @IsString()
   password: string;
 }

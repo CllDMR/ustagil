@@ -23,10 +23,10 @@ export class BaseFindOneTransformInterceptor
       map((data) => {
         const resBody: BaseFindOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,
-          organization: data.organization,
         };
 
         return resBody;

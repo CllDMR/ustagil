@@ -8,8 +8,5 @@ export class SuperAdminCreateOneDto {
   email: string;
 
   @IsString()
-  organization: string;
-
-  @IsString()
   password: string;
 }

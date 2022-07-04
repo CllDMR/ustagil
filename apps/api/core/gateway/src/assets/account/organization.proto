@@ -19,13 +19,21 @@ enum Role {
   ROLE_USER = 4;
 }
 
+enum AccountKind {
+  ACCOUNT_KIND_BASE = 0;
+  ACCOUNT_KIND_ORGANIZATION = 1;
+  ACCOUNT_KIND_SUPER_ADMIN = 2;
+  ACCOUNT_KIND_USER = 3;
+}
+
 message Organization {
   string id = 1;
-  Role role = 2;
-  string displayName = 3;
-  string email = 4;
-  string organization = 5;
-  optional string password = 6;
+  AccountKind kind = 2;
+  Role role = 3;
+  string displayName = 4;
+  string email = 5;
+  string organization = 6;
+  optional string password = 7;
 }
 
 message ListOrganizationsRequest {

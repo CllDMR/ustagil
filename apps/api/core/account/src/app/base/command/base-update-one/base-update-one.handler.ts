@@ -15,7 +15,7 @@ export class BaseUpdateOneHandler
   ) {}
 
   async execute({ dto }: BaseUpdateOneCommand): Promise<BaseDomain> {
-    const { id, displayName, email, organization } = dto;
+    const { id, displayName, email } = dto;
 
     const BaseMergedDomain = this.eventPublisher.mergeClassContext(BaseDomain);
 
@@ -26,7 +26,6 @@ export class BaseUpdateOneHandler
       new BaseDomain({
         displayName,
         email,
-        organization,
       })
     );
 

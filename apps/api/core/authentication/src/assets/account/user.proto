@@ -19,12 +19,19 @@ enum Role {
   ROLE_USER = 4;
 }
 
+enum AccountKind {
+  ACCOUNT_KIND_BASE = 0;
+  ACCOUNT_KIND_ORGANIZATION = 1;
+  ACCOUNT_KIND_SUPER_ADMIN = 2;
+  ACCOUNT_KIND_USER = 3;
+}
+
 message User {
   string id = 1;
-  Role role = 2;
-  string displayName = 3;
-  string email = 4;
-  string organization = 5;
+  AccountKind kind = 2;
+  Role role = 3;
+  string displayName = 4;
+  string email = 5;
   optional string password = 6;
 }
 
@@ -50,15 +57,13 @@ message CreateUserRequest {
   string id = 1;
   string displayName = 2;
   string email = 3;
-  string organization = 4;
-  string password = 5;
+  string password = 4;
 }
 
 message UpdateUserRequest {
   string id = 1;
   optional string displayName = 2;
   optional string email = 3;
-  optional string organization = 4;
 }
 
 message DeleteUserRequest {

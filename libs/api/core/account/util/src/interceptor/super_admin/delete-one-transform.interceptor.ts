@@ -24,10 +24,10 @@ export class SuperAdminDeleteOneTransformInterceptor
       map((data) => {
         const resBody: SuperAdminDeleteOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,
-          organization: data.organization,
         };
 
         return resBody;

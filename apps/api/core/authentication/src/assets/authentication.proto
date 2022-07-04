@@ -20,8 +20,7 @@ message Authentication {
   Role role = 1;
   string displayName = 2;
   string email = 3;
-  string organization = 4;
-  string password = 5;
+  string password = 4;
 }
 
 message Account {
@@ -29,15 +28,13 @@ message Account {
   Role role = 2;
   string displayName = 3;
   string email = 4;
-  string organization = 5;
-  string password = 6;
+  string password = 5;
 }
 
 message RegisterAccountRequest {
   string displayName = 1;
   string email = 2;
-  string organization = 3;
-  string password = 4;
+  string password = 3;
 }
 
 // message RegisterAccountResponse {
@@ -47,8 +44,7 @@ message LoginAccountRequest {
   string id = 1;
   string email = 2;
   string displayName = 3;
-  string organization = 4;
-  Role role = 5;
+  Role role = 4;
 }
 
 message LoginAccountResponse {

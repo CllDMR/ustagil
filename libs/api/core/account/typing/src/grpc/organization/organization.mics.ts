@@ -1,7 +1,8 @@
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
 export interface OrganizationGrpc {
   id: string;
+  kind: AccountKind;
   role: Role;
   displayName: string;
   email: string;
@@ -28,12 +29,12 @@ export interface OrganizationFindOneByEmailRequest {
 }
 
 export type OrganizationCreateOneRequest = Omit<
-  Omit<OrganizationGrpc, 'id'>,
-  'role'
+  Omit<Omit<OrganizationGrpc, 'id'>, 'role'>,
+  'kind'
 >;
 
 export interface OrganizationUpdateOneRequest
-  extends Partial<Omit<Omit<OrganizationGrpc, 'id'>, 'role'>> {
+  extends Partial<OrganizationCreateOneRequest> {
   id: string;
 }
 

@@ -29,7 +29,7 @@ export class AuthenticationRegisterAccountHandler
   async execute({
     dto,
   }: AuthenticationRegisterAccountCommand): Promise<AuthenticationDomain> {
-    const { displayName, email, organization, password } = dto;
+    const { displayName, email, password } = dto;
 
     const AuthenticationMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationDomain);
@@ -39,7 +39,6 @@ export class AuthenticationRegisterAccountHandler
         (await this.baseGrpcService.CreateBase({
           displayName,
           email,
-          organization,
           password,
         })) as unknown as Observable<BaseDomain>
       );

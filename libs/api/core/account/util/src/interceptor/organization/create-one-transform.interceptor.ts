@@ -24,6 +24,7 @@ export class OrganizationCreateOneTransformInterceptor
       map((data) => {
         const resBody: OrganizationCreateOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,

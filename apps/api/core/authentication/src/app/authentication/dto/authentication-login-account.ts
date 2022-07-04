@@ -11,9 +11,6 @@ export class AuthenticationLoginAccountDto {
   @IsString()
   displayName: string;
 
-  @IsString()
-  organization: string;
-
   @IsEnum(Role)
   role: Role;
 }

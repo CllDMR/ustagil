@@ -1,39 +1,40 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
 export class BaseDomain extends AggregateRoot {
   id: string;
+  kind: AccountKind;
   role: Role;
   displayName: string;
   email: string;
-  organization: string;
   password: string;
 
   constructor({
     id,
+    kind = AccountKind.ACCOUNT_KIND_BASE,
     role,
     displayName,
     email,
-    organization,
     password,
   }: Partial<BaseDomain>) {
     super();
     this.id = id;
+    this.kind = kind;
     this.role = role;
     this.displayName = displayName;
     this.email = email;
-    this.organization = organization;
     this.password = password;
   }
 
-  toString() {
+  toString(extra?: object) {
     return JSON.stringify({
       id: this.id,
+      kind: this.kind,
       role: this.role,
       displayName: this.displayName,
       email: this.email,
-      organization: this.organization,
       password: this.password,
+      ...extra,
     });
   }
 }

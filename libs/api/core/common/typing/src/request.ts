@@ -17,3 +17,10 @@ export enum Role {
   ROLE_SUPER_ADMIN = 3,
   ROLE_USER = 4,
 }
+
+export enum AccountKind {
+  ACCOUNT_KIND_BASE = 0,
+  ACCOUNT_KIND_ORGANIZATION = 1,
+  ACCOUNT_KIND_SUPER_ADMIN = 2,
+  ACCOUNT_KIND_USER = 3,
+}

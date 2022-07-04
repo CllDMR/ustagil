@@ -24,6 +24,7 @@ export class OrganizationDeleteOneTransformInterceptor
       map((data) => {
         const resBody: OrganizationDeleteOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,

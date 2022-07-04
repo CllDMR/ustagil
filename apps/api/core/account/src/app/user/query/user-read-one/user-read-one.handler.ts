@@ -18,13 +18,7 @@ export class UserReadOneHandler implements IQueryHandler<UserReadOneQuery> {
 
     const foundUserDomain = await this.userRepository.findOneById(id);
 
-    const userMergedDomain = new UserMergedDomain({
-      displayName: foundUserDomain.displayName,
-      email: foundUserDomain.email,
-      id: foundUserDomain.id,
-      organization: foundUserDomain.organization,
-      password: foundUserDomain.password,
-    });
+    const userMergedDomain = new UserMergedDomain(foundUserDomain);
 
     userMergedDomain.apply(new UserReadedOneEvent(userMergedDomain.id));
     userMergedDomain.commit();
