@@ -1,5 +1,5 @@
 import { IQuery } from '@nestjs/cqrs';
-import { SuperAdminFindOneByEmailDto } from '../../dto';
+import { SuperAdminFindOneByEmailDto } from './read-one-by-email.dto';
 
 export class SuperAdminReadOneByEmailQuery implements IQuery {
   constructor(public readonly dto: SuperAdminFindOneByEmailDto) {}

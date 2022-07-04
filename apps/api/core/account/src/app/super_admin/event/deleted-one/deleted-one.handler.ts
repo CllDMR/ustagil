@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminDeletedOneEvent } from './super_admin-deleted-one.event';
+import { SuperAdminDeletedOneEvent } from './deleted-one.event';
 
 @EventsHandler(SuperAdminDeletedOneEvent)
 export class SuperAdminDeletedOneHandler

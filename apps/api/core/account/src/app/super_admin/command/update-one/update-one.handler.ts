@@ -3,7 +3,7 @@ import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-acc
 import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { SuperAdminUpdatedOneEvent } from '../../event';
-import { SuperAdminUpdateOneCommand } from './super_admin-update-one.command';
+import { SuperAdminUpdateOneCommand } from './update-one.command';
 
 @CommandHandler(SuperAdminUpdateOneCommand)
 export class SuperAdminUpdateOneHandler

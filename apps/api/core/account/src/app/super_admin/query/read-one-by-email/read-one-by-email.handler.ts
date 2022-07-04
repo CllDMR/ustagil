@@ -2,7 +2,7 @@ import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { SuperAdminReadedOneByEmailEvent } from '../../event';
-import { SuperAdminReadOneByEmailQuery } from './super_admin-read-one-by-email.query';
+import { SuperAdminReadOneByEmailQuery } from './read-one-by-email.query';
 
 @QueryHandler(SuperAdminReadOneByEmailQuery)
 export class SuperAdminReadOneByEmailHandler

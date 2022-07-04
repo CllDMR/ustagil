@@ -4,7 +4,7 @@ import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
 import { SuperAdminCreatedOneEvent } from '../../event';
-import { SuperAdminCreateOneCommand } from './super_admin-create-one.command';
+import { SuperAdminCreateOneCommand } from './create-one.command';
 
 @CommandHandler(SuperAdminCreateOneCommand)
 export class SuperAdminCreateOneHandler

@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminUpdatedOneEvent } from './super_admin-updated-one.event';
+import { SuperAdminUpdatedOneEvent } from './updated-one.event';
 
 @EventsHandler(SuperAdminUpdatedOneEvent)
 export class SuperAdminUpdatedOneHandler

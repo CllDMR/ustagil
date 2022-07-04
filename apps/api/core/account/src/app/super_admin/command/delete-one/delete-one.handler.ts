@@ -3,7 +3,7 @@ import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-acc
 import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { SuperAdminDeletedOneEvent } from '../../event';
-import { SuperAdminDeleteOneCommand } from './super_admin-delete-one.command';
+import { SuperAdminDeleteOneCommand } from './delete-one.command';
 
 @CommandHandler(SuperAdminDeleteOneCommand)
 export class SuperAdminDeleteOneHandler
