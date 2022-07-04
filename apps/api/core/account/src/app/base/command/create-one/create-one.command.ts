@@ -1,6 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
-import { BaseCreateOneDto } from './create-one.dto';
+import { BaseCreateOneCommandDto } from './create-one.dto';
 
 export class BaseCreateOneCommand implements ICommand {
-  constructor(public readonly dto: BaseCreateOneDto) {}
+  constructor(public readonly dto: BaseCreateOneCommandDto) {}
 }
