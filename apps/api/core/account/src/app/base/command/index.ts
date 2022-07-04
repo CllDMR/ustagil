@@ -1,6 +1,6 @@
-import { BaseCreateOneHandler } from './base-create-one/base-create-one.handler';
-import { BaseDeleteOneHandler } from './base-delete-one/base-delete-one.handler';
-import { BaseUpdateOneHandler } from './base-update-one/base-update-one.handler';
+import { BaseCreateOneHandler } from './create-one/create-one.handler';
+import { BaseDeleteOneHandler } from './delete-one/delete-one.handler';
+import { BaseUpdateOneHandler } from './update-one/update-one.handler';
 
 export const BaseCommandHandlers = [
   BaseCreateOneHandler,
@@ -8,6 +8,6 @@ export const BaseCommandHandlers = [
   BaseDeleteOneHandler,
 ];
 
-export { BaseCreateOneCommand } from './base-create-one/base-create-one.command';
-export { BaseDeleteOneCommand } from './base-delete-one/base-delete-one.command';
-export { BaseUpdateOneCommand } from './base-update-one/base-update-one.command';
+export { BaseCreateOneCommand } from './create-one/create-one.command';
+export { BaseDeleteOneCommand } from './delete-one/delete-one.command';
+export { BaseUpdateOneCommand } from './update-one/update-one.command';

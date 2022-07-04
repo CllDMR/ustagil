@@ -1,31 +1,26 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { BaseDomain } from '@ustagil/api/core/account/typing';
-import { BaseReadedOneByEmailEvent } from '../../event';
-import { BaseReadOneByEmailQuery } from './base-read-one-by-email.query';
+import { BaseReadedOneEvent } from '../../event';
+import { BaseReadOneQuery } from './read-one.query';
 
-@QueryHandler(BaseReadOneByEmailQuery)
-export class BaseReadOneByEmailHandler
-  implements IQueryHandler<BaseReadOneByEmailQuery>
-{
+@QueryHandler(BaseReadOneQuery)
+export class BaseReadOneHandler implements IQueryHandler<BaseReadOneQuery> {
   constructor(
     private readonly eventPublisher: EventPublisher,
     private readonly baseRepository: BaseMongooseRepository
   ) {}
 
-  async execute({ dto }: BaseReadOneByEmailQuery) {
-    const { email } = dto;
+  async execute({ dto }: BaseReadOneQuery): Promise<BaseDomain> {
+    const { id } = dto;
 
     const BaseMergedDomain = this.eventPublisher.mergeClassContext(BaseDomain);
 
-    const foundBaseDomain = await this.baseRepository.findOne(
-      { email },
-      '+password'
-    );
+    const foundBaseDomain = await this.baseRepository.findOneById(id);
 
     const baseMergedDomain = new BaseMergedDomain(foundBaseDomain);
 
-    baseMergedDomain.apply(new BaseReadedOneByEmailEvent(baseMergedDomain.id));
+    baseMergedDomain.apply(new BaseReadedOneEvent(baseMergedDomain.id));
     baseMergedDomain.commit();
 
     return baseMergedDomain;

@@ -3,7 +3,7 @@ import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { BaseDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { BaseUpdatedOneEvent } from '../../event';
-import { BaseUpdateOneCommand } from './base-update-one.command';
+import { BaseUpdateOneCommand } from './update-one.command';
 
 @CommandHandler(BaseUpdateOneCommand)
 export class BaseUpdateOneHandler

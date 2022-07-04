@@ -3,7 +3,7 @@ import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { BaseDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { BaseDeletedOneEvent } from '../../event';
-import { BaseDeleteOneCommand } from './base-delete-one.command';
+import { BaseDeleteOneCommand } from './delete-one.command';
 
 @CommandHandler(BaseDeleteOneCommand)
 export class BaseDeleteOneHandler

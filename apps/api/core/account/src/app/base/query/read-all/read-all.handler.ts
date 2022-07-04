@@ -3,7 +3,7 @@ import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
 import { BaseDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
 import { BaseReadedAllEvent } from '../../event';
-import { BaseReadAllQuery } from './base-read-all.query';
+import { BaseReadAllQuery } from './read-all.query';
 
 @QueryHandler(BaseReadAllQuery)
 export class BaseReadAllHandler implements IQueryHandler<BaseReadAllQuery> {

@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { BaseReadedOneByEmailEvent } from './base-readed-one-by-email.event';
+import { BaseReadedOneByEmailEvent } from './readed-one-by-email.event';
 
 @EventsHandler(BaseReadedOneByEmailEvent)
 export class BaseReadedOneByEmailHandler
