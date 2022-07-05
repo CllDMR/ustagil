@@ -1,33 +1,41 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { UserDomain } from '@ustagil/api/core/account/typing';
+import { AccountUserMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountUserDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { UserDeletedOneEvent } from '../../event';
-import { UserDeleteOneCommand } from './delete-one.command';
+import { AccountUserDeletedOneEvent } from '../../event';
+import { AccountUserDeleteOneCommand } from './delete-one.command';
 
-@CommandHandler(UserDeleteOneCommand)
-export class UserDeleteOneHandler
-  implements ICommandHandler<UserDeleteOneCommand>
+@CommandHandler(AccountUserDeleteOneCommand)
+export class AccountUserDeleteOneHandler
+  implements ICommandHandler<AccountUserDeleteOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly userRepository: UserMongooseRepository
+    private readonly accountUserRepository: AccountUserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserDeleteOneCommand): Promise<UserDomain> {
+  async execute({
+    dto,
+  }: AccountUserDeleteOneCommand): Promise<AccountUserDomain> {
     const { id } = dto;
 
-    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
+    const AccountUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountUserDomain);
 
-    const deletedUserDomain = await this.userRepository.findOneAndRemove({
-      _id: new ObjectId(id),
-    });
+    const deletedAccountUserDomain =
+      await this.accountUserRepository.readOneAndRemove({
+        _id: new ObjectId(id),
+      });
 
-    const userMergedDomain = new UserMergedDomain(deletedUserDomain);
+    const accountUserDomain = new AccountUserMergedDomain(
+      deletedAccountUserDomain
+    );
 
-    userMergedDomain.apply(new UserDeletedOneEvent(userMergedDomain.id));
-    userMergedDomain.commit();
+    accountUserDomain.apply(
+      new AccountUserDeletedOneEvent(accountUserDomain.id)
+    );
+    accountUserDomain.commit();
 
-    return userMergedDomain;
+    return accountUserDomain;
   }
 }

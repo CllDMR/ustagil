@@ -1,11 +1,11 @@
-export { IAccountBaseGrpcService } from './base.controller.interface';
 export {
-  BaseCreateOneRequest,
-  BaseDeleteOneRequest,
-  BaseFindAllRequest,
-  BaseFindAllResponse,
-  BaseFindOneByEmailRequest,
-  BaseFindOneRequest,
-  BaseGrpc,
-  BaseUpdateOneRequest,
+  AccountBaseCreateOneRequest,
+  AccountBaseDeleteOneRequest,
+  AccountBaseGrpc,
+  AccountBaseReadAllRequest,
+  AccountBaseReadAllResponse,
+  AccountBaseReadOneByEmailRequest,
+  AccountBaseReadOneRequest,
+  AccountBaseUpdateOneRequest,
 } from './base.mics';
+export { IAccountBaseGrpcService } from './base.service.interface';

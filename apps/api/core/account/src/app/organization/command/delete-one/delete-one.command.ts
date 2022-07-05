@@ -1,6 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
-import { OrganizationDeleteOneCommandDto } from './delete-one.dto';
+import { AccountOrganizationDeleteOneCommandDto } from './delete-one.dto';
 
-export class OrganizationDeleteOneCommand implements ICommand {
-  constructor(public readonly dto: OrganizationDeleteOneCommandDto) {}
+export class AccountOrganizationDeleteOneCommand implements ICommand {
+  constructor(public readonly dto: AccountOrganizationDeleteOneCommandDto) {}
 }

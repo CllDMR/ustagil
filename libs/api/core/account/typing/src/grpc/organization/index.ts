@@ -1,11 +1,11 @@
-export { IAccountOrganizationGrpcService } from './organization.controller.interface';
 export {
-  OrganizationCreateOneRequest,
-  OrganizationDeleteOneRequest,
-  OrganizationFindAllRequest,
-  OrganizationFindAllResponse,
-  OrganizationFindOneByEmailRequest,
-  OrganizationFindOneRequest,
-  OrganizationGrpc,
-  OrganizationUpdateOneRequest,
+  AccountOrganizationCreateOneRequest,
+  AccountOrganizationDeleteOneRequest,
+  AccountOrganizationGrpc,
+  AccountOrganizationReadAllRequest,
+  AccountOrganizationReadAllResponse,
+  AccountOrganizationReadOneByEmailRequest,
+  AccountOrganizationReadOneRequest,
+  AccountOrganizationUpdateOneRequest,
 } from './organization.mics';
+export { IAccountOrganizationGrpcService } from './organization.service.interface';

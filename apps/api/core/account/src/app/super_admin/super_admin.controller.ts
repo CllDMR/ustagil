@@ -2,66 +2,72 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
+  AccountSuperAdminCreateOneRequest,
+  AccountSuperAdminDeleteOneRequest,
+  AccountSuperAdminReadAllRequest,
+  AccountSuperAdminReadOneByEmailRequest,
+  AccountSuperAdminReadOneRequest,
+  AccountSuperAdminUpdateOneRequest,
   IAccountSuperAdminGrpcService,
-  SuperAdminCreateOneRequest,
-  SuperAdminDeleteOneRequest,
-  SuperAdminFindAllRequest,
-  SuperAdminFindOneByEmailRequest,
-  SuperAdminFindOneRequest,
-  SuperAdminUpdateOneRequest,
 } from '@ustagil/api/core/account/typing';
 import { from } from 'rxjs';
 import {
-  SuperAdminCreateOneCommand,
-  SuperAdminDeleteOneCommand,
-  SuperAdminUpdateOneCommand,
+  AccountSuperAdminCreateOneCommand,
+  AccountSuperAdminDeleteOneCommand,
+  AccountSuperAdminUpdateOneCommand,
 } from './command';
 import {
-  SuperAdminReadAllQuery,
-  SuperAdminReadOneByEmailQuery,
-  SuperAdminReadOneQuery,
+  AccountSuperAdminReadAllQuery,
+  AccountSuperAdminReadOneByEmailQuery,
+  AccountSuperAdminReadOneQuery,
 } from './query';
 
 @Controller()
-export class SuperAdminController implements IAccountSuperAdminGrpcService {
+export class AccountSuperAdminController
+  implements IAccountSuperAdminGrpcService
+{
   constructor(
     private readonly commandBus: CommandBus<
-      | SuperAdminCreateOneCommand
-      | SuperAdminDeleteOneCommand
-      | SuperAdminUpdateOneCommand
+      | AccountSuperAdminCreateOneCommand
+      | AccountSuperAdminDeleteOneCommand
+      | AccountSuperAdminUpdateOneCommand
     >,
     private readonly queryBus: QueryBus<
-      | SuperAdminReadAllQuery
-      | SuperAdminReadOneByEmailQuery
-      | SuperAdminReadOneQuery
+      | AccountSuperAdminReadAllQuery
+      | AccountSuperAdminReadOneByEmailQuery
+      | AccountSuperAdminReadOneQuery
     >
   ) {}
 
-  @GrpcMethod('SuperAdminService')
-  ListSuperAdmins(data: SuperAdminFindAllRequest) {
-    return from(this.queryBus.execute(new SuperAdminReadAllQuery(data)));
+  @GrpcMethod('AccountSuperAdminService')
+  ListAccountSuperAdmins(data: AccountSuperAdminReadAllRequest) {
+    return from(this.queryBus.execute(new AccountSuperAdminReadAllQuery(data)));
   }
 
-  @GrpcMethod('SuperAdminService')
-  GetSuperAdminByEmail(data: SuperAdminFindOneByEmailRequest) {
-    return from(this.queryBus.execute(new SuperAdminReadOneByEmailQuery(data)));
+  @GrpcMethod('AccountSuperAdminService')
+  GetAccountSuperAdminByEmail(data: AccountSuperAdminReadOneByEmailRequest) {
+    return from(
+      this.queryBus.execute(new AccountSuperAdminReadOneByEmailQuery(data))
+    );
   }
 
-  @GrpcMethod('SuperAdminService')
-  GetSuperAdmin(data: SuperAdminFindOneRequest) {
-    return from(this.queryBus.execute(new SuperAdminReadOneQuery(data)));
+  @GrpcMethod('AccountSuperAdminService')
+  GetAccountSuperAdmin(data: AccountSuperAdminReadOneRequest) {
+    return from(this.queryBus.execute(new AccountSuperAdminReadOneQuery(data)));
   }
 
-  @GrpcMethod('SuperAdminService')
-  CreateSuperAdmin(data: SuperAdminCreateOneRequest) {
-    return from(this.commandBus.execute(new SuperAdminCreateOneCommand(data)));
+  @GrpcMethod('AccountSuperAdminService')
+  CreateAccountSuperAdmin(data: AccountSuperAdminCreateOneRequest) {
+    return from(
+      this.commandBus.execute(new AccountSuperAdminCreateOneCommand(data))
+    );
   }
 
-  @GrpcMethod('SuperAdminService')
-  UpdateSuperAdmin(data: SuperAdminUpdateOneRequest) {
+  @GrpcMethod('AccountSuperAdminService')
+  UpdateAccountSuperAdmin(data: AccountSuperAdminUpdateOneRequest) {
     return from(
       this.commandBus.execute(
-        new SuperAdminUpdateOneCommand({
+        new AccountSuperAdminUpdateOneCommand({
           id: data.id,
           ...data,
         })
@@ -69,8 +75,10 @@ export class SuperAdminController implements IAccountSuperAdminGrpcService {
     );
   }
 
-  @GrpcMethod('SuperAdminService')
-  DeleteSuperAdmin(data: SuperAdminDeleteOneRequest) {
-    return from(this.commandBus.execute(new SuperAdminDeleteOneCommand(data)));
+  @GrpcMethod('AccountSuperAdminService')
+  DeleteAccountSuperAdmin(data: AccountSuperAdminDeleteOneRequest) {
+    return from(
+      this.commandBus.execute(new AccountSuperAdminDeleteOneCommand(data))
+    );
   }
 }

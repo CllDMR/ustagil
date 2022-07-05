@@ -1,3 +1,3 @@
-export { BaseFindAllMSMessage } from './base-find-all.ms-message';
-export { BaseFindOneByEmailMSMessage } from './base-find-one-by-email.ms-message';
-export { BaseFindOneMSMessage } from './base-find-one.ms-message';
+export { AccountBaseReadAllMSMessage } from './read-all.ms-message';
+export { AccountBaseReadOneByEmailMSMessage } from './read-one-by-email.ms-message';
+export { AccountBaseReadOneMSMessage } from './read-one.ms-message';

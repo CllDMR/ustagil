@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class OrganizationCreateOneCommandDto {
+export class AccountOrganizationCreateOneCommandDto {
   @IsString()
   displayName: string;
 

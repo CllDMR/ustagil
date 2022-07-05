@@ -1,13 +1,13 @@
-import { SuperAdminLoginnedHandler } from './logined/logined.handler';
-import { SuperAdminRegisteredHandler } from './registered/registered.handler';
-import { SuperAdminValidatedHandler } from './validated/validated.handler';
+import { AuthenticationSuperAdminLoginnedHandler } from './logined/logined.handler';
+import { AuthenticationSuperAdminRegisteredHandler } from './registered/registered.handler';
+import { AuthenticationSuperAdminValidatedHandler } from './validated/validated.handler';
 
-export const SuperAdminEventHandlers = [
-  SuperAdminLoginnedHandler,
-  SuperAdminRegisteredHandler,
-  SuperAdminValidatedHandler,
+export const AuthenticationSuperAdminEventHandlers = [
+  AuthenticationSuperAdminLoginnedHandler,
+  AuthenticationSuperAdminRegisteredHandler,
+  AuthenticationSuperAdminValidatedHandler,
 ];
 
-export { SuperAdminLoginnedEvent } from './logined/logined.event';
-export { SuperAdminRegisteredEvent } from './registered/registered.event';
-export { SuperAdminValidatedEvent } from './validated/validated.event';
+export { AuthenticationSuperAdminLoginnedEvent } from './logined/logined.event';
+export { AuthenticationSuperAdminRegisteredEvent } from './registered/registered.event';
+export { AuthenticationSuperAdminValidatedEvent } from './validated/validated.event';

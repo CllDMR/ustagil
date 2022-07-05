@@ -1,11 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { UserCreatedOneEvent } from './created-one.event';
+import { AccountUserCreatedOneEvent } from './created-one.event';
 
-@EventsHandler(UserCreatedOneEvent)
-export class UserCreatedOneHandler
-  implements IEventHandler<UserCreatedOneEvent>
+@EventsHandler(AccountUserCreatedOneEvent)
+export class AccountUserCreatedOneHandler
+  implements IEventHandler<AccountUserCreatedOneEvent>
 {
-  async handle({ id }: UserCreatedOneEvent): Promise<void> {
-    console.log('Created user with id:', id);
+  async handle({ id }: AccountUserCreatedOneEvent): Promise<void> {
+    console.log('Created account user with id:', id);
   }
 }

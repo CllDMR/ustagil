@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { UserDomain } from '@ustagil/api/core/account/typing';
+import { AccountUserDomain } from '@ustagil/api/core/account/typing';
 import { MongooseRepository } from '@ustagil/api/core/common/data-access';
-import { UserEntityDomainFactory } from '../../factory/user.factory';
-import { User } from '../../schema/user.schema';
+import { AccountUserEntityDomainFactory } from '../../factory/user.factory';
+import { AccountUser } from '../../schema/user.schema';
 
 @Injectable()
-export class UserMongooseRepository extends MongooseRepository<
-  User,
-  UserDomain
+export class AccountUserMongooseRepository extends MongooseRepository<
+  AccountUser,
+  AccountUserDomain
 > {
   constructor(
-    @InjectModel(User.name) userModel,
-    userEntityDomainFactory: UserEntityDomainFactory
+    @InjectModel(AccountUser.name) accountUserModel,
+    accountUserEntityDomainFactory: AccountUserEntityDomainFactory
   ) {
-    super(userModel, userEntityDomainFactory);
+    super(accountUserModel, accountUserEntityDomainFactory);
   }
 }

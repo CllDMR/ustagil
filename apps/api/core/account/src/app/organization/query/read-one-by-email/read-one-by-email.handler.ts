@@ -1,37 +1,38 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
-import { OrganizationReadedOneByEmailEvent } from '../../event';
-import { OrganizationReadOneByEmailQuery } from './read-one-by-email.query';
+import { AccountOrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationReadedOneByEmailEvent } from '../../event';
+import { AccountOrganizationReadOneByEmailQuery } from './read-one-by-email.query';
 
-@QueryHandler(OrganizationReadOneByEmailQuery)
-export class OrganizationReadOneByEmailHandler
-  implements IQueryHandler<OrganizationReadOneByEmailQuery>
+@QueryHandler(AccountOrganizationReadOneByEmailQuery)
+export class AccountOrganizationReadOneByEmailHandler
+  implements IQueryHandler<AccountOrganizationReadOneByEmailQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly organizationRepository: OrganizationMongooseRepository
+    private readonly accountOrganizationRepository: AccountOrganizationMongooseRepository
   ) {}
 
-  async execute({ dto }: OrganizationReadOneByEmailQuery) {
+  async execute({ dto }: AccountOrganizationReadOneByEmailQuery) {
     const { email } = dto;
 
-    const OrganizationMergedDomain =
-      this.eventPublisher.mergeClassContext(OrganizationDomain);
+    const AccountOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountOrganizationDomain);
 
-    const foundOrganizationDomain = await this.organizationRepository.findOne({
-      email,
-    });
+    const readedAccountOrganizationDomain =
+      await this.accountOrganizationRepository.readOne({
+        email,
+      });
 
-    const organizationMergedDomain = new OrganizationMergedDomain(
-      foundOrganizationDomain
+    const accountOrganizationDomain = new AccountOrganizationMergedDomain(
+      readedAccountOrganizationDomain
     );
 
-    organizationMergedDomain.apply(
-      new OrganizationReadedOneByEmailEvent(organizationMergedDomain.id)
+    accountOrganizationDomain.apply(
+      new AccountOrganizationReadedOneByEmailEvent(accountOrganizationDomain.id)
     );
-    organizationMergedDomain.commit();
+    accountOrganizationDomain.commit();
 
-    return organizationMergedDomain;
+    return accountOrganizationDomain;
   }
 }

@@ -1,6 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
-import { OrganizationRegisterDto } from './register.dto';
+import { AuthenticationOrganizationRegisterDto } from './register.dto';
 
-export class OrganizationRegisterCommand implements ICommand {
-  constructor(public readonly dto: OrganizationRegisterDto) {}
+export class AuthenticationOrganizationRegisterCommand implements ICommand {
+  constructor(public readonly dto: AuthenticationOrganizationRegisterDto) {}
 }

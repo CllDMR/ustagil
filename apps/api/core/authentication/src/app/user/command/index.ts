@@ -1,5 +1,7 @@
-import { UserRegisterHandler } from './register/register.handler';
+import { AuthenticationUserRegisterHandler } from './register/register.handler';
 
-export const UserCommandHandlers = [UserRegisterHandler];
+export const AuthenticationUserCommandHandlers = [
+  AuthenticationUserRegisterHandler,
+];
 
-export { UserRegisterCommand } from './register/register.command';
+export { AuthenticationUserRegisterCommand } from './register/register.command';

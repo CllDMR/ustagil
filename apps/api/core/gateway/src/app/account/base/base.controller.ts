@@ -15,25 +15,25 @@ import {
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseCreateOneRequestBodyDto,
-  BaseFindAllRequestQueryDto,
-  BaseUpdateOneRequestBodyDto,
-  IBaseGrpcController,
+  AccountBaseCreateOneRequestBodyDto,
+  AccountBaseFindAllRequestQueryDto,
+  AccountBaseUpdateOneRequestBodyDto,
+  IAccountBaseGrpcService,
 } from '@ustagil/api/core/account/typing';
 import {
-  BaseCreateOneTransformInterceptor,
-  BaseDeleteOneTransformInterceptor,
-  BaseFindAllTransformInterceptor,
-  BaseFindOneTransformInterceptor,
-  BaseUpdateOneTransformInterceptor,
+  AccountBaseCreateOneTransformInterceptor,
+  AccountBaseDeleteOneTransformInterceptor,
+  AccountBaseReadAllTransformInterceptor,
+  AccountBaseReadOneTransformInterceptor,
+  AccountBaseUpdateOneTransformInterceptor,
 } from '@ustagil/api/core/account/util';
 import {
-  BaseDomainCreatePolicyRule,
-  BaseDomainDeletePolicyRule,
-  BaseDomainReadPolicyRule,
-  BaseDomainUpdatePolicyRule,
+  AccountBaseDomainCreatePolicyRule,
+  AccountBaseDomainDeletePolicyRule,
+  AccountBaseDomainReadPolicyRule,
+  AccountBaseDomainUpdatePolicyRule,
   CheckPolicies,
   PoliciesGuard,
 } from '@ustagil/api/core/casl';
@@ -46,50 +46,56 @@ import { JwtAuthGuard } from '@ustagil/api/core/common/util';
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
-export class BaseController implements OnModuleInit {
-  private baseGrpcService: IBaseGrpcController;
+export class AccountBaseController implements OnModuleInit {
+  private accountBaseGrpcService: IAccountBaseGrpcService;
 
   constructor(
-    @Inject(BASE_MS_GRPC) private readonly baseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_BASE_MS_GRPC)
+    private readonly accountBaseMSGrpcClient: ClientGrpc
   ) {}
 
   onModuleInit() {
-    this.baseGrpcService =
-      this.baseMSGrpcClient.getService<IBaseGrpcController>('BaseService');
+    this.accountBaseGrpcService =
+      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
+        'AccountBaseService'
+      );
   }
 
-  @UseInterceptors(BaseCreateOneTransformInterceptor)
-  @CheckPolicies(new BaseDomainCreatePolicyRule())
+  @UseInterceptors(AccountBaseCreateOneTransformInterceptor)
+  @CheckPolicies(new AccountBaseDomainCreatePolicyRule())
   @Post('account/bases')
-  postBase(@Body() dto: BaseCreateOneRequestBodyDto) {
-    return this.baseGrpcService.CreateBase(dto);
+  postBase(@Body() dto: AccountBaseCreateOneRequestBodyDto) {
+    return this.accountBaseGrpcService.CreateAccountBase(dto);
   }
 
-  @UseInterceptors(BaseFindAllTransformInterceptor)
-  @CheckPolicies(new BaseDomainReadPolicyRule())
+  @UseInterceptors(AccountBaseReadAllTransformInterceptor)
+  @CheckPolicies(new AccountBaseDomainReadPolicyRule())
   @Get('account/bases')
-  getBases(@Query() dto: BaseFindAllRequestQueryDto) {
-    return this.baseGrpcService.ListBases(dto);
+  getBases(@Query() dto: AccountBaseFindAllRequestQueryDto) {
+    return this.accountBaseGrpcService.ListAccountBases(dto);
   }
 
-  @UseInterceptors(BaseFindOneTransformInterceptor)
-  @CheckPolicies(new BaseDomainReadPolicyRule())
+  @UseInterceptors(AccountBaseReadOneTransformInterceptor)
+  @CheckPolicies(new AccountBaseDomainReadPolicyRule())
   @Get('account/bases/:id')
   getBase(@Param('id') id: string) {
-    return this.baseGrpcService.GetBase({ id });
+    return this.accountBaseGrpcService.GetAccountBase({ id });
   }
 
-  @UseInterceptors(BaseUpdateOneTransformInterceptor)
-  @CheckPolicies(new BaseDomainUpdatePolicyRule())
+  @UseInterceptors(AccountBaseUpdateOneTransformInterceptor)
+  @CheckPolicies(new AccountBaseDomainUpdatePolicyRule())
   @Patch('account/bases/:id')
-  patchBase(@Param('id') id: string, @Body() dto: BaseUpdateOneRequestBodyDto) {
-    return this.baseGrpcService.UpdateBase({ id, ...dto });
+  patchBase(
+    @Param('id') id: string,
+    @Body() dto: AccountBaseUpdateOneRequestBodyDto
+  ) {
+    return this.accountBaseGrpcService.UpdateAccountBase({ id, ...dto });
   }
 
-  @UseInterceptors(BaseDeleteOneTransformInterceptor)
-  @CheckPolicies(new BaseDomainDeletePolicyRule())
+  @UseInterceptors(AccountBaseDeleteOneTransformInterceptor)
+  @CheckPolicies(new AccountBaseDomainDeletePolicyRule())
   @Delete('account/bases/:id')
   deleteBase(@Param('id') id: string) {
-    return this.baseGrpcService.DeleteBase({ id });
+    return this.accountBaseGrpcService.DeleteAccountBase({ id });
   }
 }

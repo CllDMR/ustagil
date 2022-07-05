@@ -7,9 +7,9 @@ export interface BaseRepository<
 > {
   create(domain: TDomain): Promise<TDomain>;
 
-  findAll(entityFilter?: unknown): Promise<TDomain[]>;
-  findOne(entityFilter?: unknown): Promise<TDomain>;
-  findOneById(id: string): Promise<TDomain>;
+  readAll(entityFilter?: unknown): Promise<TDomain[]>;
+  readOne(entityFilter?: unknown): Promise<TDomain>;
+  readOneById(id: string): Promise<TDomain>;
 
-  findOneAndUpdate(entityFilter: unknown, domain: TDomain): Promise<TDomain>;
+  readOneAndUpdate(entityFilter: unknown, domain: TDomain): Promise<TDomain>;
 }

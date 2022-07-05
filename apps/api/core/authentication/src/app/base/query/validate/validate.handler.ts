@@ -2,9 +2,9 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
+  AccountBaseDomain,
   IAccountBaseGrpcService,
 } from '@ustagil/api/core/account/typing';
 import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
@@ -13,36 +13,39 @@ import {
   fromRpcToCustomRpcException,
 } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { BaseValidatedEvent } from '../../event';
-import { BaseValidateQuery } from './validate.query';
+import { AuthenticationBaseValidatedEvent } from '../../event';
+import { AuthenticationBaseValidateQuery } from './validate.query';
 
-@QueryHandler(BaseValidateQuery)
-export class BaseValidateHandler implements IQueryHandler<BaseValidateQuery> {
+@QueryHandler(AuthenticationBaseValidateQuery)
+export class BaseValidateHandler
+  implements IQueryHandler<AuthenticationBaseValidateQuery>
+{
   private readonly accountBaseGrpcService: IAccountBaseGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private readonly accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_BASE_MS_GRPC)
+    private readonly accountBaseMSGrpcClient: ClientGrpc
   ) {
     this.accountBaseGrpcService =
       this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+        'AccountBaseService'
       );
   }
 
-  async execute({ dto }: BaseValidateQuery) {
+  async execute({ dto }: AuthenticationBaseValidateQuery) {
     const { email, password } = dto;
 
     const AuthenticationBaseMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
 
-    let accountBaseDomain: BaseDomain;
+    let accountBaseDomain: AccountBaseDomain;
 
     try {
       accountBaseDomain = await firstValueFrom(
-        (await this.accountBaseGrpcService.GetBaseByEmail({
+        (await this.accountBaseGrpcService.GetAccountBaseByEmail({
           email,
-        })) as unknown as Observable<BaseDomain>
+        })) as unknown as Observable<AccountBaseDomain>
       );
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
@@ -62,7 +65,7 @@ export class BaseValidateHandler implements IQueryHandler<BaseValidateQuery> {
       });
 
     authenticationBaseMergedDomain.apply(
-      new BaseValidatedEvent(accountBaseDomain.id)
+      new AuthenticationBaseValidatedEvent(accountBaseDomain.id)
     );
 
     authenticationBaseMergedDomain.commit();
@@ -73,7 +76,7 @@ export class BaseValidateHandler implements IQueryHandler<BaseValidateQuery> {
 
 // const account = await firstValueFrom(
 //   this.accountMSClient
-//     .send<BaseDomain, AccountFindOneByEmailMSMessage>(
+//     .send<AccountBaseDomain, AccountFindOneByEmailMSMessage>(
 //       ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE,
 //       new AccountFindOneByEmailMSMessage(authentication.email)
 //     )

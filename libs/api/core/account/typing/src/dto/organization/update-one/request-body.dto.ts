@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { OrganizationCreateOneRequestBodyDto } from '../create-one/request-body.dto';
+import { AccountOrganizationCreateOneRequestBodyDto } from '../create-one/request-body.dto';
 
-export class OrganizationUpdateOneRequestBodyDto extends PartialType(
-  OrganizationCreateOneRequestBodyDto
+export class AccountOrganizationUpdateOneRequestBodyDto extends PartialType(
+  AccountOrganizationCreateOneRequestBodyDto
 ) {}

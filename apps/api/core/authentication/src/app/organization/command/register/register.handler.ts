@@ -1,60 +1,65 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
-  IAccountBaseGrpcService,
+  AccountOrganizationDomain,
+  IAccountOrganizationGrpcService,
 } from '@ustagil/api/core/account/typing';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationOrganizationDomain } from '@ustagil/api/core/authentication/typing';
 import { fromRpcToCustomRpcException } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { OrganizationRegisteredEvent } from '../../event';
-import { OrganizationRegisterCommand } from './register.command';
+import { AuthenticationOrganizationRegisteredEvent } from '../../event';
+import { AuthenticationOrganizationRegisterCommand } from './register.command';
 
-@CommandHandler(OrganizationRegisterCommand)
-export class OrganizationRegisterHandler
-  implements ICommandHandler<OrganizationRegisterCommand>
+@CommandHandler(AuthenticationOrganizationRegisterCommand)
+export class AuthenticationOrganizationRegisterHandler
+  implements ICommandHandler<AuthenticationOrganizationRegisterCommand>
 {
-  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
+  private readonly accountOrganizationGrpcService: IAccountOrganizationGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_ORGANIZATION_MS_GRPC)
+    private accountOrganizationMSGrpcClient: ClientGrpc
   ) {
-    this.accountBaseGrpcService =
-      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+    this.accountOrganizationGrpcService =
+      this.accountOrganizationMSGrpcClient.getService<IAccountOrganizationGrpcService>(
+        'AccountOrganizationService'
       );
   }
 
   async execute({
     dto,
-  }: OrganizationRegisterCommand): Promise<AuthenticationBaseDomain> {
-    const { displayName, email, password } = dto;
+  }: AuthenticationOrganizationRegisterCommand): Promise<AuthenticationOrganizationDomain> {
+    const { displayName, email, password, organization } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationOrganizationDomain);
 
     try {
-      const newAccountBaseDomain = await firstValueFrom(
-        (await this.accountBaseGrpcService.CreateBase({
+      const newAccountOrganizationDomain = await firstValueFrom(
+        (await this.accountOrganizationGrpcService.CreateAccountOrganization({
           displayName,
           email,
           password,
-        })) as unknown as Observable<BaseDomain>
+          organization,
+        })) as unknown as Observable<AccountOrganizationDomain>
       );
 
-      const authenticationBaseDomain = new AuthenticationBaseMergedDomain(
-        newAccountBaseDomain
-      );
+      const authenticationOrganizationDomain =
+        new AuthenticationOrganizationMergedDomain(
+          newAccountOrganizationDomain
+        );
 
-      authenticationBaseDomain.apply(
-        new OrganizationRegisteredEvent(newAccountBaseDomain.id)
+      authenticationOrganizationDomain.apply(
+        new AuthenticationOrganizationRegisteredEvent(
+          newAccountOrganizationDomain.id
+        )
       );
-      authenticationBaseDomain.commit();
+      authenticationOrganizationDomain.commit();
 
-      return authenticationBaseDomain;
+      return authenticationOrganizationDomain;
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }

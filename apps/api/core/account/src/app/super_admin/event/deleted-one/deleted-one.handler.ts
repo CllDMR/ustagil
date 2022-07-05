@@ -1,11 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminDeletedOneEvent } from './deleted-one.event';
+import { AccountSuperAdminDeletedOneEvent } from './deleted-one.event';
 
-@EventsHandler(SuperAdminDeletedOneEvent)
-export class SuperAdminDeletedOneHandler
-  implements IEventHandler<SuperAdminDeletedOneEvent>
+@EventsHandler(AccountSuperAdminDeletedOneEvent)
+export class AccountSuperAdminDeletedOneHandler
+  implements IEventHandler<AccountSuperAdminDeletedOneEvent>
 {
-  async handle({ id }: SuperAdminDeletedOneEvent): Promise<void> {
-    console.log('Deleted super_admin with id:', id);
+  async handle({ id }: AccountSuperAdminDeletedOneEvent): Promise<void> {
+    console.log('Deleted account super_admin with id:', id);
   }
 }

@@ -1,6 +1,6 @@
 import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export interface SuperAdminGrpc {
+export interface AccountSuperAdminGrpc {
   id: string;
   kind: AccountKind;
   role: Role;
@@ -9,34 +9,34 @@ export interface SuperAdminGrpc {
   password: string;
 }
 
-export interface SuperAdminFindAllRequest {
+export interface AccountSuperAdminReadAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface SuperAdminFindAllResponse {
-  super_admins: SuperAdminGrpc[];
+export interface AccountSuperAdminReadAllResponse {
+  super_admins: AccountSuperAdminGrpc[];
   next_page_cursor: string;
 }
 
-export interface SuperAdminFindOneRequest {
+export interface AccountSuperAdminReadOneRequest {
   id: string;
 }
 
-export interface SuperAdminFindOneByEmailRequest {
+export interface AccountSuperAdminReadOneByEmailRequest {
   email: string;
 }
 
-export type SuperAdminCreateOneRequest = Omit<
-  Omit<Omit<SuperAdminGrpc, 'id'>, 'role'>,
+export type AccountSuperAdminCreateOneRequest = Omit<
+  Omit<Omit<AccountSuperAdminGrpc, 'id'>, 'role'>,
   'kind'
 >;
 
-export interface SuperAdminUpdateOneRequest
-  extends Partial<SuperAdminCreateOneRequest> {
+export interface AccountSuperAdminUpdateOneRequest
+  extends Partial<AccountSuperAdminCreateOneRequest> {
   id: string;
 }
 
-export interface SuperAdminDeleteOneRequest {
+export interface AccountSuperAdminDeleteOneRequest {
   id: string;
 }

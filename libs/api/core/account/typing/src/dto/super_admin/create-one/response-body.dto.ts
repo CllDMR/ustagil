@@ -1,6 +1,6 @@
 import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export class SuperAdminCreateOneResponseBodyDto {
+export class AccountSuperAdminCreateOneResponseBodyDto {
   id: string;
   kind: AccountKind;
   role: Role;

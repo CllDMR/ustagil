@@ -1,3 +1,3 @@
-export class SuperAdminReadedOneByEmailEvent {
+export class AccountSuperAdminReadedOneByEmailEvent {
   constructor(public readonly id: string) {}
 }

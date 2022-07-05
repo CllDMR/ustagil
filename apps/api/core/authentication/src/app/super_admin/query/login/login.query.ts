@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
-import { SuperAdminLoginDto } from './login.dto';
+import { AuthenticationSuperAdminLoginDto } from './login.dto';
 
-export class SuperAdminLoginQuery implements IQuery {
-  constructor(public readonly dto: SuperAdminLoginDto) {}
+export class AuthenticationSuperAdminLoginQuery implements IQuery {
+  constructor(public readonly dto: AuthenticationSuperAdminLoginDto) {}
 }

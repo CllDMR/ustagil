@@ -1,9 +1,14 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { UserLoginnedEvent } from './logined.event';
+import { AuthenticationUserLoginnedEvent } from './logined.event';
 
-@EventsHandler(UserLoginnedEvent)
-export class UserLoginnedHandler implements IEventHandler<UserLoginnedEvent> {
-  async handle({ displayName, email }: UserLoginnedEvent): Promise<void> {
-    console.log('Loginned user with id:', displayName, email);
+@EventsHandler(AuthenticationUserLoginnedEvent)
+export class AuthenticationUserLoginnedHandler
+  implements IEventHandler<AuthenticationUserLoginnedEvent>
+{
+  async handle({
+    displayName,
+    email,
+  }: AuthenticationUserLoginnedEvent): Promise<void> {
+    console.log('Loginned account user with id:', displayName, email);
   }
 }

@@ -1,28 +1,30 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { BaseDomain } from '@ustagil/api/core/account/typing';
+import { AccountBaseMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountBaseDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { BaseReadedAllEvent } from '../../event';
-import { BaseReadAllQuery } from './read-all.query';
+import { AccountBaseReadedAllEvent } from '../../event';
+import { AccountBaseReadAllQuery } from './read-all.query';
 
-@QueryHandler(BaseReadAllQuery)
-export class BaseReadAllHandler implements IQueryHandler<BaseReadAllQuery> {
+@QueryHandler(AccountBaseReadAllQuery)
+export class AccountBaseReadAllHandler
+  implements IQueryHandler<AccountBaseReadAllQuery>
+{
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly baseRepository: BaseMongooseRepository
+    private readonly accountBaseRepository: AccountBaseMongooseRepository
   ) {}
 
-  async execute({ dto }: BaseReadAllQuery): Promise<{
-    bases: BaseDomain[];
+  async execute({ dto }: AccountBaseReadAllQuery): Promise<{
+    bases: AccountBaseDomain[];
     next_page_cursor: string;
   }> {
     const { page_size = 10, next_page_cursor } = dto;
 
-    const baseMergedDomain = this.eventPublisher.mergeObjectContext(
-      new BaseDomain({})
+    const accountBaseDomain = this.eventPublisher.mergeObjectContext(
+      new AccountBaseDomain({})
     );
 
-    const baseDomains = await this.baseRepository.findAll(
+    const readedAccountBaseDomains = await this.accountBaseRepository.readAll(
       {
         ...(next_page_cursor
           ? {
@@ -38,15 +40,18 @@ export class BaseReadAllHandler implements IQueryHandler<BaseReadAllQuery> {
       }
     );
 
-    baseMergedDomain.apply(new BaseReadedAllEvent());
-    baseMergedDomain.commit();
+    accountBaseDomain.apply(new AccountBaseReadedAllEvent());
+    accountBaseDomain.commit();
 
     let new_next_page_cursor = '';
 
-    if (baseDomains.length >= page_size + 1) {
-      const nextBase = baseDomains.pop();
-      new_next_page_cursor = nextBase.id;
+    if (readedAccountBaseDomains.length >= page_size + 1) {
+      const nextAccountBase = readedAccountBaseDomains.pop();
+      new_next_page_cursor = nextAccountBase.id;
     }
-    return { bases: baseDomains, next_page_cursor: new_next_page_cursor };
+    return {
+      bases: readedAccountBaseDomains,
+      next_page_cursor: new_next_page_cursor,
+    };
   }
 }

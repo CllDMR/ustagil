@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class BaseRegisterDto {
+export class AuthenticationBaseRegisterDto {
   @IsString()
   displayName: string;
 

@@ -1,5 +1,7 @@
-import { SuperAdminRegisterHandler } from './register/register.handler';
+import { AuthenticationSuperAdminRegisterHandler } from './register/register.handler';
 
-export const SuperAdminCommandHandlers = [SuperAdminRegisterHandler];
+export const AuthenticationSuperAdminCommandHandlers = [
+  AuthenticationSuperAdminRegisterHandler,
+];
 
-export { SuperAdminRegisterCommand } from './register/register.command';
+export { AuthenticationSuperAdminRegisterCommand } from './register/register.command';

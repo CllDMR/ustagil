@@ -1,5 +1,7 @@
-import { BaseRegisterHandler } from './register/register.handler';
+import { AuthenticationBaseRegisterHandler } from './register/register.handler';
 
-export const BaseCommandHandlers = [BaseRegisterHandler];
+export const AuthenticationBaseCommandHandlers = [
+  AuthenticationBaseRegisterHandler,
+];
 
-export { BaseRegisterCommand } from './register/register.command';
+export { AuthenticationBaseRegisterCommand } from './register/register.command';

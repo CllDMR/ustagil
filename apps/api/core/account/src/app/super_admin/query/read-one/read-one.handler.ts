@@ -1,37 +1,39 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
-import { SuperAdminReadedOneEvent } from '../../event';
-import { SuperAdminReadOneQuery } from './read-one.query';
+import { AccountSuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountSuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { AccountSuperAdminReadedOneEvent } from '../../event';
+import { AccountSuperAdminReadOneQuery } from './read-one.query';
 
-@QueryHandler(SuperAdminReadOneQuery)
-export class SuperAdminReadOneHandler
-  implements IQueryHandler<SuperAdminReadOneQuery>
+@QueryHandler(AccountSuperAdminReadOneQuery)
+export class AccountSuperAdminReadOneHandler
+  implements IQueryHandler<AccountSuperAdminReadOneQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly superAdminRepository: SuperAdminMongooseRepository
+    private readonly accountSuperAdminRepository: AccountSuperAdminMongooseRepository
   ) {}
 
-  async execute({ dto }: SuperAdminReadOneQuery): Promise<SuperAdminDomain> {
+  async execute({
+    dto,
+  }: AccountSuperAdminReadOneQuery): Promise<AccountSuperAdminDomain> {
     const { id } = dto;
 
-    const SuperAdminMergedDomain =
-      this.eventPublisher.mergeClassContext(SuperAdminDomain);
-
-    const foundSuperAdminDomain = await this.superAdminRepository.findOneById(
-      id
+    const AccountSuperAdminMergedDomain = this.eventPublisher.mergeClassContext(
+      AccountSuperAdminDomain
     );
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain(
-      foundSuperAdminDomain
+    const readedAccountSuperAdminDomain =
+      await this.accountSuperAdminRepository.readOneById(id);
+
+    const accountSuperAdminDomain = new AccountSuperAdminMergedDomain(
+      readedAccountSuperAdminDomain
     );
 
-    superAdminMergedDomain.apply(
-      new SuperAdminReadedOneEvent(superAdminMergedDomain.id)
+    accountSuperAdminDomain.apply(
+      new AccountSuperAdminReadedOneEvent(accountSuperAdminDomain.id)
     );
-    superAdminMergedDomain.commit();
+    accountSuperAdminDomain.commit();
 
-    return superAdminMergedDomain;
+    return accountSuperAdminDomain;
   }
 }

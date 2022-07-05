@@ -1,47 +1,48 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { AccountSuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountSuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { SuperAdminUpdatedOneEvent } from '../../event';
-import { SuperAdminUpdateOneCommand } from './update-one.command';
+import { AccountSuperAdminUpdatedOneEvent } from '../../event';
+import { AccountSuperAdminUpdateOneCommand } from './update-one.command';
 
-@CommandHandler(SuperAdminUpdateOneCommand)
-export class SuperAdminUpdateOneHandler
-  implements ICommandHandler<SuperAdminUpdateOneCommand>
+@CommandHandler(AccountSuperAdminUpdateOneCommand)
+export class AccountSuperAdminUpdateOneHandler
+  implements ICommandHandler<AccountSuperAdminUpdateOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly superAdminRepository: SuperAdminMongooseRepository
+    private readonly accountSuperAdminRepository: AccountSuperAdminMongooseRepository
   ) {}
 
   async execute({
     dto,
-  }: SuperAdminUpdateOneCommand): Promise<SuperAdminDomain> {
+  }: AccountSuperAdminUpdateOneCommand): Promise<AccountSuperAdminDomain> {
     const { id, displayName, email } = dto;
 
-    const SuperAdminMergedDomain =
-      this.eventPublisher.mergeClassContext(SuperAdminDomain);
+    const AccountSuperAdminMergedDomain = this.eventPublisher.mergeClassContext(
+      AccountSuperAdminDomain
+    );
 
-    const updatedSuperAdminDomain =
-      await this.superAdminRepository.findOneAndUpdate(
+    const updatedAccountSuperAdminDomain =
+      await this.accountSuperAdminRepository.readOneAndUpdate(
         {
           _id: new ObjectId(id),
         },
-        new SuperAdminDomain({
+        new AccountSuperAdminDomain({
           displayName,
           email,
         })
       );
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain(
-      updatedSuperAdminDomain
+    const accountSuperAdminDomain = new AccountSuperAdminMergedDomain(
+      updatedAccountSuperAdminDomain
     );
 
-    superAdminMergedDomain.apply(
-      new SuperAdminUpdatedOneEvent(superAdminMergedDomain.id)
+    accountSuperAdminDomain.apply(
+      new AccountSuperAdminUpdatedOneEvent(accountSuperAdminDomain.id)
     );
-    superAdminMergedDomain.commit();
+    accountSuperAdminDomain.commit();
 
-    return updatedSuperAdminDomain;
+    return updatedAccountSuperAdminDomain;
   }
 }

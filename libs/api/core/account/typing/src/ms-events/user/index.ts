@@ -1,3 +1,3 @@
-export { UserCreateOneMSEvent } from './user-create-one.ms-event';
-export { UserDeleteOneMSEvent } from './user-delete-one.ms-event';
-export { UserUpdateOneMSEvent } from './user-update-one.ms-event';
+export { AccountUserCreateOneMSEvent } from './create-one.ms-event';
+export { AccountUserDeleteOneMSEvent } from './delete-one.ms-event';
+export { AccountUserUpdateOneMSEvent } from './update-one.ms-event';

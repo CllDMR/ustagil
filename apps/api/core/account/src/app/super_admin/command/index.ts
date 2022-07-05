@@ -1,13 +1,13 @@
-import { SuperAdminCreateOneHandler } from './create-one/create-one.handler';
-import { SuperAdminDeleteOneHandler } from './delete-one/delete-one.handler';
-import { SuperAdminUpdateOneHandler } from './update-one/update-one.handler';
+import { AccountSuperAdminCreateOneHandler } from './create-one/create-one.handler';
+import { AccountSuperAdminDeleteOneHandler } from './delete-one/delete-one.handler';
+import { AccountSuperAdminUpdateOneHandler } from './update-one/update-one.handler';
 
-export const SuperAdminCommandHandlers = [
-  SuperAdminCreateOneHandler,
-  SuperAdminUpdateOneHandler,
-  SuperAdminDeleteOneHandler,
+export const AccountSuperAdminCommandHandlers = [
+  AccountSuperAdminCreateOneHandler,
+  AccountSuperAdminUpdateOneHandler,
+  AccountSuperAdminDeleteOneHandler,
 ];
 
-export { SuperAdminCreateOneCommand } from './create-one/create-one.command';
-export { SuperAdminDeleteOneCommand } from './delete-one/delete-one.command';
-export { SuperAdminUpdateOneCommand } from './update-one/update-one.command';
+export { AccountSuperAdminCreateOneCommand } from './create-one/create-one.command';
+export { AccountSuperAdminDeleteOneCommand } from './delete-one/delete-one.command';
+export { AccountSuperAdminUpdateOneCommand } from './update-one/update-one.command';

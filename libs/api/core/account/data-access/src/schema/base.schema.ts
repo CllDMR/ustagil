@@ -3,10 +3,10 @@ import { IdentifiableSchema } from '@ustagil/api/core/common/data-access';
 import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 import { Document } from 'mongoose';
 
-export type BaseDocument = Base & Document;
+export type AccountBaseDocument = AccountBase & Document;
 
 @Schema({ collection: 'accounts', discriminatorKey: 'kind' })
-export class Base extends IdentifiableSchema {
+export class AccountBase extends IdentifiableSchema {
   @Prop({
     type: String,
     required: true,
@@ -35,4 +35,4 @@ export class Base extends IdentifiableSchema {
   readonly password: string;
 }
 
-export const BaseSchema = SchemaFactory.createForClass(Base);
+export const AccountBaseSchema = SchemaFactory.createForClass(AccountBase);

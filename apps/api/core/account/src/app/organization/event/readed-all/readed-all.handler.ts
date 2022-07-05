@@ -1,11 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { OrganizationReadedAllEvent } from './readed-all.event';
+import { AccountOrganizationReadedAllEvent } from './readed-all.event';
 
-@EventsHandler(OrganizationReadedAllEvent)
-export class OrganizationReadedAllHandler
-  implements IEventHandler<OrganizationReadedAllEvent>
+@EventsHandler(AccountOrganizationReadedAllEvent)
+export class AccountOrganizationReadedAllHandler
+  implements IEventHandler<AccountOrganizationReadedAllEvent>
 {
-  async handle(_: OrganizationReadedAllEvent): Promise<void> {
-    console.log('Readed all organizations');
+  async handle(_: AccountOrganizationReadedAllEvent): Promise<void> {
+    console.log('Readed all account organizations');
   }
 }

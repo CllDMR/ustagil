@@ -1,1 +1,1 @@
-export class UserReadedAllEvent {}
+export class AccountUserReadedAllEvent {}

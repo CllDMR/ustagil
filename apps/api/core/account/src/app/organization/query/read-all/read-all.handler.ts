@@ -1,56 +1,57 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { OrganizationReadedAllEvent } from '../../event';
-import { OrganizationReadAllQuery } from './read-all.query';
+import { AccountOrganizationReadedAllEvent } from '../../event';
+import { AccountOrganizationReadAllQuery } from './read-all.query';
 
-@QueryHandler(OrganizationReadAllQuery)
-export class OrganizationReadAllHandler
-  implements IQueryHandler<OrganizationReadAllQuery>
+@QueryHandler(AccountOrganizationReadAllQuery)
+export class AccountOrganizationReadAllHandler
+  implements IQueryHandler<AccountOrganizationReadAllQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly organizationRepository: OrganizationMongooseRepository
+    private readonly accountOrganizationRepository: AccountOrganizationMongooseRepository
   ) {}
 
-  async execute({ dto }: OrganizationReadAllQuery): Promise<{
-    organizations: OrganizationDomain[];
+  async execute({ dto }: AccountOrganizationReadAllQuery): Promise<{
+    organizations: AccountOrganizationDomain[];
     next_page_cursor: string;
   }> {
     const { page_size = 10, next_page_cursor } = dto;
 
-    const organizationMergedDomain = this.eventPublisher.mergeObjectContext(
-      new OrganizationDomain({})
+    const accountOrganizationDomain = this.eventPublisher.mergeObjectContext(
+      new AccountOrganizationDomain({})
     );
 
-    const organizationDomains = await this.organizationRepository.findAll(
-      {
-        ...(next_page_cursor
-          ? {
-              _id: {
-                $lte: new ObjectId(next_page_cursor),
-              },
-            }
-          : {}),
-      },
-      {
-        limit: page_size + 1,
-        sort: '-_id',
-      }
-    );
+    const readedAccountOrganizationDomains =
+      await this.accountOrganizationRepository.readAll(
+        {
+          ...(next_page_cursor
+            ? {
+                _id: {
+                  $lte: new ObjectId(next_page_cursor),
+                },
+              }
+            : {}),
+        },
+        {
+          limit: page_size + 1,
+          sort: '-_id',
+        }
+      );
 
-    organizationMergedDomain.apply(new OrganizationReadedAllEvent());
-    organizationMergedDomain.commit();
+    accountOrganizationDomain.apply(new AccountOrganizationReadedAllEvent());
+    accountOrganizationDomain.commit();
 
     let new_next_page_cursor = '';
 
-    if (organizationDomains.length >= page_size + 1) {
-      const nextOrganization = organizationDomains.pop();
-      new_next_page_cursor = nextOrganization.id;
+    if (readedAccountOrganizationDomains.length >= page_size + 1) {
+      const nextAccountOrganization = readedAccountOrganizationDomains.pop();
+      new_next_page_cursor = nextAccountOrganization.id;
     }
     return {
-      organizations: organizationDomains,
+      organizations: readedAccountOrganizationDomains,
       next_page_cursor: new_next_page_cursor,
     };
   }

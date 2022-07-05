@@ -1,60 +1,60 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
-  IAccountBaseGrpcService,
+  AccountSuperAdminDomain,
+  IAccountSuperAdminGrpcService,
 } from '@ustagil/api/core/account/typing';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationSuperAdminDomain } from '@ustagil/api/core/authentication/typing';
 import { fromRpcToCustomRpcException } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { SuperAdminRegisteredEvent } from '../../event';
-import { SuperAdminRegisterCommand } from './register.command';
+import { AuthenticationSuperAdminRegisteredEvent } from '../../event';
+import { AuthenticationSuperAdminRegisterCommand } from './register.command';
 
-@CommandHandler(SuperAdminRegisterCommand)
-export class SuperAdminRegisterHandler
-  implements ICommandHandler<SuperAdminRegisterCommand>
+@CommandHandler(AuthenticationSuperAdminRegisterCommand)
+export class AuthenticationSuperAdminRegisterHandler
+  implements ICommandHandler<AuthenticationSuperAdminRegisterCommand>
 {
-  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
+  private readonly accountSuperAdminGrpcService: IAccountSuperAdminGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_SUPER_ADMIN_MS_GRPC)
+    private accountSuperAdminMSGrpcClient: ClientGrpc
   ) {
-    this.accountBaseGrpcService =
-      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+    this.accountSuperAdminGrpcService =
+      this.accountSuperAdminMSGrpcClient.getService<IAccountSuperAdminGrpcService>(
+        'AccountSuperAdminService'
       );
   }
 
   async execute({
     dto,
-  }: SuperAdminRegisterCommand): Promise<AuthenticationBaseDomain> {
+  }: AuthenticationSuperAdminRegisterCommand): Promise<AuthenticationSuperAdminDomain> {
     const { displayName, email, password } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationSuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationSuperAdminDomain);
 
     try {
-      const newAccountBase = await firstValueFrom(
-        (await this.accountBaseGrpcService.CreateBase({
+      const newAccountSuperAdmin = await firstValueFrom(
+        (await this.accountSuperAdminGrpcService.CreateAccountSuperAdmin({
           displayName,
           email,
           password,
-        })) as unknown as Observable<BaseDomain>
+        })) as unknown as Observable<AccountSuperAdminDomain>
       );
 
-      const authenticationBaseDomain = new AuthenticationBaseMergedDomain(
-        newAccountBase
-      );
+      const authenticationSuperAdminDomain =
+        new AuthenticationSuperAdminMergedDomain(newAccountSuperAdmin);
 
-      authenticationBaseDomain.apply(
-        new SuperAdminRegisteredEvent(newAccountBase.id)
+      authenticationSuperAdminDomain.apply(
+        new AuthenticationSuperAdminRegisteredEvent(newAccountSuperAdmin.id)
       );
-      authenticationBaseDomain.commit();
+      authenticationSuperAdminDomain.commit();
 
-      return authenticationBaseDomain;
+      return authenticationSuperAdminDomain;
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }

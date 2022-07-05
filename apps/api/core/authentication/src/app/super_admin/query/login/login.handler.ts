@@ -1,46 +1,47 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationSuperAdminDomain } from '@ustagil/api/core/authentication/typing';
 import { JWTPayload } from '@ustagil/api/core/common/typing';
-import { SuperAdminLoginnedEvent } from '../../event';
-import { SuperAdminLoginQuery } from './login.query';
+import { AuthenticationSuperAdminLoginnedEvent } from '../../event';
+import { AuthenticationSuperAdminLoginQuery } from './login.query';
 
-@QueryHandler(SuperAdminLoginQuery)
-export class SuperAdminLoginHandler
-  implements IQueryHandler<SuperAdminLoginQuery>
+@QueryHandler(AuthenticationSuperAdminLoginQuery)
+export class AuthenticationSuperAdminLoginHandler
+  implements IQueryHandler<AuthenticationSuperAdminLoginQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
     private readonly jwtService: JwtService
   ) {}
 
-  async execute({ dto }: SuperAdminLoginQuery): Promise<{
+  async execute({ dto }: AuthenticationSuperAdminLoginQuery): Promise<{
     access_token: string;
   }> {
     const { displayName, email, id, role } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationSuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationSuperAdminDomain);
 
-    const authenticationBaseDomain = new AuthenticationBaseMergedDomain({
-      displayName,
-      email,
-      role,
-    });
+    const authenticationSuperAdminDomain =
+      new AuthenticationSuperAdminMergedDomain({
+        displayName,
+        email,
+        role,
+      });
 
     const payload: JWTPayload = {
       sub: id,
-      role: authenticationBaseDomain.role,
+      role: authenticationSuperAdminDomain.role,
     };
 
-    authenticationBaseDomain.apply(
-      new SuperAdminLoginnedEvent(
-        authenticationBaseDomain.displayName,
-        authenticationBaseDomain.email
+    authenticationSuperAdminDomain.apply(
+      new AuthenticationSuperAdminLoginnedEvent(
+        authenticationSuperAdminDomain.displayName,
+        authenticationSuperAdminDomain.email
       )
     );
 
-    authenticationBaseDomain.commit();
+    authenticationSuperAdminDomain.commit();
 
     return {
       access_token: this.jwtService.sign(payload),

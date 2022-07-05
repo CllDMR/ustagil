@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class UserCreateOneRequestBodyDto {
+export class AccountUserCreateOneRequestBodyDto {
   @IsString()
   displayName: string;
 

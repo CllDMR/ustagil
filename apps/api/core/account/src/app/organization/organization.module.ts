@@ -1,24 +1,24 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import {
-  BaseMongooseModule,
-  OrganizationEntityDomainFactory,
-  OrganizationMongooseRepository,
+  AccountMongooseModule,
+  AccountOrganizationEntityDomainFactory,
+  AccountOrganizationMongooseRepository,
 } from '@ustagil/api/core/account/data-access';
-import { OrganizationCommandHandlers } from './command';
-import { OrganizationEventHandlers } from './event';
-import { OrganizationController } from './organization.controller';
-import { OrganizationQueryHandlers } from './query';
+import { AccountOrganizationCommandHandlers } from './command';
+import { AccountOrganizationEventHandlers } from './event';
+import { AccountOrganizationController } from './organization.controller';
+import { AccountOrganizationQueryHandlers } from './query';
 
 @Module({
-  imports: [BaseMongooseModule, CqrsModule],
-  controllers: [OrganizationController],
+  imports: [AccountMongooseModule, CqrsModule],
+  controllers: [AccountOrganizationController],
   providers: [
-    OrganizationMongooseRepository,
-    OrganizationEntityDomainFactory,
-    ...OrganizationCommandHandlers,
-    ...OrganizationEventHandlers,
-    ...OrganizationQueryHandlers,
+    AccountOrganizationMongooseRepository,
+    AccountOrganizationEntityDomainFactory,
+    ...AccountOrganizationCommandHandlers,
+    ...AccountOrganizationEventHandlers,
+    ...AccountOrganizationQueryHandlers,
   ],
 })
-export class OrganizationModule {}
+export class AccountOrganizationModule {}

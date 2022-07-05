@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
-import { SuperAdminFindAllQueryDto } from './read-all.dto';
+import { AccountSuperAdminReadAllQueryDto } from './read-all.dto';
 
-export class SuperAdminReadAllQuery implements IQuery {
-  constructor(public readonly dto: SuperAdminFindAllQueryDto) {}
+export class AccountSuperAdminReadAllQuery implements IQuery {
+  constructor(public readonly dto: AccountSuperAdminReadAllQueryDto) {}
 }

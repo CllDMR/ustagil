@@ -2,57 +2,60 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_USER_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
-  IAccountBaseGrpcService,
+  AccountUserDomain,
+  IAccountUserGrpcService,
 } from '@ustagil/api/core/account/typing';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationUserDomain } from '@ustagil/api/core/authentication/typing';
 import {
   CustomRpcException,
   fromRpcToCustomRpcException,
 } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { UserValidatedEvent } from '../../event';
-import { UserValidateQuery } from './validate.query';
+import { AuthenticationUserValidatedEvent } from '../../event';
+import { AuthenticationUserValidateQuery } from './validate.query';
 
-@QueryHandler(UserValidateQuery)
-export class UserValidateHandler implements IQueryHandler<UserValidateQuery> {
-  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
+@QueryHandler(AuthenticationUserValidateQuery)
+export class AuthenticationUserValidateHandler
+  implements IQueryHandler<AuthenticationUserValidateQuery>
+{
+  private readonly accountUserGrpcService: IAccountUserGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private readonly accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_USER_MS_GRPC)
+    private readonly accountUserMSGrpcClient: ClientGrpc
   ) {
-    this.accountBaseGrpcService =
-      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+    this.accountUserGrpcService =
+      this.accountUserMSGrpcClient.getService<IAccountUserGrpcService>(
+        'AccountUserService'
       );
   }
 
-  async execute({ dto }: UserValidateQuery) {
+  async execute({ dto }: AuthenticationUserValidateQuery) {
     const { email, password } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationUserDomain);
 
-    let accountBaseDomain: BaseDomain;
+    let accountUserDomain: AccountUserDomain;
 
     try {
-      accountBaseDomain = await firstValueFrom(
-        (await this.accountBaseGrpcService.GetBaseByEmail({
+      accountUserDomain = await firstValueFrom(
+        (await this.accountUserGrpcService.GetAccountUserByEmail({
           email,
-        })) as unknown as Observable<BaseDomain>
+        })) as unknown as Observable<AccountUserDomain>
       );
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }
 
-    const authenticationBaseDomain = new AuthenticationBaseMergedDomain(
-      accountBaseDomain
+    const authenticationUserDomain = new AuthenticationUserMergedDomain(
+      accountUserDomain
     );
 
-    if (accountBaseDomain.password !== password)
+    if (accountUserDomain.password !== password)
       throw new CustomRpcException({
         description: 'Could not find account.',
         errorCode: '',
@@ -61,19 +64,19 @@ export class UserValidateHandler implements IQueryHandler<UserValidateQuery> {
         statusCode: HttpStatus.BAD_REQUEST,
       });
 
-    authenticationBaseDomain.apply(
-      new UserValidatedEvent(accountBaseDomain.id)
+    authenticationUserDomain.apply(
+      new AuthenticationUserValidatedEvent(accountUserDomain.id)
     );
 
-    authenticationBaseDomain.commit();
+    authenticationUserDomain.commit();
 
-    return authenticationBaseDomain;
+    return authenticationUserDomain;
   }
 }
 
 // const account = await firstValueFrom(
 //   this.accountMSClient
-//     .send<BaseDomain, AccountFindOneByEmailMSMessage>(
+//     .send<AccountUserDomain, AccountFindOneByEmailMSMessage>(
 //       ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE,
 //       new AccountFindOneByEmailMSMessage(authentication.email)
 //     )

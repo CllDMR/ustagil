@@ -1,11 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { OrganizationDeletedOneEvent } from './deleted-one.event';
+import { AccountOrganizationDeletedOneEvent } from './deleted-one.event';
 
-@EventsHandler(OrganizationDeletedOneEvent)
-export class OrganizationDeletedOneHandler
-  implements IEventHandler<OrganizationDeletedOneEvent>
+@EventsHandler(AccountOrganizationDeletedOneEvent)
+export class AccountOrganizationDeletedOneHandler
+  implements IEventHandler<AccountOrganizationDeletedOneEvent>
 {
-  async handle({ id }: OrganizationDeletedOneEvent): Promise<void> {
-    console.log('Deleted organization with id:', id);
+  async handle({ id }: AccountOrganizationDeletedOneEvent): Promise<void> {
+    console.log('Deleted account organization with id:', id);
   }
 }

@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
 import { EntityDomainFactory } from '@ustagil/api/core/common/data-access';
 import { AccountKind } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
-import { Organization } from '../schema/organization.schema';
+import { AccountOrganization } from '../schema/organization.schema';
 
 @Injectable()
-export class OrganizationEntityDomainFactory
-  implements EntityDomainFactory<Organization, OrganizationDomain>
+export class AccountOrganizationEntityDomainFactory
+  implements
+    EntityDomainFactory<AccountOrganization, AccountOrganizationDomain>
 {
-  createEntityFromDomain(domain: OrganizationDomain): Organization {
+  createEntityFromDomain(
+    domain: AccountOrganizationDomain
+  ): AccountOrganization {
     return {
       _id: new ObjectId(domain.id),
       kind: domain.kind.toString(),
@@ -21,8 +24,10 @@ export class OrganizationEntityDomainFactory
     };
   }
 
-  createDomainFromEntity(entity: Organization): OrganizationDomain {
-    return new OrganizationDomain({
+  createDomainFromEntity(
+    entity: AccountOrganization
+  ): AccountOrganizationDomain {
+    return new AccountOrganizationDomain({
       id: entity._id.toHexString(),
       kind: AccountKind[entity.kind],
       role: entity.role,

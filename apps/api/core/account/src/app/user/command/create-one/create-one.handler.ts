@@ -1,27 +1,30 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { UserDomain } from '@ustagil/api/core/account/typing';
+import { AccountUserMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountUserDomain } from '@ustagil/api/core/account/typing';
 import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
-import { UserCreatedOneEvent } from '../../event';
-import { UserCreateOneCommand } from './create-one.command';
+import { AccountUserCreatedOneEvent } from '../../event';
+import { AccountUserCreateOneCommand } from './create-one.command';
 
-@CommandHandler(UserCreateOneCommand)
-export class UserCreateOneHandler
-  implements ICommandHandler<UserCreateOneCommand>
+@CommandHandler(AccountUserCreateOneCommand)
+export class AccountUserCreateOneHandler
+  implements ICommandHandler<AccountUserCreateOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly userRepository: UserMongooseRepository
+    private readonly accountUserRepository: AccountUserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserCreateOneCommand): Promise<UserDomain> {
+  async execute({
+    dto,
+  }: AccountUserCreateOneCommand): Promise<AccountUserDomain> {
     const { displayName, email, password } = dto;
 
-    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
+    const AccountUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountUserDomain);
 
-    const createdUserDomain = await this.userRepository.create(
-      new UserDomain({
+    const createdAccountUserDomain = await this.accountUserRepository.create(
+      new AccountUserDomain({
         id: new ObjectId().toHexString(),
         role: Role.ROLE_USER,
         displayName: displayName,
@@ -30,11 +33,15 @@ export class UserCreateOneHandler
       })
     );
 
-    const userMergedDomain = new UserMergedDomain(createdUserDomain);
+    const accountUserDomain = new AccountUserMergedDomain(
+      createdAccountUserDomain
+    );
 
-    userMergedDomain.apply(new UserCreatedOneEvent(userMergedDomain.id));
-    userMergedDomain.commit();
+    accountUserDomain.apply(
+      new AccountUserCreatedOneEvent(accountUserDomain.id)
+    );
+    accountUserDomain.commit();
 
-    return userMergedDomain;
+    return accountUserDomain;
   }
 }

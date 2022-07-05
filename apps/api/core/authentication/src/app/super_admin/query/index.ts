@@ -1,10 +1,10 @@
-import { SuperAdminLoginHandler } from './login/login.handler';
-import { SuperAdminValidateHandler } from './validate/validate.handler';
+import { AuthenticationSuperAdminLoginHandler } from './login/login.handler';
+import { AuthenticationSuperAdminValidateHandler } from './validate/validate.handler';
 
-export const SuperAdminQueryHandlers = [
-  SuperAdminLoginHandler,
-  SuperAdminValidateHandler,
+export const AuthenticationSuperAdminQueryHandlers = [
+  AuthenticationSuperAdminLoginHandler,
+  AuthenticationSuperAdminValidateHandler,
 ];
 
-export { SuperAdminLoginQuery } from './login/login.query';
-export { SuperAdminValidateQuery } from './validate/validate.query';
+export { AuthenticationSuperAdminLoginQuery } from './login/login.query';
+export { AuthenticationSuperAdminValidateQuery } from './validate/validate.query';

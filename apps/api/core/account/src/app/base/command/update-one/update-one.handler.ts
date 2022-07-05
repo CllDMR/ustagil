@@ -1,39 +1,47 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { BaseDomain } from '@ustagil/api/core/account/typing';
+import { AccountBaseMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountBaseDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { BaseUpdatedOneEvent } from '../../event';
-import { BaseUpdateOneCommand } from './update-one.command';
+import { AccountBaseUpdatedOneEvent } from '../../event';
+import { AccountBaseUpdateOneCommand } from './update-one.command';
 
-@CommandHandler(BaseUpdateOneCommand)
-export class BaseUpdateOneHandler
-  implements ICommandHandler<BaseUpdateOneCommand>
+@CommandHandler(AccountBaseUpdateOneCommand)
+export class AccountBaseUpdateOneHandler
+  implements ICommandHandler<AccountBaseUpdateOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly baseRepository: BaseMongooseRepository
+    private readonly accountBaseRepository: AccountBaseMongooseRepository
   ) {}
 
-  async execute({ dto }: BaseUpdateOneCommand): Promise<BaseDomain> {
+  async execute({
+    dto,
+  }: AccountBaseUpdateOneCommand): Promise<AccountBaseDomain> {
     const { id, displayName, email } = dto;
 
-    const BaseMergedDomain = this.eventPublisher.mergeClassContext(BaseDomain);
+    const AccountBaseMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountBaseDomain);
 
-    const updatedBaseDomain = await this.baseRepository.findOneAndUpdate(
-      {
-        _id: new ObjectId(id),
-      },
-      new BaseDomain({
-        displayName,
-        email,
-      })
+    const updatedAccountBaseDomain =
+      await this.accountBaseRepository.readOneAndUpdate(
+        {
+          _id: new ObjectId(id),
+        },
+        new AccountBaseDomain({
+          displayName,
+          email,
+        })
+      );
+
+    const accountBaseDomain = new AccountBaseMergedDomain(
+      updatedAccountBaseDomain
     );
 
-    const baseMergedDomain = new BaseMergedDomain(updatedBaseDomain);
+    accountBaseDomain.apply(
+      new AccountBaseUpdatedOneEvent(accountBaseDomain.id)
+    );
+    accountBaseDomain.commit();
 
-    baseMergedDomain.apply(new BaseUpdatedOneEvent(baseMergedDomain.id));
-    baseMergedDomain.commit();
-
-    return updatedBaseDomain;
+    return updatedAccountBaseDomain;
   }
 }

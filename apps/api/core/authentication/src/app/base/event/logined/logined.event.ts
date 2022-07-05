@@ -1,4 +1,4 @@
-export class BaseLoginnedEvent {
+export class AuthenticationBaseLoginnedEvent {
   constructor(
     public readonly displayName: string,
     public readonly email: string

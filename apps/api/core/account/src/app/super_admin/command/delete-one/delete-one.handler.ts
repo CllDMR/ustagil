@@ -1,41 +1,42 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { AccountSuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountSuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { SuperAdminDeletedOneEvent } from '../../event';
-import { SuperAdminDeleteOneCommand } from './delete-one.command';
+import { AccountSuperAdminDeletedOneEvent } from '../../event';
+import { AccountSuperAdminDeleteOneCommand } from './delete-one.command';
 
-@CommandHandler(SuperAdminDeleteOneCommand)
-export class SuperAdminDeleteOneHandler
-  implements ICommandHandler<SuperAdminDeleteOneCommand>
+@CommandHandler(AccountSuperAdminDeleteOneCommand)
+export class AccountSuperAdminDeleteOneHandler
+  implements ICommandHandler<AccountSuperAdminDeleteOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly superAdminRepository: SuperAdminMongooseRepository
+    private readonly accountSuperAdminRepository: AccountSuperAdminMongooseRepository
   ) {}
 
   async execute({
     dto,
-  }: SuperAdminDeleteOneCommand): Promise<SuperAdminDomain> {
+  }: AccountSuperAdminDeleteOneCommand): Promise<AccountSuperAdminDomain> {
     const { id } = dto;
 
-    const SuperAdminMergedDomain =
-      this.eventPublisher.mergeClassContext(SuperAdminDomain);
+    const AccountSuperAdminMergedDomain = this.eventPublisher.mergeClassContext(
+      AccountSuperAdminDomain
+    );
 
-    const deletedSuperAdminDomain =
-      await this.superAdminRepository.findOneAndRemove({
+    const deletedAccountSuperAdminDomain =
+      await this.accountSuperAdminRepository.readOneAndRemove({
         _id: new ObjectId(id),
       });
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain(
-      deletedSuperAdminDomain
+    const accountSuperAdminDomain = new AccountSuperAdminMergedDomain(
+      deletedAccountSuperAdminDomain
     );
 
-    superAdminMergedDomain.apply(
-      new SuperAdminDeletedOneEvent(superAdminMergedDomain.id)
+    accountSuperAdminDomain.apply(
+      new AccountSuperAdminDeletedOneEvent(accountSuperAdminDomain.id)
     );
-    superAdminMergedDomain.commit();
+    accountSuperAdminDomain.commit();
 
-    return superAdminMergedDomain;
+    return accountSuperAdminDomain;
   }
 }

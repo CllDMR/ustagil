@@ -1,10 +1,10 @@
 import { Ability, InferSubjects } from '@casl/ability';
 import { SetMetadata } from '@nestjs/common';
 import {
-  BaseDomain,
-  OrganizationDomain,
-  SuperAdminDomain,
-  UserDomain,
+  AccountBaseDomain,
+  AccountOrganizationDomain,
+  AccountSuperAdminDomain,
+  AccountUserDomain,
 } from '@ustagil/api/core/account/typing';
 
 export enum Action {
@@ -17,10 +17,10 @@ export enum Action {
 
 export type Subjects =
   | InferSubjects<
-      | typeof BaseDomain
-      | typeof UserDomain
-      | typeof OrganizationDomain
-      | typeof SuperAdminDomain
+      | typeof AccountBaseDomain
+      | typeof AccountUserDomain
+      | typeof AccountOrganizationDomain
+      | typeof AccountSuperAdminDomain
     >
   | 'all';
 

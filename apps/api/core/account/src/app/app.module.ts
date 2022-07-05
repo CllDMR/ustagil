@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BaseModule } from './base/base.module';
-import { OrganizationModule } from './organization/organization.module';
-import { SuperAdminModule } from './super_admin/super_admin.module';
-import { UserModule } from './user/user.module';
+import { AccountBaseModule } from './base/base.module';
+import { AccountOrganizationModule } from './organization/organization.module';
+import { AccountSuperAdminModule } from './super_admin/super_admin.module';
+import { AccountUserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -24,11 +24,11 @@ import { UserModule } from './user/user.module';
       }),
     }),
 
-    BaseModule,
-    OrganizationModule,
-    SuperAdminModule,
-    UserModule,
+    AccountBaseModule,
+    AccountOrganizationModule,
+    AccountSuperAdminModule,
+    AccountUserModule,
   ],
   providers: [],
 })
-export class AppModule {}
+export class AccountModule {}

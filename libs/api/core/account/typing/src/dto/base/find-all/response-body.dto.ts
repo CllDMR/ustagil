@@ -1,6 +1,6 @@
 import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export class BaseFindAllResponseBodyDto {
+export class AccountBaseFindAllResponseBodyDto {
   bases: {
     id: string;
     kind: AccountKind;

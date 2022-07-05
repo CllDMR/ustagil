@@ -4,14 +4,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PassportModule } from '@nestjs/passport';
 import {
-  BASE_MS_GRPC,
-  BASE_MS_GRPC_URL,
+  ACCOUNT_SUPER_ADMIN_MS_GRPC,
+  ACCOUNT_SUPER_ADMIN_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
 import { join } from 'path';
-import { SuperAdminCommandHandlers } from './command';
-import { SuperAdminEventHandlers } from './event';
-import { SuperAdminQueryHandlers } from './query';
-import { SuperAdminController } from './super_admin.controller';
+import { AuthenticationSuperAdminCommandHandlers } from './command';
+import { AuthenticationSuperAdminEventHandlers } from './event';
+import { AuthenticationSuperAdminQueryHandlers } from './query';
+import { AuthenticationSuperAdminController } from './super_admin.controller';
 
 @Module({
   imports: [
@@ -23,11 +23,11 @@ import { SuperAdminController } from './super_admin.controller';
     }),
     ClientsModule.register([
       {
-        name: BASE_MS_GRPC,
+        name: ACCOUNT_SUPER_ADMIN_MS_GRPC,
         transport: Transport.GRPC,
         options: {
-          url: BASE_MS_GRPC_URL,
-          package: 'super_admin',
+          url: ACCOUNT_SUPER_ADMIN_MS_GRPC_URL,
+          package: 'account_super_admin',
           protoPath: join(__dirname, 'assets/account/super_admin.proto'),
           loader: {
             keepCase: true,
@@ -36,11 +36,11 @@ import { SuperAdminController } from './super_admin.controller';
       },
     ]),
   ],
-  controllers: [SuperAdminController],
+  controllers: [AuthenticationSuperAdminController],
   providers: [
-    ...SuperAdminCommandHandlers,
-    ...SuperAdminEventHandlers,
-    ...SuperAdminQueryHandlers,
+    ...AuthenticationSuperAdminCommandHandlers,
+    ...AuthenticationSuperAdminEventHandlers,
+    ...AuthenticationSuperAdminQueryHandlers,
   ],
 })
-export class SuperAdminModule {}
+export class AuthenticationSuperAdminModule {}

@@ -1,5 +1,5 @@
-export { SuperAdminCreateOneTransformInterceptor } from './create-one-transform.interceptor';
-export { SuperAdminDeleteOneTransformInterceptor } from './delete-one-transform.interceptor';
-export { SuperAdminFindAllTransformInterceptor } from './find-all-transform.interceptor';
-export { SuperAdminFindOneTransformInterceptor } from './find-one-transform.interceptor';
-export { SuperAdminUpdateOneTransformInterceptor } from './update-one-transform.interceptor';
+export { AccountSuperAdminCreateOneTransformInterceptor } from './create-one-transform.interceptor';
+export { AccountSuperAdminDeleteOneTransformInterceptor } from './delete-one-transform.interceptor';
+export { AccountSuperAdminReadAllTransformInterceptor } from './read-all-transform.interceptor';
+export { AccountSuperAdminReadOneTransformInterceptor } from './read-one-transform.interceptor';
+export { AccountSuperAdminUpdateOneTransformInterceptor } from './update-one-transform.interceptor';

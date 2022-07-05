@@ -65,7 +65,7 @@ export abstract class MongooseRepository<
     return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 
-  async findAll(
+  async readAll(
     entityFilterQuery?: FilterQuery<TEntity>,
     queryOptions?: QueryOptions<TEntity>
   ): Promise<TDomain[]> {
@@ -91,7 +91,7 @@ export abstract class MongooseRepository<
     );
   }
 
-  async findOne(
+  async readOne(
     entityFilterQuery?: FilterQuery<TEntity>,
     entityProjectionType?: ProjectionType<TEntity>
   ): Promise<TDomain> {
@@ -126,7 +126,7 @@ export abstract class MongooseRepository<
     return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 
-  async findOneById(id: string): Promise<TDomain> {
+  async readOneById(id: string): Promise<TDomain> {
     let entity: TEntity;
 
     try {
@@ -158,7 +158,7 @@ export abstract class MongooseRepository<
     return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 
-  async findOneAndUpdate(
+  async readOneAndUpdate(
     entityFilterQuery: FilterQuery<TEntity>,
     domain: TDomain
   ): Promise<TDomain> {
@@ -210,7 +210,7 @@ export abstract class MongooseRepository<
     return this.entityDomainFactory.createDomainFromEntity(entity);
   }
 
-  async findOneAndRemove(
+  async readOneAndRemove(
     entityFilterQuery: FilterQuery<TEntity>
   ): Promise<TDomain> {
     let entity: TEntity;

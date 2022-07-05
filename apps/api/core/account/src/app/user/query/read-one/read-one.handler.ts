@@ -1,28 +1,36 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { UserDomain } from '@ustagil/api/core/account/typing';
-import { UserReadedOneEvent } from '../../event';
-import { UserReadOneQuery } from './read-one.query';
+import { AccountUserMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountUserDomain } from '@ustagil/api/core/account/typing';
+import { AccountUserReadedOneEvent } from '../../event';
+import { AccountUserReadOneQuery } from './read-one.query';
 
-@QueryHandler(UserReadOneQuery)
-export class UserReadOneHandler implements IQueryHandler<UserReadOneQuery> {
+@QueryHandler(AccountUserReadOneQuery)
+export class AccountUserReadOneHandler
+  implements IQueryHandler<AccountUserReadOneQuery>
+{
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly userRepository: UserMongooseRepository
+    private readonly accountUserRepository: AccountUserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserReadOneQuery): Promise<UserDomain> {
+  async execute({ dto }: AccountUserReadOneQuery): Promise<AccountUserDomain> {
     const { id } = dto;
 
-    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
+    const AccountUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountUserDomain);
 
-    const foundUserDomain = await this.userRepository.findOneById(id);
+    const readedAccountUserDomain =
+      await this.accountUserRepository.readOneById(id);
 
-    const userMergedDomain = new UserMergedDomain(foundUserDomain);
+    const accountUserDomain = new AccountUserMergedDomain(
+      readedAccountUserDomain
+    );
 
-    userMergedDomain.apply(new UserReadedOneEvent(userMergedDomain.id));
-    userMergedDomain.commit();
+    accountUserDomain.apply(
+      new AccountUserReadedOneEvent(accountUserDomain.id)
+    );
+    accountUserDomain.commit();
 
-    return userMergedDomain;
+    return accountUserDomain;
   }
 }

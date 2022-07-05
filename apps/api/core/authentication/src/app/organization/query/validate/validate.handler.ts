@@ -2,59 +2,61 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
-  IAccountBaseGrpcService,
+  AccountOrganizationDomain,
+  IAccountOrganizationGrpcService,
 } from '@ustagil/api/core/account/typing';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationOrganizationDomain } from '@ustagil/api/core/authentication/typing';
 import {
   CustomRpcException,
   fromRpcToCustomRpcException,
 } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { OrganizationValidatedEvent } from '../../event';
-import { OrganizationValidateQuery } from './validate.query';
+import { AuthenticationOrganizationValidatedEvent } from '../../event';
+import { AuthenticationOrganizationValidateQuery } from './validate.query';
 
-@QueryHandler(OrganizationValidateQuery)
-export class OrganizationValidateHandler
-  implements IQueryHandler<OrganizationValidateQuery>
+@QueryHandler(AuthenticationOrganizationValidateQuery)
+export class AuthenticationOrganizationValidateHandler
+  implements IQueryHandler<AuthenticationOrganizationValidateQuery>
 {
-  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
+  private readonly accountOrganizationGrpcService: IAccountOrganizationGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private readonly accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_ORGANIZATION_MS_GRPC)
+    private readonly accountOrganizationMSGrpcClient: ClientGrpc
   ) {
-    this.accountBaseGrpcService =
-      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+    this.accountOrganizationGrpcService =
+      this.accountOrganizationMSGrpcClient.getService<IAccountOrganizationGrpcService>(
+        'AccountOrganizationService'
       );
   }
 
-  async execute({ dto }: OrganizationValidateQuery) {
+  async execute({ dto }: AuthenticationOrganizationValidateQuery) {
     const { email, password } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationOrganizationDomain);
 
-    let accountBaseDomain: BaseDomain;
+    let accountOrganizationDomain: AccountOrganizationDomain;
 
     try {
-      accountBaseDomain = await firstValueFrom(
-        (await this.accountBaseGrpcService.GetBaseByEmail({
-          email,
-        })) as unknown as Observable<BaseDomain>
+      accountOrganizationDomain = await firstValueFrom(
+        (await this.accountOrganizationGrpcService.GetAccountOrganizationByEmail(
+          {
+            email,
+          }
+        )) as unknown as Observable<AccountOrganizationDomain>
       );
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }
 
-    const authenticationBaseDomain = new AuthenticationBaseMergedDomain(
-      accountBaseDomain
-    );
+    const authenticationOrganizationDomain =
+      new AuthenticationOrganizationMergedDomain(accountOrganizationDomain);
 
-    if (accountBaseDomain.password !== password)
+    if (accountOrganizationDomain.password !== password)
       throw new CustomRpcException({
         description: 'Could not find account.',
         errorCode: '',
@@ -63,19 +65,19 @@ export class OrganizationValidateHandler
         statusCode: HttpStatus.BAD_REQUEST,
       });
 
-    authenticationBaseDomain.apply(
-      new OrganizationValidatedEvent(accountBaseDomain.id)
+    authenticationOrganizationDomain.apply(
+      new AuthenticationOrganizationValidatedEvent(accountOrganizationDomain.id)
     );
 
-    authenticationBaseDomain.commit();
+    authenticationOrganizationDomain.commit();
 
-    return authenticationBaseDomain;
+    return authenticationOrganizationDomain;
   }
 }
 
 // const account = await firstValueFrom(
 //   this.accountMSClient
-//     .send<BaseDomain, AccountFindOneByEmailMSMessage>(
+//     .send<AccountOrganizationDomain, AccountFindOneByEmailMSMessage>(
 //       ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE,
 //       new AccountFindOneByEmailMSMessage(authentication.email)
 //     )

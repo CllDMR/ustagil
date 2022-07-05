@@ -1,11 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminReadedAllEvent } from './readed-all.event';
+import { AccountSuperAdminReadedAllEvent } from './readed-all.event';
 
-@EventsHandler(SuperAdminReadedAllEvent)
-export class SuperAdminReadedAllHandler
-  implements IEventHandler<SuperAdminReadedAllEvent>
+@EventsHandler(AccountSuperAdminReadedAllEvent)
+export class AccountSuperAdminReadedAllHandler
+  implements IEventHandler<AccountSuperAdminReadedAllEvent>
 {
-  async handle(_: SuperAdminReadedAllEvent): Promise<void> {
-    console.log('Readed all super_admins');
+  async handle(_: AccountSuperAdminReadedAllEvent): Promise<void> {
+    console.log('Readed all account super_admins');
   }
 }

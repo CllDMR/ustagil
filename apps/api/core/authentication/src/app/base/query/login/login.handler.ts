@@ -2,17 +2,19 @@ import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
 import { JWTPayload } from '@ustagil/api/core/common/typing';
-import { BaseLoginnedEvent } from '../../event';
-import { BaseLoginQuery } from './login.query';
+import { AuthenticationBaseLoginnedEvent } from '../../event';
+import { AuthenticationBaseLoginQuery } from './login.query';
 
-@QueryHandler(BaseLoginQuery)
-export class BaseLoginHandler implements IQueryHandler<BaseLoginQuery> {
+@QueryHandler(AuthenticationBaseLoginQuery)
+export class AuthenticationBaseLoginHandler
+  implements IQueryHandler<AuthenticationBaseLoginQuery>
+{
   constructor(
     private readonly eventPublisher: EventPublisher,
     private readonly jwtService: JwtService
   ) {}
 
-  async execute({ dto }: BaseLoginQuery): Promise<{
+  async execute({ dto }: AuthenticationBaseLoginQuery): Promise<{
     access_token: string;
   }> {
     const { displayName, email, id, role } = dto;
@@ -32,7 +34,7 @@ export class BaseLoginHandler implements IQueryHandler<BaseLoginQuery> {
     };
 
     authenticationBaseDomain.apply(
-      new BaseLoginnedEvent(
+      new AuthenticationBaseLoginnedEvent(
         authenticationBaseDomain.displayName,
         authenticationBaseDomain.email
       )

@@ -1,9 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsMongoId } from 'class-validator';
-import { SuperAdminCreateOneCommandDto } from '../create-one/create-one.dto';
+import { AccountSuperAdminCreateOneCommandDto } from '../create-one/create-one.dto';
 
-export class SuperAdminUpdateOneCommandDto extends PartialType(
-  SuperAdminCreateOneCommandDto
+export class AccountSuperAdminUpdateOneCommandDto extends PartialType(
+  AccountSuperAdminCreateOneCommandDto
 ) {
   @IsMongoId()
   id: string;

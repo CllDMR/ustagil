@@ -1,10 +1,10 @@
-import { OrganizationLoginHandler } from './login/login.handler';
-import { OrganizationValidateHandler } from './validate/validate.handler';
+import { AuthenticationOrganizationLoginHandler } from './login/login.handler';
+import { AuthenticationOrganizationValidateHandler } from './validate/validate.handler';
 
-export const OrganizationQueryHandlers = [
-  OrganizationLoginHandler,
-  OrganizationValidateHandler,
+export const AuthenticationOrganizationQueryHandlers = [
+  AuthenticationOrganizationLoginHandler,
+  AuthenticationOrganizationValidateHandler,
 ];
 
-export { OrganizationLoginQuery } from './login/login.query';
-export { OrganizationValidateQuery } from './validate/validate.query';
+export { AuthenticationOrganizationLoginQuery } from './login/login.query';
+export { AuthenticationOrganizationValidateQuery } from './validate/validate.query';

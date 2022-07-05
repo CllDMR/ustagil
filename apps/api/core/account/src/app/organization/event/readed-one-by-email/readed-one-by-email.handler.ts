@@ -1,11 +1,13 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { OrganizationReadedOneByEmailEvent } from './readed-one-by-email.event';
+import { AccountOrganizationReadedOneByEmailEvent } from './readed-one-by-email.event';
 
-@EventsHandler(OrganizationReadedOneByEmailEvent)
-export class OrganizationReadedOneByEmailHandler
-  implements IEventHandler<OrganizationReadedOneByEmailEvent>
+@EventsHandler(AccountOrganizationReadedOneByEmailEvent)
+export class AccountOrganizationReadedOneByEmailHandler
+  implements IEventHandler<AccountOrganizationReadedOneByEmailEvent>
 {
-  async handle({ id }: OrganizationReadedOneByEmailEvent): Promise<void> {
-    console.log('Readed one organization by email with id:', id);
+  async handle({
+    id,
+  }: AccountOrganizationReadedOneByEmailEvent): Promise<void> {
+    console.log('Readed one account organization by email with id:', id);
   }
 }

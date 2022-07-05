@@ -4,14 +4,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PassportModule } from '@nestjs/passport';
 import {
-  BASE_MS_GRPC,
-  BASE_MS_GRPC_URL,
+  ACCOUNT_USER_MS_GRPC,
+  ACCOUNT_USER_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
 import { join } from 'path';
-import { UserCommandHandlers } from './command';
-import { UserEventHandlers } from './event';
-import { UserQueryHandlers } from './query';
-import { UserController } from './user.controller';
+import { AuthenticationUserCommandHandlers } from './command';
+import { AuthenticationUserEventHandlers } from './event';
+import { AuthenticationUserQueryHandlers } from './query';
+import { AuthenticationUserController } from './user.controller';
 
 @Module({
   imports: [
@@ -23,11 +23,11 @@ import { UserController } from './user.controller';
     }),
     ClientsModule.register([
       {
-        name: BASE_MS_GRPC,
+        name: ACCOUNT_USER_MS_GRPC,
         transport: Transport.GRPC,
         options: {
-          url: BASE_MS_GRPC_URL,
-          package: 'user',
+          url: ACCOUNT_USER_MS_GRPC_URL,
+          package: 'account_user',
           protoPath: join(__dirname, 'assets/account/user.proto'),
           loader: {
             keepCase: true,
@@ -36,11 +36,11 @@ import { UserController } from './user.controller';
       },
     ]),
   ],
-  controllers: [UserController],
+  controllers: [AuthenticationUserController],
   providers: [
-    ...UserCommandHandlers,
-    ...UserEventHandlers,
-    ...UserQueryHandlers,
+    ...AuthenticationUserCommandHandlers,
+    ...AuthenticationUserEventHandlers,
+    ...AuthenticationUserQueryHandlers,
   ],
 })
-export class UserModule {}
+export class AuthenticationUserModule {}

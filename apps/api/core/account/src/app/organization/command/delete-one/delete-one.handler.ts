@@ -1,41 +1,41 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { OrganizationDeletedOneEvent } from '../../event';
-import { OrganizationDeleteOneCommand } from './delete-one.command';
+import { AccountOrganizationDeletedOneEvent } from '../../event';
+import { AccountOrganizationDeleteOneCommand } from './delete-one.command';
 
-@CommandHandler(OrganizationDeleteOneCommand)
-export class OrganizationDeleteOneHandler
-  implements ICommandHandler<OrganizationDeleteOneCommand>
+@CommandHandler(AccountOrganizationDeleteOneCommand)
+export class AccountOrganizationDeleteOneHandler
+  implements ICommandHandler<AccountOrganizationDeleteOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly organizationRepository: OrganizationMongooseRepository
+    private readonly accountOrganizationRepository: AccountOrganizationMongooseRepository
   ) {}
 
   async execute({
     dto,
-  }: OrganizationDeleteOneCommand): Promise<OrganizationDomain> {
+  }: AccountOrganizationDeleteOneCommand): Promise<AccountOrganizationDomain> {
     const { id } = dto;
 
-    const OrganizationMergedDomain =
-      this.eventPublisher.mergeClassContext(OrganizationDomain);
+    const AccountOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountOrganizationDomain);
 
-    const deletedOrganizationDomain =
-      await this.organizationRepository.findOneAndRemove({
+    const deletedAccountOrganizationDomain =
+      await this.accountOrganizationRepository.readOneAndRemove({
         _id: new ObjectId(id),
       });
 
-    const organizationMergedDomain = new OrganizationMergedDomain(
-      deletedOrganizationDomain
+    const accountOrganizationDomain = new AccountOrganizationMergedDomain(
+      deletedAccountOrganizationDomain
     );
 
-    organizationMergedDomain.apply(
-      new OrganizationDeletedOneEvent(organizationMergedDomain.id)
+    accountOrganizationDomain.apply(
+      new AccountOrganizationDeletedOneEvent(accountOrganizationDomain.id)
     );
-    organizationMergedDomain.commit();
+    accountOrganizationDomain.commit();
 
-    return organizationMergedDomain;
+    return accountOrganizationDomain;
   }
 }

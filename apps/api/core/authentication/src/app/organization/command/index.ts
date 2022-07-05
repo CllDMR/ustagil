@@ -1,5 +1,7 @@
-import { OrganizationRegisterHandler } from './register/register.handler';
+import { AuthenticationOrganizationRegisterHandler } from './register/register.handler';
 
-export const OrganizationCommandHandlers = [OrganizationRegisterHandler];
+export const AuthenticationOrganizationCommandHandlers = [
+  AuthenticationOrganizationRegisterHandler,
+];
 
-export { OrganizationRegisterCommand } from './register/register.command';
+export { AuthenticationOrganizationRegisterCommand } from './register/register.command';

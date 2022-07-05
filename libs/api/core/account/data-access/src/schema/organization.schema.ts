@@ -3,10 +3,10 @@ import { IdentifiableSchema } from '@ustagil/api/core/common/data-access';
 import { Role } from '@ustagil/api/core/common/typing';
 import { Document } from 'mongoose';
 
-export type OrganizationDocument = Organization & Document;
+export type AccountOrganizationDocument = AccountOrganization & Document;
 
 @Schema()
-export class Organization extends IdentifiableSchema {
+export class AccountOrganization extends IdentifiableSchema {
   readonly kind: string;
   readonly role: Role;
   readonly displayName: string;
@@ -17,4 +17,5 @@ export class Organization extends IdentifiableSchema {
   readonly organization: string;
 }
 
-export const OrganizationSchema = SchemaFactory.createForClass(Organization);
+export const AccountOrganizationSchema =
+  SchemaFactory.createForClass(AccountOrganization);

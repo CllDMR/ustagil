@@ -1,56 +1,57 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { AccountSuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountSuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { SuperAdminReadedAllEvent } from '../../event';
-import { SuperAdminReadAllQuery } from './read-all.query';
+import { AccountSuperAdminReadedAllEvent } from '../../event';
+import { AccountSuperAdminReadAllQuery } from './read-all.query';
 
-@QueryHandler(SuperAdminReadAllQuery)
-export class SuperAdminReadAllHandler
-  implements IQueryHandler<SuperAdminReadAllQuery>
+@QueryHandler(AccountSuperAdminReadAllQuery)
+export class AccountSuperAdminReadAllHandler
+  implements IQueryHandler<AccountSuperAdminReadAllQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly superAdminRepository: SuperAdminMongooseRepository
+    private readonly accountSuperAdminRepository: AccountSuperAdminMongooseRepository
   ) {}
 
-  async execute({ dto }: SuperAdminReadAllQuery): Promise<{
-    super_admins: SuperAdminDomain[];
+  async execute({ dto }: AccountSuperAdminReadAllQuery): Promise<{
+    super_admins: AccountSuperAdminDomain[];
     next_page_cursor: string;
   }> {
     const { page_size = 10, next_page_cursor } = dto;
 
-    const superAdminMergedDomain = this.eventPublisher.mergeObjectContext(
-      new SuperAdminDomain({})
+    const accountSuperAdminDomain = this.eventPublisher.mergeObjectContext(
+      new AccountSuperAdminDomain({})
     );
 
-    const superAdminDomains = await this.superAdminRepository.findAll(
-      {
-        ...(next_page_cursor
-          ? {
-              _id: {
-                $lte: new ObjectId(next_page_cursor),
-              },
-            }
-          : {}),
-      },
-      {
-        limit: page_size + 1,
-        sort: '-_id',
-      }
-    );
+    const readedAccountSuperAdminDomains =
+      await this.accountSuperAdminRepository.readAll(
+        {
+          ...(next_page_cursor
+            ? {
+                _id: {
+                  $lte: new ObjectId(next_page_cursor),
+                },
+              }
+            : {}),
+        },
+        {
+          limit: page_size + 1,
+          sort: '-_id',
+        }
+      );
 
-    superAdminMergedDomain.apply(new SuperAdminReadedAllEvent());
-    superAdminMergedDomain.commit();
+    accountSuperAdminDomain.apply(new AccountSuperAdminReadedAllEvent());
+    accountSuperAdminDomain.commit();
 
     let new_next_page_cursor = '';
 
-    if (superAdminDomains.length >= page_size + 1) {
-      const nextSuperAdmin = superAdminDomains.pop();
-      new_next_page_cursor = nextSuperAdmin.id;
+    if (readedAccountSuperAdminDomains.length >= page_size + 1) {
+      const nextAccountSuperAdmin = readedAccountSuperAdminDomains.pop();
+      new_next_page_cursor = nextAccountSuperAdmin.id;
     }
     return {
-      super_admins: superAdminDomains,
+      super_admins: readedAccountSuperAdminDomains,
       next_page_cursor: new_next_page_cursor,
     };
   }

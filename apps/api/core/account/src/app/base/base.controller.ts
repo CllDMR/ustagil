@@ -2,62 +2,68 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  BaseCreateOneRequest,
-  BaseDeleteOneRequest,
-  BaseFindAllRequest,
-  BaseFindOneByEmailRequest,
-  BaseFindOneRequest,
-  BaseUpdateOneRequest,
+  AccountBaseCreateOneRequest,
+  AccountBaseDeleteOneRequest,
+  AccountBaseReadAllRequest,
+  AccountBaseReadOneByEmailRequest,
+  AccountBaseReadOneRequest,
+  AccountBaseUpdateOneRequest,
   IAccountBaseGrpcService,
 } from '@ustagil/api/core/account/typing';
 import { from } from 'rxjs';
 import {
-  BaseCreateOneCommand,
-  BaseDeleteOneCommand,
-  BaseUpdateOneCommand,
+  AccountBaseCreateOneCommand,
+  AccountBaseDeleteOneCommand,
+  AccountBaseUpdateOneCommand,
 } from './command';
 import {
-  BaseReadAllQuery,
-  BaseReadOneByEmailQuery,
-  BaseReadOneQuery,
+  AccountBaseReadAllQuery,
+  AccountBaseReadOneByEmailQuery,
+  AccountBaseReadOneQuery,
 } from './query';
 
 @Controller()
-export class BaseController implements IAccountBaseGrpcService {
+export class AccountBaseController implements IAccountBaseGrpcService {
   constructor(
     private readonly commandBus: CommandBus<
-      BaseCreateOneCommand | BaseDeleteOneCommand | BaseUpdateOneCommand
+      | AccountBaseCreateOneCommand
+      | AccountBaseDeleteOneCommand
+      | AccountBaseUpdateOneCommand
     >,
     private readonly queryBus: QueryBus<
-      BaseReadAllQuery | BaseReadOneQuery | BaseReadOneByEmailQuery
+      | AccountBaseReadAllQuery
+      | AccountBaseReadOneQuery
+      | AccountBaseReadOneByEmailQuery
     >
   ) {}
 
-  @GrpcMethod('BaseService')
-  ListBases(data: BaseFindAllRequest) {
-    return from(this.queryBus.execute(new BaseReadAllQuery(data)));
+  @GrpcMethod('AccountBaseService')
+  ListAccountBases(data: AccountBaseReadAllRequest) {
+    return from(this.queryBus.execute(new AccountBaseReadAllQuery(data)));
   }
 
-  @GrpcMethod('BaseService')
-  GetBaseByEmail(data: BaseFindOneByEmailRequest) {
-    return from(this.queryBus.execute(new BaseReadOneByEmailQuery(data)));
+  @GrpcMethod('AccountBaseService')
+  GetAccountBaseByEmail(data: AccountBaseReadOneByEmailRequest) {
+    return from(
+      this.queryBus.execute(new AccountBaseReadOneByEmailQuery(data))
+    );
   }
 
-  @GrpcMethod('BaseService')
-  GetBase(data: BaseFindOneRequest) {
-    return from(this.queryBus.execute(new BaseReadOneQuery(data)));
+  @GrpcMethod('AccountBaseService')
+  GetAccountBase(data: AccountBaseReadOneRequest) {
+    return from(this.queryBus.execute(new AccountBaseReadOneQuery(data)));
   }
 
-  @GrpcMethod('BaseService')
-  CreateBase(data: BaseCreateOneRequest) {
-    return from(this.commandBus.execute(new BaseCreateOneCommand(data)));
+  @GrpcMethod('AccountBaseService')
+  CreateAccountBase(data: AccountBaseCreateOneRequest) {
+    return from(this.commandBus.execute(new AccountBaseCreateOneCommand(data)));
   }
 
-  @GrpcMethod('BaseService')
-  UpdateBase(data: BaseUpdateOneRequest) {
+  @GrpcMethod('AccountBaseService')
+  UpdateAccountBase(data: AccountBaseUpdateOneRequest) {
     return from(
       this.commandBus.execute(
-        new BaseUpdateOneCommand({
+        new AccountBaseUpdateOneCommand({
           id: data.id,
           ...data,
         })
@@ -65,8 +71,8 @@ export class BaseController implements IAccountBaseGrpcService {
     );
   }
 
-  @GrpcMethod('BaseService')
-  DeleteBase(data: BaseDeleteOneRequest) {
-    return from(this.commandBus.execute(new BaseDeleteOneCommand(data)));
+  @GrpcMethod('AccountBaseService')
+  DeleteAccountBase(data: AccountBaseDeleteOneRequest) {
+    return from(this.commandBus.execute(new AccountBaseDeleteOneCommand(data)));
   }
 }

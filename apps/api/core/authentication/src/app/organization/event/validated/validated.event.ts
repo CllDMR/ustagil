@@ -1,3 +1,3 @@
-export class OrganizationValidatedEvent {
+export class AuthenticationOrganizationValidatedEvent {
   constructor(public readonly accountId: string) {}
 }

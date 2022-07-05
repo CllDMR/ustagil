@@ -1,49 +1,51 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PassportStrategy } from '@nestjs/passport';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
 import { IAccountBaseGrpcService } from '@ustagil/api/core/account/typing';
-import { AUTHENTICATION_MS_GRPC } from '@ustagil/api/core/authentication/constant';
+import { AUTHENTICATION_BASE_MS_GRPC } from '@ustagil/api/core/authentication/constant';
 import {
-  AuthenticationDomain,
-  IAuthenticationGrpcController,
+  AuthenticationBaseDomain,
+  IAuthenticationBaseGrpcService,
 } from '@ustagil/api/core/authentication/typing';
 import { Strategy } from 'passport-local';
 import { firstValueFrom, Observable } from 'rxjs';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  private readonly authenticationGrpcService: IAuthenticationGrpcController;
-  private readonly baseGrpcService: IAccountBaseGrpcService;
+  private readonly authenticationBaseGrpcService: IAuthenticationBaseGrpcService;
+  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
 
   constructor(
-    @Inject(AUTHENTICATION_MS_GRPC)
+    @Inject(AUTHENTICATION_BASE_MS_GRPC)
     private readonly authenticationClientGrpc: ClientGrpc,
-    @Inject(BASE_MS_GRPC)
+    @Inject(ACCOUNT_BASE_MS_GRPC)
     private readonly baseClientGrpc: ClientGrpc
   ) {
     super({ usernameField: 'email' });
 
-    this.authenticationGrpcService =
-      this.authenticationClientGrpc.getService<IAuthenticationGrpcController>(
-        'AuthenticationService'
+    this.authenticationBaseGrpcService =
+      this.authenticationClientGrpc.getService<IAuthenticationBaseGrpcService>(
+        'AuthenticationBaseService'
       );
-    this.baseGrpcService =
-      this.baseClientGrpc.getService<IAccountBaseGrpcService>('BaseService');
+    this.accountBaseGrpcService =
+      this.baseClientGrpc.getService<IAccountBaseGrpcService>(
+        'AccountBaseService'
+      );
   }
 
   async validate(
     email: string,
     password: string
-  ): Promise<AuthenticationDomain> {
-    const authentication = await firstValueFrom(
-      (await this.authenticationGrpcService.validateAccount({
+  ): Promise<AuthenticationBaseDomain> {
+    const authenticationBaseDomain = await firstValueFrom(
+      (await this.authenticationBaseGrpcService.validateAccountBase({
         email,
         password,
-      })) as unknown as Observable<AuthenticationDomain>
+      })) as unknown as Observable<AuthenticationBaseDomain>
     );
 
-    return authentication;
+    return authenticationBaseDomain;
   }
 }
 // console.log(

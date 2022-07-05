@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import {
-  USER_MS_GPRC,
-  USER_MS_GPRC_URL,
+  ACCOUNT_USER_MS_GRPC,
+  ACCOUNT_USER_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
 import { ApiCoreCaslModule } from '@ustagil/api/core/casl';
 import { join } from 'path';
-import { UserController } from './user.controller';
+import { AccountUserController } from './user.controller';
 
 @Module({
   imports: [
     ApiCoreCaslModule,
     ClientsModule.register([
       {
-        name: USER_MS_GPRC,
+        name: ACCOUNT_USER_MS_GRPC,
         transport: Transport.GRPC,
         options: {
-          url: USER_MS_GPRC_URL,
-          package: 'user',
+          url: ACCOUNT_USER_MS_GRPC_URL,
+          package: 'account_user',
           protoPath: join(__dirname, 'assets/account/user.proto'),
           loader: {
             keepCase: true,
@@ -26,7 +26,7 @@ import { UserController } from './user.controller';
       },
     ]),
   ],
-  controllers: [UserController],
+  controllers: [AccountUserController],
   providers: [],
 })
-export class UserModule {}
+export class AccountUserModule {}

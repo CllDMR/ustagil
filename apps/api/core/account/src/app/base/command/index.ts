@@ -1,13 +1,13 @@
-import { BaseCreateOneHandler } from './create-one/create-one.handler';
-import { BaseDeleteOneHandler } from './delete-one/delete-one.handler';
-import { BaseUpdateOneHandler } from './update-one/update-one.handler';
+import { AccountBaseCreateOneHandler } from './create-one/create-one.handler';
+import { AccountBaseDeleteOneHandler } from './delete-one/delete-one.handler';
+import { AccountBaseUpdateOneHandler } from './update-one/update-one.handler';
 
-export const BaseCommandHandlers = [
-  BaseCreateOneHandler,
-  BaseUpdateOneHandler,
-  BaseDeleteOneHandler,
+export const AccountBaseCommandHandlers = [
+  AccountBaseCreateOneHandler,
+  AccountBaseUpdateOneHandler,
+  AccountBaseDeleteOneHandler,
 ];
 
-export { BaseCreateOneCommand } from './create-one/create-one.command';
-export { BaseDeleteOneCommand } from './delete-one/delete-one.command';
-export { BaseUpdateOneCommand } from './update-one/update-one.command';
+export { AccountBaseCreateOneCommand } from './create-one/create-one.command';
+export { AccountBaseDeleteOneCommand } from './delete-one/delete-one.command';
+export { AccountBaseUpdateOneCommand } from './update-one/update-one.command';

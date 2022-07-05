@@ -4,14 +4,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PassportModule } from '@nestjs/passport';
 import {
-  BASE_MS_GRPC,
-  BASE_MS_GRPC_URL,
+  ACCOUNT_ORGANIZATION_MS_GRPC,
+  ACCOUNT_ORGANIZATION_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
 import { join } from 'path';
-import { OrganizationCommandHandlers } from './command';
-import { OrganizationEventHandlers } from './event';
-import { OrganizationController } from './organization.controller';
-import { OrganizationQueryHandlers } from './query';
+import { AuthenticationOrganizationCommandHandlers } from './command';
+import { AuthenticationOrganizationEventHandlers } from './event';
+import { AuthenticationOrganizationController } from './organization.controller';
+import { AuthenticationOrganizationQueryHandlers } from './query';
 
 @Module({
   imports: [
@@ -23,11 +23,11 @@ import { OrganizationQueryHandlers } from './query';
     }),
     ClientsModule.register([
       {
-        name: BASE_MS_GRPC,
+        name: ACCOUNT_ORGANIZATION_MS_GRPC,
         transport: Transport.GRPC,
         options: {
-          url: BASE_MS_GRPC_URL,
-          package: 'organization',
+          url: ACCOUNT_ORGANIZATION_MS_GRPC_URL,
+          package: 'account_organization',
           protoPath: join(__dirname, 'assets/account/organization.proto'),
           loader: {
             keepCase: true,
@@ -36,11 +36,11 @@ import { OrganizationQueryHandlers } from './query';
       },
     ]),
   ],
-  controllers: [OrganizationController],
+  controllers: [AuthenticationOrganizationController],
   providers: [
-    ...OrganizationCommandHandlers,
-    ...OrganizationEventHandlers,
-    ...OrganizationQueryHandlers,
+    ...AuthenticationOrganizationCommandHandlers,
+    ...AuthenticationOrganizationEventHandlers,
+    ...AuthenticationOrganizationQueryHandlers,
   ],
 })
-export class OrganizationModule {}
+export class AuthenticationOrganizationModule {}

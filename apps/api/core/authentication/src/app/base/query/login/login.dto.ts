@@ -1,7 +1,7 @@
 import { Role } from '@ustagil/api/core/common/typing';
 import { IsEnum, IsMongoId, IsString } from 'class-validator';
 
-export class BaseLoginDto {
+export class AuthenticationBaseLoginDto {
   @IsMongoId()
   id: string;
 

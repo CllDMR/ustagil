@@ -1,3 +1,3 @@
-export class UserUpdatedOneEvent {
+export class AccountUserUpdatedOneEvent {
   constructor(public readonly id: string) {}
 }

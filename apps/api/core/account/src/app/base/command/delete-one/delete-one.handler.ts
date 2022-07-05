@@ -1,33 +1,41 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { BaseDomain } from '@ustagil/api/core/account/typing';
+import { AccountBaseMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountBaseDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { BaseDeletedOneEvent } from '../../event';
-import { BaseDeleteOneCommand } from './delete-one.command';
+import { AccountBaseDeletedOneEvent } from '../../event';
+import { AccountBaseDeleteOneCommand } from './delete-one.command';
 
-@CommandHandler(BaseDeleteOneCommand)
-export class BaseDeleteOneHandler
-  implements ICommandHandler<BaseDeleteOneCommand>
+@CommandHandler(AccountBaseDeleteOneCommand)
+export class AccountBaseDeleteOneHandler
+  implements ICommandHandler<AccountBaseDeleteOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly baseRepository: BaseMongooseRepository
+    private readonly accountBaseRepository: AccountBaseMongooseRepository
   ) {}
 
-  async execute({ dto }: BaseDeleteOneCommand): Promise<BaseDomain> {
+  async execute({
+    dto,
+  }: AccountBaseDeleteOneCommand): Promise<AccountBaseDomain> {
     const { id } = dto;
 
-    const BaseMergedDomain = this.eventPublisher.mergeClassContext(BaseDomain);
+    const AccountBaseMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountBaseDomain);
 
-    const deletedBaseDomain = await this.baseRepository.findOneAndRemove({
-      _id: new ObjectId(id),
-    });
+    const deletedAccountBaseDomain =
+      await this.accountBaseRepository.readOneAndRemove({
+        _id: new ObjectId(id),
+      });
 
-    const baseMergedDomain = new BaseMergedDomain(deletedBaseDomain);
+    const accountBaseDomain = new AccountBaseMergedDomain(
+      deletedAccountBaseDomain
+    );
 
-    baseMergedDomain.apply(new BaseDeletedOneEvent(baseMergedDomain.id));
-    baseMergedDomain.commit();
+    accountBaseDomain.apply(
+      new AccountBaseDeletedOneEvent(accountBaseDomain.id)
+    );
+    accountBaseDomain.commit();
 
-    return baseMergedDomain;
+    return accountBaseDomain;
   }
 }

@@ -1,1 +1,1 @@
-export class SuperAdminReadedAllEvent {}
+export class AccountSuperAdminReadedAllEvent {}

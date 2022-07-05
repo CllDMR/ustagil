@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class SuperAdminRegisterDto {
+export class AuthenticationSuperAdminRegisterDto {
   @IsString()
   displayName: string;
 

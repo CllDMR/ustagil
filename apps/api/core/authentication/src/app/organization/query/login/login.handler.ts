@@ -1,46 +1,47 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationOrganizationDomain } from '@ustagil/api/core/authentication/typing';
 import { JWTPayload } from '@ustagil/api/core/common/typing';
-import { OrganizationLoginnedEvent } from '../../event';
-import { OrganizationLoginQuery } from './login.query';
+import { AuthenticationOrganizationLoginnedEvent } from '../../event';
+import { AuthenticationOrganizationLoginQuery } from './login.query';
 
-@QueryHandler(OrganizationLoginQuery)
-export class OrganizationLoginHandler
-  implements IQueryHandler<OrganizationLoginQuery>
+@QueryHandler(AuthenticationOrganizationLoginQuery)
+export class AuthenticationOrganizationLoginHandler
+  implements IQueryHandler<AuthenticationOrganizationLoginQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
     private readonly jwtService: JwtService
   ) {}
 
-  async execute({ dto }: OrganizationLoginQuery): Promise<{
+  async execute({ dto }: AuthenticationOrganizationLoginQuery): Promise<{
     access_token: string;
   }> {
     const { displayName, email, id, role } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationOrganizationDomain);
 
-    const authenticationBaseDomain = new AuthenticationBaseMergedDomain({
-      displayName,
-      email,
-      role,
-    });
+    const authenticationOrganizationDomain =
+      new AuthenticationOrganizationMergedDomain({
+        displayName,
+        email,
+        role,
+      });
 
     const payload: JWTPayload = {
       sub: id,
-      role: authenticationBaseDomain.role,
+      role: authenticationOrganizationDomain.role,
     };
 
-    authenticationBaseDomain.apply(
-      new OrganizationLoginnedEvent(
-        authenticationBaseDomain.displayName,
-        authenticationBaseDomain.email
+    authenticationOrganizationDomain.apply(
+      new AuthenticationOrganizationLoginnedEvent(
+        authenticationOrganizationDomain.displayName,
+        authenticationOrganizationDomain.email
       )
     );
 
-    authenticationBaseDomain.commit();
+    authenticationOrganizationDomain.commit();
 
     return {
       access_token: this.jwtService.sign(payload),

@@ -1,11 +1,13 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminRegisteredEvent } from './registered.event';
+import { AuthenticationSuperAdminRegisteredEvent } from './registered.event';
 
-@EventsHandler(SuperAdminRegisteredEvent)
-export class SuperAdminRegisteredHandler
-  implements IEventHandler<SuperAdminRegisteredEvent>
+@EventsHandler(AuthenticationSuperAdminRegisteredEvent)
+export class AuthenticationSuperAdminRegisteredHandler
+  implements IEventHandler<AuthenticationSuperAdminRegisteredEvent>
 {
-  async handle({ accountId }: SuperAdminRegisteredEvent): Promise<void> {
-    console.log('Registered super_admin with id:', accountId);
+  async handle({
+    accountId,
+  }: AuthenticationSuperAdminRegisteredEvent): Promise<void> {
+    console.log('Registered account super_admin with id:', accountId);
   }
 }

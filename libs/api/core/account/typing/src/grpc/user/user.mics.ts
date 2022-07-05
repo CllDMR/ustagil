@@ -1,6 +1,6 @@
 import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export interface UserGrpc {
+export interface AccountUserGrpc {
   id: string;
   kind: AccountKind;
   role: Role;
@@ -9,33 +9,34 @@ export interface UserGrpc {
   password: string;
 }
 
-export interface UserFindAllRequest {
+export interface AccountUserReadAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface UserFindAllResponse {
-  users: UserGrpc[];
+export interface AccountUserReadAllResponse {
+  users: AccountUserGrpc[];
   next_page_cursor: string;
 }
 
-export interface UserFindOneRequest {
+export interface AccountUserReadOneRequest {
   id: string;
 }
 
-export interface UserFindOneByEmailRequest {
+export interface AccountUserReadOneByEmailRequest {
   email: string;
 }
 
-export type UserCreateOneRequest = Omit<
-  Omit<Omit<UserGrpc, 'id'>, 'role'>,
+export type AccountUserCreateOneRequest = Omit<
+  Omit<Omit<AccountUserGrpc, 'id'>, 'role'>,
   'kind'
 >;
 
-export interface UserUpdateOneRequest extends Partial<UserCreateOneRequest> {
+export interface AccountUserUpdateOneRequest
+  extends Partial<AccountUserCreateOneRequest> {
   id: string;
 }
 
-export interface UserDeleteOneRequest {
+export interface AccountUserDeleteOneRequest {
   id: string;
 }

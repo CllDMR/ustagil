@@ -1,7 +1,10 @@
-import { UserLoginHandler } from './login/login.handler';
-import { UserValidateHandler } from './validate/validate.handler';
+import { AuthenticationUserLoginHandler } from './login/login.handler';
+import { AuthenticationUserValidateHandler } from './validate/validate.handler';
 
-export const UserQueryHandlers = [UserLoginHandler, UserValidateHandler];
+export const AuthenticationUserQueryHandlers = [
+  AuthenticationUserLoginHandler,
+  AuthenticationUserValidateHandler,
+];
 
-export { UserLoginQuery } from './login/login.query';
-export { UserValidateQuery } from './validate/validate.query';
+export { AuthenticationUserLoginQuery } from './login/login.query';
+export { AuthenticationUserValidateQuery } from './validate/validate.query';

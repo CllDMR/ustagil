@@ -5,24 +5,27 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import {
-  OrganizationDeleteOneResponseBodyDto,
-  OrganizationDomain,
+  AccountOrganizationDeleteOneResponseBodyDto,
+  AccountOrganizationDomain,
 } from '@ustagil/api/core/account/typing';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class OrganizationDeleteOneTransformInterceptor
+export class AccountOrganizationDeleteOneTransformInterceptor
   implements
-    NestInterceptor<OrganizationDomain, OrganizationDeleteOneResponseBodyDto>
+    NestInterceptor<
+      AccountOrganizationDomain,
+      AccountOrganizationDeleteOneResponseBodyDto
+    >
 {
   intercept(
     context: ExecutionContext,
-    next: CallHandler<OrganizationDomain>
-  ): Observable<OrganizationDeleteOneResponseBodyDto> {
+    next: CallHandler<AccountOrganizationDomain>
+  ): Observable<AccountOrganizationDeleteOneResponseBodyDto> {
     return next.handle().pipe(
       map((data) => {
-        const resBody: OrganizationDeleteOneResponseBodyDto = {
+        const resBody: AccountOrganizationDeleteOneResponseBodyDto = {
           id: data.id,
           kind: data.kind,
           role: data.role,

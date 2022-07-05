@@ -1,60 +1,60 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_USER_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
-  IAccountBaseGrpcService,
+  AccountUserDomain,
+  IAccountUserGrpcService,
 } from '@ustagil/api/core/account/typing';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationUserDomain } from '@ustagil/api/core/authentication/typing';
 import { fromRpcToCustomRpcException } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { UserRegisteredEvent } from '../../event';
-import { UserRegisterCommand } from './register.command';
+import { AuthenticationUserRegisteredEvent } from '../../event';
+import { AuthenticationUserRegisterCommand } from './register.command';
 
-@CommandHandler(UserRegisterCommand)
-export class UserRegisterHandler
-  implements ICommandHandler<UserRegisterCommand>
+@CommandHandler(AuthenticationUserRegisterCommand)
+export class AuthenticationUserRegisterHandler
+  implements ICommandHandler<AuthenticationUserRegisterCommand>
 {
-  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
+  private readonly accountUserGrpcService: IAccountUserGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_USER_MS_GRPC) private accountUserMSGrpcClient: ClientGrpc
   ) {
-    this.accountBaseGrpcService =
-      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+    this.accountUserGrpcService =
+      this.accountUserMSGrpcClient.getService<IAccountUserGrpcService>(
+        'AccountUserService'
       );
   }
 
   async execute({
     dto,
-  }: UserRegisterCommand): Promise<AuthenticationBaseDomain> {
+  }: AuthenticationUserRegisterCommand): Promise<AuthenticationUserDomain> {
     const { displayName, email, password } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationUserDomain);
 
     try {
-      const newAccountBase = await firstValueFrom(
-        (await this.accountBaseGrpcService.CreateBase({
+      const newAccountUser = await firstValueFrom(
+        (await this.accountUserGrpcService.CreateAccountUser({
           displayName,
           email,
           password,
-        })) as unknown as Observable<BaseDomain>
+        })) as unknown as Observable<AccountUserDomain>
       );
 
-      const authenticationBaseDomain = new AuthenticationBaseMergedDomain(
-        newAccountBase
+      const authenticationUserDomain = new AuthenticationUserMergedDomain(
+        newAccountUser
       );
 
-      authenticationBaseDomain.apply(
-        new UserRegisteredEvent(newAccountBase.id)
+      authenticationUserDomain.apply(
+        new AuthenticationUserRegisteredEvent(newAccountUser.id)
       );
-      authenticationBaseDomain.commit();
+      authenticationUserDomain.commit();
 
-      return authenticationBaseDomain;
+      return authenticationUserDomain;
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }

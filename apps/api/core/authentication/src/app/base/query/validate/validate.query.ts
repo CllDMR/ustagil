@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
-import { BaseValidateDto } from './validate.dto';
+import { AuthenticationBaseValidateDto } from './validate.dto';
 
-export class BaseValidateQuery implements IQuery {
-  constructor(public readonly dto: BaseValidateDto) {}
+export class AuthenticationBaseValidateQuery implements IQuery {
+  constructor(public readonly dto: AuthenticationBaseValidateDto) {}
 }

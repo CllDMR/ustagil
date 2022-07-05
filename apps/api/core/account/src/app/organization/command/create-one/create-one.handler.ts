@@ -1,48 +1,49 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
 import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
-import { OrganizationCreatedOneEvent } from '../../event';
-import { OrganizationCreateOneCommand } from './create-one.command';
+import { AccountOrganizationCreatedOneEvent } from '../../event';
+import { AccountOrganizationCreateOneCommand } from './create-one.command';
 
-@CommandHandler(OrganizationCreateOneCommand)
-export class OrganizationCreateOneHandler
-  implements ICommandHandler<OrganizationCreateOneCommand>
+@CommandHandler(AccountOrganizationCreateOneCommand)
+export class AccountOrganizationCreateOneHandler
+  implements ICommandHandler<AccountOrganizationCreateOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly organizationRepository: OrganizationMongooseRepository
+    private readonly accountOrganizationRepository: AccountOrganizationMongooseRepository
   ) {}
 
   async execute({
     dto,
-  }: OrganizationCreateOneCommand): Promise<OrganizationDomain> {
+  }: AccountOrganizationCreateOneCommand): Promise<AccountOrganizationDomain> {
     const { displayName, email, organization, password } = dto;
 
-    const OrganizationMergedDomain =
-      this.eventPublisher.mergeClassContext(OrganizationDomain);
+    const AccountOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountOrganizationDomain);
 
-    const createdOrganizationDomain = await this.organizationRepository.create(
-      new OrganizationDomain({
-        id: new ObjectId().toHexString(),
-        role: Role.ROLE_ORGANIZATION,
-        displayName: displayName,
-        email: email,
-        organization: organization,
-        password: password,
-      })
+    const createdAccountOrganizationDomain =
+      await this.accountOrganizationRepository.create(
+        new AccountOrganizationDomain({
+          id: new ObjectId().toHexString(),
+          role: Role.ROLE_ORGANIZATION,
+          displayName: displayName,
+          email: email,
+          organization: organization,
+          password: password,
+        })
+      );
+
+    const accountOrganizationDomain = new AccountOrganizationMergedDomain(
+      createdAccountOrganizationDomain
     );
 
-    const organizationMergedDomain = new OrganizationMergedDomain(
-      createdOrganizationDomain
+    accountOrganizationDomain.apply(
+      new AccountOrganizationCreatedOneEvent(accountOrganizationDomain.id)
     );
+    accountOrganizationDomain.commit();
 
-    organizationMergedDomain.apply(
-      new OrganizationCreatedOneEvent(organizationMergedDomain.id)
-    );
-    organizationMergedDomain.commit();
-
-    return organizationMergedDomain;
+    return accountOrganizationDomain;
   }
 }

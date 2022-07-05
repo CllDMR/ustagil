@@ -1,33 +1,38 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { BaseMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { BaseDomain } from '@ustagil/api/core/account/typing';
-import { BaseReadedOneByEmailEvent } from '../../event';
-import { BaseReadOneByEmailQuery } from './read-one-by-email.query';
+import { AccountBaseMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountBaseDomain } from '@ustagil/api/core/account/typing';
+import { AccountBaseReadedOneByEmailEvent } from '../../event';
+import { AccountBaseReadOneByEmailQuery } from './read-one-by-email.query';
 
-@QueryHandler(BaseReadOneByEmailQuery)
-export class BaseReadOneByEmailHandler
-  implements IQueryHandler<BaseReadOneByEmailQuery>
+@QueryHandler(AccountBaseReadOneByEmailQuery)
+export class AccountBaseReadOneByEmailHandler
+  implements IQueryHandler<AccountBaseReadOneByEmailQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly baseRepository: BaseMongooseRepository
+    private readonly accountBaseRepository: AccountBaseMongooseRepository
   ) {}
 
-  async execute({ dto }: BaseReadOneByEmailQuery) {
+  async execute({ dto }: AccountBaseReadOneByEmailQuery) {
     const { email } = dto;
 
-    const BaseMergedDomain = this.eventPublisher.mergeClassContext(BaseDomain);
+    const AccountBaseMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountBaseDomain);
 
-    const foundBaseDomain = await this.baseRepository.findOne(
+    const readedAccountBaseDomain = await this.accountBaseRepository.readOne(
       { email },
       '+password'
     );
 
-    const baseMergedDomain = new BaseMergedDomain(foundBaseDomain);
+    const accountBaseDomain = new AccountBaseMergedDomain(
+      readedAccountBaseDomain
+    );
 
-    baseMergedDomain.apply(new BaseReadedOneByEmailEvent(baseMergedDomain.id));
-    baseMergedDomain.commit();
+    accountBaseDomain.apply(
+      new AccountBaseReadedOneByEmailEvent(accountBaseDomain.id)
+    );
+    accountBaseDomain.commit();
 
-    return baseMergedDomain;
+    return accountBaseDomain;
   }
 }

@@ -2,39 +2,52 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  AuthenticationDomain,
-  IAuthenticationGrpcController,
-  LoginAccountRequest,
-  LoginAccountResponse,
-  RegisterAccountRequest,
-  ValidateAccountRequest,
+  AuthenticationUserDomain,
+  AuthenticationUserLoginAccountRequest,
+  AuthenticationUserLoginAccountResponse,
+  AuthenticationUserRegisterAccountRequest,
+  AuthenticationUserValidateAccountRequest,
+  IAuthenticationUserGrpcService,
 } from '@ustagil/api/core/authentication/typing';
-import { UserRegisterCommand } from './command';
-import { UserLoginQuery, UserValidateQuery } from './query';
+import { AuthenticationUserRegisterCommand } from './command';
+import {
+  AuthenticationUserLoginQuery,
+  AuthenticationUserValidateQuery,
+} from './query';
 
 @Controller()
-export class UserController implements IAuthenticationGrpcController {
+export class AuthenticationUserController
+  implements IAuthenticationUserGrpcService
+{
   constructor(
-    private readonly commandBus: CommandBus<UserRegisterCommand>,
-    private readonly queryBus: QueryBus<UserLoginQuery | UserValidateQuery>
+    private readonly commandBus: CommandBus<AuthenticationUserRegisterCommand>,
+    private readonly queryBus: QueryBus<
+      AuthenticationUserLoginQuery | AuthenticationUserValidateQuery
+    >
   ) {}
 
-  @GrpcMethod('UserService')
-  async registerAccount(
-    data: RegisterAccountRequest
-  ): Promise<AuthenticationDomain> {
-    return await this.commandBus.execute(new UserRegisterCommand(data));
+  @GrpcMethod('AuthenticationUserService')
+  async registerAccountUser(
+    data: AuthenticationUserRegisterAccountRequest
+  ): Promise<AuthenticationUserDomain> {
+    return await this.commandBus.execute(
+      new AuthenticationUserRegisterCommand(data)
+    );
   }
 
-  @GrpcMethod('UserService')
-  async loginAccount(data: LoginAccountRequest): Promise<LoginAccountResponse> {
-    return await this.queryBus.execute(new UserLoginQuery(data));
+  @GrpcMethod('AuthenticationUserService')
+  async loginAccountUser(
+    data: AuthenticationUserLoginAccountRequest
+  ): Promise<AuthenticationUserLoginAccountResponse> {
+    return await this.queryBus.execute(new AuthenticationUserLoginQuery(data));
   }
 
-  @GrpcMethod('UserService')
-  async validateAccount(
-    data: ValidateAccountRequest
-  ): Promise<AuthenticationDomain> {
-    return await this.queryBus.execute(new UserValidateQuery(data));
+  @GrpcMethod('AuthenticationUserService')
+  async validateAccountUser(
+    data: AuthenticationUserValidateAccountRequest
+  ): Promise<AuthenticationUserDomain> {
+    return await this.queryBus.execute(
+      new AuthenticationUserValidateQuery(data)
+    );
   }
 }

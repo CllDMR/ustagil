@@ -1,6 +1,6 @@
 import { IsMongoId, IsNumber, IsOptional } from 'class-validator';
 
-export class SuperAdminFindAllQueryDto {
+export class AccountSuperAdminReadAllQueryDto {
   @IsNumber()
   @IsOptional()
   page_size?: number;

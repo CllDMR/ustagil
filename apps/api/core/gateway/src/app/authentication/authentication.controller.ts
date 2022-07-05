@@ -10,12 +10,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { AUTHENTICATION_MS_GRPC } from '@ustagil/api/core/authentication/constant';
+import { AUTHENTICATION_BASE_MS_GRPC } from '@ustagil/api/core/authentication/constant';
 import {
-  IAuthenticationGrpcController,
-  RegisterRequestBodyDto,
+  AuthenticationBaseRegisterRequestBodyDto,
+  IAuthenticationBaseGrpcService,
 } from '@ustagil/api/core/authentication/typing';
-import { RegisterTransformInterceptor } from '@ustagil/api/core/authentication/util';
+import { AuthenticationBaseRegisterTransformInterceptor } from '@ustagil/api/core/authentication/util';
 import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
@@ -24,18 +24,18 @@ import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
 
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
-export class AuthenticationController {
-  private authenticationGrpcService: IAuthenticationGrpcController;
+export class AuthenticationBaseController {
+  private authenticationBaseGrpcService: IAuthenticationBaseGrpcService;
 
   constructor(
-    @Inject(AUTHENTICATION_MS_GRPC)
-    private readonly authenticationMSGrpcClient: ClientGrpc
+    @Inject(AUTHENTICATION_BASE_MS_GRPC)
+    private readonly authenticationBaseMSGrpcClient: ClientGrpc
   ) {}
 
   onModuleInit() {
-    this.authenticationGrpcService =
-      this.authenticationMSGrpcClient.getService<IAuthenticationGrpcController>(
-        'AuthenticationService'
+    this.authenticationBaseGrpcService =
+      this.authenticationBaseMSGrpcClient.getService<IAuthenticationBaseGrpcService>(
+        'AuthenticationBaseService'
       );
   }
 
@@ -43,13 +43,13 @@ export class AuthenticationController {
   @Post('login')
   async login(@Request() req) {
     const account = req.user;
-    return this.authenticationGrpcService.loginAccount(account);
+    return this.authenticationBaseGrpcService.loginAccountBase(account);
   }
 
-  @UseInterceptors(RegisterTransformInterceptor)
+  @UseInterceptors(AuthenticationBaseRegisterTransformInterceptor)
   @Post('register')
-  registerAccount(@Body() dto: RegisterRequestBodyDto) {
-    return this.authenticationGrpcService.registerAccount(dto);
+  registerAccount(@Body() dto: AuthenticationBaseRegisterRequestBodyDto) {
+    return this.authenticationBaseGrpcService.registerAccountBase(dto);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,12 +1,20 @@
-export { Base, BaseDocument, BaseSchema } from './base.schema';
 export {
-  Organization,
-  OrganizationDocument,
-  OrganizationSchema,
+  AccountBase,
+  AccountBaseDocument,
+  AccountBaseSchema,
+} from './base.schema';
+export {
+  AccountOrganization,
+  AccountOrganizationDocument,
+  AccountOrganizationSchema,
 } from './organization.schema';
 export {
-  SuperAdmin,
-  SuperAdminDocument,
-  SuperAdminSchema,
+  AccountSuperAdmin,
+  AccountSuperAdminDocument,
+  AccountSuperAdminSchema,
 } from './super_admin.schema';
-export { User, UserDocument, UserSchema } from './user.schema';
+export {
+  AccountUser,
+  AccountUserDocument,
+  AccountUserSchema,
+} from './user.schema';

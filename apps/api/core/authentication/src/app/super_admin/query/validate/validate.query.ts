@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
-import { SuperAdminValidateDto } from './validate.dto';
+import { AuthenticationSuperAdminValidateDto } from './validate.dto';
 
-export class SuperAdminValidateQuery implements IQuery {
-  constructor(public readonly dto: SuperAdminValidateDto) {}
+export class AuthenticationSuperAdminValidateQuery implements IQuery {
+  constructor(public readonly dto: AuthenticationSuperAdminValidateDto) {}
 }

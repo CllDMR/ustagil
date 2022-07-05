@@ -1,24 +1,24 @@
 export {
-  BaseDomainCreatePolicyRule,
-  BaseDomainDeletePolicyRule,
-  BaseDomainReadPolicyRule,
-  BaseDomainUpdatePolicyRule,
+  AccountBaseDomainCreatePolicyRule,
+  AccountBaseDomainDeletePolicyRule,
+  AccountBaseDomainReadPolicyRule,
+  AccountBaseDomainUpdatePolicyRule,
 } from './account/base-domain.policy';
 export {
-  OrganizationDomainCreatePolicyRule,
-  OrganizationDomainDeletePolicyRule,
-  OrganizationDomainReadPolicyRule,
-  OrganizationDomainUpdatePolicyRule,
+  AccountOrganizationDomainCreatePolicyRule,
+  AccountOrganizationDomainDeletePolicyRule,
+  AccountOrganizationDomainReadPolicyRule,
+  AccountOrganizationDomainUpdatePolicyRule,
 } from './account/organization-domain.policy';
 export {
-  SuperAdminDomainCreatePolicyRule,
-  SuperAdminDomainDeletePolicyRule,
-  SuperAdminDomainReadPolicyRule,
-  SuperAdminDomainUpdatePolicyRule,
+  AccountSuperAdminDomainCreatePolicyRule,
+  AccountSuperAdminDomainDeletePolicyRule,
+  AccountSuperAdminDomainReadPolicyRule,
+  AccountSuperAdminDomainUpdatePolicyRule,
 } from './account/super-admin-domain.policy';
 export {
-  UserDomainCreatePolicyRule,
-  UserDomainDeletePolicyRule,
-  UserDomainReadPolicyRule,
-  UserDomainUpdatePolicyRule,
+  AccountUserDomainCreatePolicyRule,
+  AccountUserDomainDeletePolicyRule,
+  AccountUserDomainReadPolicyRule,
+  AccountUserDomainUpdatePolicyRule,
 } from './account/user-domain.policy';

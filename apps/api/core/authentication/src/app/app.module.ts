@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { BaseModule } from './base/base.module';
-import { OrganizationModule } from './organization/organization.module';
-import { SuperAdminModule } from './super_admin/super_admin.module';
-import { UserModule } from './user/user.module';
+import { AuthenticationBaseModule } from './base/base.module';
+import { AuthenticationOrganizationModule } from './organization/organization.module';
+import { AuthenticationSuperAdminModule } from './super_admin/super_admin.module';
+import { AuthenticationUserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -13,10 +13,10 @@ import { UserModule } from './user/user.module';
       cache: true,
     }),
 
-    BaseModule,
-    OrganizationModule,
-    SuperAdminModule,
-    UserModule,
+    AuthenticationBaseModule,
+    AuthenticationOrganizationModule,
+    AuthenticationSuperAdminModule,
+    AuthenticationUserModule,
   ],
 })
-export class AppModule {}
+export class AuthenticationModule {}

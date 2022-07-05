@@ -1,9 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { BaseReadedAllEvent } from './readed-all.event';
+import { AccountBaseReadedAllEvent } from './readed-all.event';
 
-@EventsHandler(BaseReadedAllEvent)
-export class BaseReadedAllHandler implements IEventHandler<BaseReadedAllEvent> {
-  async handle(_: BaseReadedAllEvent): Promise<void> {
-    console.log('Readed all bases');
+@EventsHandler(AccountBaseReadedAllEvent)
+export class AccountBaseReadedAllHandler
+  implements IEventHandler<AccountBaseReadedAllEvent>
+{
+  async handle(_: AccountBaseReadedAllEvent): Promise<void> {
+    console.log('Readed all account bases');
   }
 }

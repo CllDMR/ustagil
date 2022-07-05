@@ -1,13 +1,13 @@
-import { BaseLoginnedHandler } from './logined/logined.handler';
-import { BaseRegisteredHandler } from './registered/registered.handler';
-import { BaseValidatedHandler } from './validated/validated.handler';
+import { AuthenticationBaseLoginnedHandler } from './logined/logined.handler';
+import { AuthenticationBaseRegisteredHandler } from './registered/registered.handler';
+import { AuthenticationBaseValidatedHandler } from './validated/validated.handler';
 
-export const BaseEventHandlers = [
-  BaseLoginnedHandler,
-  BaseRegisteredHandler,
-  BaseValidatedHandler,
+export const AuthenticationBaseEventHandlers = [
+  AuthenticationBaseLoginnedHandler,
+  AuthenticationBaseRegisteredHandler,
+  AuthenticationBaseValidatedHandler,
 ];
 
-export { BaseLoginnedEvent } from './logined/logined.event';
-export { BaseRegisteredEvent } from './registered/registered.event';
-export { BaseValidatedEvent } from './validated/validated.event';
+export { AuthenticationBaseLoginnedEvent } from './logined/logined.event';
+export { AuthenticationBaseRegisteredEvent } from './registered/registered.event';
+export { AuthenticationBaseValidatedEvent } from './validated/validated.event';

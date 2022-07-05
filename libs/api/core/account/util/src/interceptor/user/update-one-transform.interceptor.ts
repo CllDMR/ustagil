@@ -5,23 +5,24 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import {
-  UserDomain,
-  UserUpdateOneResponseBodyDto,
+  AccountUserDomain,
+  AccountUserUpdateOneResponseBodyDto,
 } from '@ustagil/api/core/account/typing';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class UserUpdateOneTransformInterceptor
-  implements NestInterceptor<UserDomain, UserUpdateOneResponseBodyDto>
+export class AccountUserUpdateOneTransformInterceptor
+  implements
+    NestInterceptor<AccountUserDomain, AccountUserUpdateOneResponseBodyDto>
 {
   intercept(
     context: ExecutionContext,
-    next: CallHandler<UserDomain>
-  ): Observable<UserUpdateOneResponseBodyDto> {
+    next: CallHandler<AccountUserDomain>
+  ): Observable<AccountUserUpdateOneResponseBodyDto> {
     return next.handle().pipe(
       map((data) => {
-        const resBody: UserUpdateOneResponseBodyDto = {
+        const resBody: AccountUserUpdateOneResponseBodyDto = {
           id: data.id,
           kind: data.kind,
           role: data.role,

@@ -1,26 +1,28 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationUserDomain } from '@ustagil/api/core/authentication/typing';
 import { JWTPayload } from '@ustagil/api/core/common/typing';
-import { UserLoginnedEvent } from '../../event';
-import { UserLoginQuery } from './login.query';
+import { AuthenticationUserLoginnedEvent } from '../../event';
+import { AuthenticationUserLoginQuery } from './login.query';
 
-@QueryHandler(UserLoginQuery)
-export class UserLoginHandler implements IQueryHandler<UserLoginQuery> {
+@QueryHandler(AuthenticationUserLoginQuery)
+export class AuthenticationUserLoginHandler
+  implements IQueryHandler<AuthenticationUserLoginQuery>
+{
   constructor(
     private readonly eventPublisher: EventPublisher,
     private readonly jwtService: JwtService
   ) {}
 
-  async execute({ dto }: UserLoginQuery): Promise<{
+  async execute({ dto }: AuthenticationUserLoginQuery): Promise<{
     access_token: string;
   }> {
     const { displayName, email, id, role } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationUserDomain);
 
-    const authenticationBaseDomain = new AuthenticationBaseMergedDomain({
+    const authenticationUserDomain = new AuthenticationUserMergedDomain({
       displayName,
       email,
       role,
@@ -28,17 +30,17 @@ export class UserLoginHandler implements IQueryHandler<UserLoginQuery> {
 
     const payload: JWTPayload = {
       sub: id,
-      role: authenticationBaseDomain.role,
+      role: authenticationUserDomain.role,
     };
 
-    authenticationBaseDomain.apply(
-      new UserLoginnedEvent(
-        authenticationBaseDomain.displayName,
-        authenticationBaseDomain.email
+    authenticationUserDomain.apply(
+      new AuthenticationUserLoginnedEvent(
+        authenticationUserDomain.displayName,
+        authenticationUserDomain.email
       )
     );
 
-    authenticationBaseDomain.commit();
+    authenticationUserDomain.commit();
 
     return {
       access_token: this.jwtService.sign(payload),

@@ -1,6 +1,6 @@
 import { IsMongoId, IsNumberString, IsOptional } from 'class-validator';
 
-export class UserFindAllRequestQueryDto {
+export class AccountUserReadAllRequestQueryDto {
   @IsNumberString()
   @IsOptional()
   page_size?: number;

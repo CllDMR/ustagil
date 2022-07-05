@@ -1,3 +1,3 @@
-export class SuperAdminRegisteredEvent {
+export class AuthenticationSuperAdminRegisteredEvent {
   constructor(public readonly accountId: string) {}
 }

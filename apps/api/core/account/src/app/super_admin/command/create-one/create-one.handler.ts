@@ -1,47 +1,49 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { AccountSuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountSuperAdminDomain } from '@ustagil/api/core/account/typing';
 import { Role } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
-import { SuperAdminCreatedOneEvent } from '../../event';
-import { SuperAdminCreateOneCommand } from './create-one.command';
+import { AccountSuperAdminCreatedOneEvent } from '../../event';
+import { AccountSuperAdminCreateOneCommand } from './create-one.command';
 
-@CommandHandler(SuperAdminCreateOneCommand)
-export class SuperAdminCreateOneHandler
-  implements ICommandHandler<SuperAdminCreateOneCommand>
+@CommandHandler(AccountSuperAdminCreateOneCommand)
+export class AccountSuperAdminCreateOneHandler
+  implements ICommandHandler<AccountSuperAdminCreateOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly superAdminRepository: SuperAdminMongooseRepository
+    private readonly accountSuperAdminRepository: AccountSuperAdminMongooseRepository
   ) {}
 
   async execute({
     dto,
-  }: SuperAdminCreateOneCommand): Promise<SuperAdminDomain> {
+  }: AccountSuperAdminCreateOneCommand): Promise<AccountSuperAdminDomain> {
     const { displayName, email, password } = dto;
 
-    const SuperAdminMergedDomain =
-      this.eventPublisher.mergeClassContext(SuperAdminDomain);
-
-    const createdSuperAdminDomain = await this.superAdminRepository.create(
-      new SuperAdminDomain({
-        id: new ObjectId().toHexString(),
-        role: Role.ROLE_SUPER_ADMIN,
-        displayName: displayName,
-        email: email,
-        password: password,
-      })
+    const AccountSuperAdminMergedDomain = this.eventPublisher.mergeClassContext(
+      AccountSuperAdminDomain
     );
 
-    const superAdminMergedDomain = new SuperAdminMergedDomain(
-      createdSuperAdminDomain
+    const createdAccountSuperAdminDomain =
+      await this.accountSuperAdminRepository.create(
+        new AccountSuperAdminDomain({
+          id: new ObjectId().toHexString(),
+          role: Role.ROLE_SUPER_ADMIN,
+          displayName: displayName,
+          email: email,
+          password: password,
+        })
+      );
+
+    const accountSuperAdminDomain = new AccountSuperAdminMergedDomain(
+      createdAccountSuperAdminDomain
     );
 
-    superAdminMergedDomain.apply(
-      new SuperAdminCreatedOneEvent(superAdminMergedDomain.id)
+    accountSuperAdminDomain.apply(
+      new AccountSuperAdminCreatedOneEvent(accountSuperAdminDomain.id)
     );
-    superAdminMergedDomain.commit();
+    accountSuperAdminDomain.commit();
 
-    return superAdminMergedDomain;
+    return accountSuperAdminDomain;
   }
 }

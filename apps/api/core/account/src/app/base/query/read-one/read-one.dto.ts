@@ -1,6 +1,6 @@
 import { IsMongoId } from 'class-validator';
 
-export class BaseFindOneQueryDto {
+export class AccountBaseReadOneQueryDto {
   @IsMongoId()
   id: string;
 }

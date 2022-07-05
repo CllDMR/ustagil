@@ -1,6 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
-import { UserLoginDto } from './login.dto';
+import { AuthenticationUserLoginDto } from './login.dto';
 
-export class UserLoginQuery implements IQuery {
-  constructor(public readonly dto: UserLoginDto) {}
+export class AuthenticationUserLoginQuery implements IQuery {
+  constructor(public readonly dto: AuthenticationUserLoginDto) {}
 }

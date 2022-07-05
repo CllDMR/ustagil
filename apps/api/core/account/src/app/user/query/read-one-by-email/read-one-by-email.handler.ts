@@ -1,30 +1,37 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { UserMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { UserDomain } from '@ustagil/api/core/account/typing';
-import { UserReadedOneByEmailEvent } from '../../event';
-import { UserReadOneByEmailQuery } from './read-one-by-email.query';
+import { AccountUserMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountUserDomain } from '@ustagil/api/core/account/typing';
+import { AccountUserReadedOneByEmailEvent } from '../../event';
+import { AccountUserReadOneByEmailQuery } from './read-one-by-email.query';
 
-@QueryHandler(UserReadOneByEmailQuery)
-export class UserReadOneByEmailHandler
-  implements IQueryHandler<UserReadOneByEmailQuery>
+@QueryHandler(AccountUserReadOneByEmailQuery)
+export class AccountUserReadOneByEmailHandler
+  implements IQueryHandler<AccountUserReadOneByEmailQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly userRepository: UserMongooseRepository
+    private readonly accountUserRepository: AccountUserMongooseRepository
   ) {}
 
-  async execute({ dto }: UserReadOneByEmailQuery) {
+  async execute({ dto }: AccountUserReadOneByEmailQuery) {
     const { email } = dto;
 
-    const UserMergedDomain = this.eventPublisher.mergeClassContext(UserDomain);
+    const AccountUserMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountUserDomain);
 
-    const foundUserDomain = await this.userRepository.findOne({ email });
+    const readedAccountUserDomain = await this.accountUserRepository.readOne({
+      email,
+    });
 
-    const userMergedDomain = new UserMergedDomain(foundUserDomain);
+    const accountUserDomain = new AccountUserMergedDomain(
+      readedAccountUserDomain
+    );
 
-    userMergedDomain.apply(new UserReadedOneByEmailEvent(userMergedDomain.id));
-    userMergedDomain.commit();
+    accountUserDomain.apply(
+      new AccountUserReadedOneByEmailEvent(accountUserDomain.id)
+    );
+    accountUserDomain.commit();
 
-    return userMergedDomain;
+    return accountUserDomain;
   }
 }

@@ -2,59 +2,59 @@ import { Status } from '@grpc/grpc-js/build/src/constants';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ClientGrpc } from '@nestjs/microservices';
-import { BASE_MS_GRPC } from '@ustagil/api/core/account/constant';
+import { ACCOUNT_SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  BaseDomain,
-  IAccountBaseGrpcService,
+  AccountSuperAdminDomain,
+  IAccountSuperAdminGrpcService,
 } from '@ustagil/api/core/account/typing';
-import { AuthenticationBaseDomain } from '@ustagil/api/core/authentication/typing';
+import { AuthenticationSuperAdminDomain } from '@ustagil/api/core/authentication/typing';
 import {
   CustomRpcException,
   fromRpcToCustomRpcException,
 } from '@ustagil/api/core/common/typing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { SuperAdminValidatedEvent } from '../../event';
-import { SuperAdminValidateQuery } from './validate.query';
+import { AuthenticationSuperAdminValidatedEvent } from '../../event';
+import { AuthenticationSuperAdminValidateQuery } from './validate.query';
 
-@QueryHandler(SuperAdminValidateQuery)
-export class SuperAdminValidateHandler
-  implements IQueryHandler<SuperAdminValidateQuery>
+@QueryHandler(AuthenticationSuperAdminValidateQuery)
+export class AuthenticationSuperAdminValidateHandler
+  implements IQueryHandler<AuthenticationSuperAdminValidateQuery>
 {
-  private readonly accountBaseGrpcService: IAccountBaseGrpcService;
+  private readonly accountSuperAdminGrpcService: IAccountSuperAdminGrpcService;
 
   constructor(
     private readonly eventPublisher: EventPublisher,
-    @Inject(BASE_MS_GRPC) private readonly accountBaseMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_SUPER_ADMIN_MS_GRPC)
+    private readonly accountSuperAdminMSGrpcClient: ClientGrpc
   ) {
-    this.accountBaseGrpcService =
-      this.accountBaseMSGrpcClient.getService<IAccountBaseGrpcService>(
-        'BaseService'
+    this.accountSuperAdminGrpcService =
+      this.accountSuperAdminMSGrpcClient.getService<IAccountSuperAdminGrpcService>(
+        'AccountSuperAdminService'
       );
   }
 
-  async execute({ dto }: SuperAdminValidateQuery) {
+  async execute({ dto }: AuthenticationSuperAdminValidateQuery) {
     const { email, password } = dto;
 
-    const AuthenticationBaseMergedDomain =
-      this.eventPublisher.mergeClassContext(AuthenticationBaseDomain);
+    const AuthenticationSuperAdminMergedDomain =
+      this.eventPublisher.mergeClassContext(AuthenticationSuperAdminDomain);
 
-    let accountBaseDomain: BaseDomain;
+    let accountSuperAdminDomain: AccountSuperAdminDomain;
 
     try {
-      accountBaseDomain = await firstValueFrom(
-        (await this.accountBaseGrpcService.GetBaseByEmail({
+      accountSuperAdminDomain = await firstValueFrom(
+        (await this.accountSuperAdminGrpcService.GetAccountSuperAdminByEmail({
           email,
-        })) as unknown as Observable<BaseDomain>
+        })) as unknown as Observable<AccountSuperAdminDomain>
       );
     } catch (error) {
       throw fromRpcToCustomRpcException(error);
     }
 
-    const authenticationBaseDomain = new AuthenticationBaseMergedDomain(
-      accountBaseDomain
-    );
+    const authenticationSuperAdminDomain =
+      new AuthenticationSuperAdminMergedDomain(accountSuperAdminDomain);
 
-    if (accountBaseDomain.password !== password)
+    if (accountSuperAdminDomain.password !== password)
       throw new CustomRpcException({
         description: 'Could not find account.',
         errorCode: '',
@@ -63,19 +63,19 @@ export class SuperAdminValidateHandler
         statusCode: HttpStatus.BAD_REQUEST,
       });
 
-    authenticationBaseDomain.apply(
-      new SuperAdminValidatedEvent(accountBaseDomain.id)
+    authenticationSuperAdminDomain.apply(
+      new AuthenticationSuperAdminValidatedEvent(accountSuperAdminDomain.id)
     );
 
-    authenticationBaseDomain.commit();
+    authenticationSuperAdminDomain.commit();
 
-    return authenticationBaseDomain;
+    return authenticationSuperAdminDomain;
   }
 }
 
 // const account = await firstValueFrom(
 //   this.accountMSClient
-//     .send<BaseDomain, AccountFindOneByEmailMSMessage>(
+//     .send<AccountSuperAdminDomain, AccountFindOneByEmailMSMessage>(
 //       ACCOUNT_FIND_ONE_BY_EMAIL_MSMESSAGE,
 //       new AccountFindOneByEmailMSMessage(authentication.email)
 //     )

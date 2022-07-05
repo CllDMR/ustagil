@@ -1,11 +1,13 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminValidatedEvent } from './validated.event';
+import { AuthenticationSuperAdminValidatedEvent } from './validated.event';
 
-@EventsHandler(SuperAdminValidatedEvent)
-export class SuperAdminValidatedHandler
-  implements IEventHandler<SuperAdminValidatedEvent>
+@EventsHandler(AuthenticationSuperAdminValidatedEvent)
+export class AuthenticationSuperAdminValidatedHandler
+  implements IEventHandler<AuthenticationSuperAdminValidatedEvent>
 {
-  async handle({ accountId }: SuperAdminValidatedEvent): Promise<void> {
-    console.log('Validated super_admin with id:', accountId);
+  async handle({
+    accountId,
+  }: AuthenticationSuperAdminValidatedEvent): Promise<void> {
+    console.log('Validated account super_admin with id:', accountId);
   }
 }

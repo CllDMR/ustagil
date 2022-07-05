@@ -1,7 +1,10 @@
-import { BaseLoginHandler } from './login/login.handler';
+import { AuthenticationBaseLoginHandler } from './login/login.handler';
 import { BaseValidateHandler } from './validate/validate.handler';
 
-export const BaseQueryHandlers = [BaseLoginHandler, BaseValidateHandler];
+export const AuthenticationBaseQueryHandlers = [
+  AuthenticationBaseLoginHandler,
+  BaseValidateHandler,
+];
 
-export { BaseLoginQuery } from './login/login.query';
-export { BaseValidateQuery } from './validate/validate.query';
+export { AuthenticationBaseLoginQuery } from './login/login.query';
+export { AuthenticationBaseValidateQuery } from './validate/validate.query';

@@ -1,5 +1,5 @@
-export { OrganizationCreateOneTransformInterceptor } from './create-one-transform.interceptor';
-export { OrganizationDeleteOneTransformInterceptor } from './delete-one-transform.interceptor';
-export { OrganizationFindAllTransformInterceptor } from './find-all-transform.interceptor';
-export { OrganizationFindOneTransformInterceptor } from './find-one-transform.interceptor';
-export { OrganizationUpdateOneTransformInterceptor } from './update-one-transform.interceptor';
+export { AccountOrganizationCreateOneTransformInterceptor } from './create-one-transform.interceptor';
+export { AccountOrganizationDeleteOneTransformInterceptor } from './delete-one-transform.interceptor';
+export { AccountOrganizationReadAllTransformInterceptor } from './read-all-transform.interceptor';
+export { AccountOrganizationReadOneTransformInterceptor } from './read-one-transform.interceptor';
+export { AccountOrganizationUpdateOneTransformInterceptor } from './update-one-transform.interceptor';

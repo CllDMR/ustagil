@@ -1,11 +1,11 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { SuperAdminCreatedOneEvent } from './created-one.event';
+import { AccountSuperAdminCreatedOneEvent } from './created-one.event';
 
-@EventsHandler(SuperAdminCreatedOneEvent)
-export class SuperAdminCreatedOneHandler
-  implements IEventHandler<SuperAdminCreatedOneEvent>
+@EventsHandler(AccountSuperAdminCreatedOneEvent)
+export class AccountSuperAdminCreatedOneHandler
+  implements IEventHandler<AccountSuperAdminCreatedOneEvent>
 {
-  async handle({ id }: SuperAdminCreatedOneEvent): Promise<void> {
-    console.log('Created super_admin with id:', id);
+  async handle({ id }: AccountSuperAdminCreatedOneEvent): Promise<void> {
+    console.log('Created account super_admin with id:', id);
   }
 }

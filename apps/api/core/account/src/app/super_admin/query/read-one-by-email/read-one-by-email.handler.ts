@@ -1,37 +1,39 @@
 import { EventPublisher, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { SuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { SuperAdminDomain } from '@ustagil/api/core/account/typing';
-import { SuperAdminReadedOneByEmailEvent } from '../../event';
-import { SuperAdminReadOneByEmailQuery } from './read-one-by-email.query';
+import { AccountSuperAdminMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountSuperAdminDomain } from '@ustagil/api/core/account/typing';
+import { AccountSuperAdminReadedOneByEmailEvent } from '../../event';
+import { AccountSuperAdminReadOneByEmailQuery } from './read-one-by-email.query';
 
-@QueryHandler(SuperAdminReadOneByEmailQuery)
-export class SuperAdminReadOneByEmailHandler
-  implements IQueryHandler<SuperAdminReadOneByEmailQuery>
+@QueryHandler(AccountSuperAdminReadOneByEmailQuery)
+export class AccountSuperAdminReadOneByEmailHandler
+  implements IQueryHandler<AccountSuperAdminReadOneByEmailQuery>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly superAdminRepository: SuperAdminMongooseRepository
+    private readonly accountSuperAdminRepository: AccountSuperAdminMongooseRepository
   ) {}
 
-  async execute({ dto }: SuperAdminReadOneByEmailQuery) {
+  async execute({ dto }: AccountSuperAdminReadOneByEmailQuery) {
     const { email } = dto;
 
-    const SuperAdminMergedDomain =
-      this.eventPublisher.mergeClassContext(SuperAdminDomain);
-
-    const foundSuperAdminDomain = await this.superAdminRepository.findOne({
-      email,
-    });
-
-    const superAdminMergedDomain = new SuperAdminMergedDomain(
-      foundSuperAdminDomain
+    const AccountSuperAdminMergedDomain = this.eventPublisher.mergeClassContext(
+      AccountSuperAdminDomain
     );
 
-    superAdminMergedDomain.apply(
-      new SuperAdminReadedOneByEmailEvent(superAdminMergedDomain.id)
-    );
-    superAdminMergedDomain.commit();
+    const readedAccountSuperAdminDomain =
+      await this.accountSuperAdminRepository.readOne({
+        email,
+      });
 
-    return superAdminMergedDomain;
+    const accountSuperAdminDomain = new AccountSuperAdminMergedDomain(
+      readedAccountSuperAdminDomain
+    );
+
+    accountSuperAdminDomain.apply(
+      new AccountSuperAdminReadedOneByEmailEvent(accountSuperAdminDomain.id)
+    );
+    accountSuperAdminDomain.commit();
+
+    return accountSuperAdminDomain;
   }
 }

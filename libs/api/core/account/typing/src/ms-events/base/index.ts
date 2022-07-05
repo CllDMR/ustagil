@@ -1,3 +1,3 @@
-export { BaseCreateOneMSEvent } from './base-create-one.ms-event';
-export { BaseDeleteOneMSEvent } from './base-delete-one.ms-event';
-export { BaseUpdateOneMSEvent } from './base-update-one.ms-event';
+export { AccountBaseCreateOneMSEvent } from './create-one.ms-event';
+export { AccountBaseDeleteOneMSEvent } from './delete-one.ms-event';
+export { AccountBaseUpdateOneMSEvent } from './update-one.ms-event';

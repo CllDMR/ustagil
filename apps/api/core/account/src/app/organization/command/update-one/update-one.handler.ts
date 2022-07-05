@@ -1,48 +1,48 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { OrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationMongooseRepository } from '@ustagil/api/core/account/data-access';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
 import { ObjectId } from 'mongodb';
-import { OrganizationUpdatedOneEvent } from '../../event';
-import { OrganizationUpdateOneCommand } from './update-one.command';
+import { AccountOrganizationUpdatedOneEvent } from '../../event';
+import { AccountOrganizationUpdateOneCommand } from './update-one.command';
 
-@CommandHandler(OrganizationUpdateOneCommand)
-export class OrganizationUpdateOneHandler
-  implements ICommandHandler<OrganizationUpdateOneCommand>
+@CommandHandler(AccountOrganizationUpdateOneCommand)
+export class AccountOrganizationUpdateOneHandler
+  implements ICommandHandler<AccountOrganizationUpdateOneCommand>
 {
   constructor(
     private readonly eventPublisher: EventPublisher,
-    private readonly organizationRepository: OrganizationMongooseRepository
+    private readonly accountOrganizationRepository: AccountOrganizationMongooseRepository
   ) {}
 
   async execute({
     dto,
-  }: OrganizationUpdateOneCommand): Promise<OrganizationDomain> {
+  }: AccountOrganizationUpdateOneCommand): Promise<AccountOrganizationDomain> {
     const { id, displayName, email, organization } = dto;
 
-    const OrganizationMergedDomain =
-      this.eventPublisher.mergeClassContext(OrganizationDomain);
+    const AccountOrganizationMergedDomain =
+      this.eventPublisher.mergeClassContext(AccountOrganizationDomain);
 
-    const updatedOrganizationDomain =
-      await this.organizationRepository.findOneAndUpdate(
+    const updatedAccountOrganizationDomain =
+      await this.accountOrganizationRepository.readOneAndUpdate(
         {
           _id: new ObjectId(id),
         },
-        new OrganizationDomain({
+        new AccountOrganizationDomain({
           displayName,
           email,
           organization,
         })
       );
 
-    const organizationMergedDomain = new OrganizationMergedDomain(
-      updatedOrganizationDomain
+    const accountOrganizationDomain = new AccountOrganizationMergedDomain(
+      updatedAccountOrganizationDomain
     );
 
-    organizationMergedDomain.apply(
-      new OrganizationUpdatedOneEvent(organizationMergedDomain.id)
+    accountOrganizationDomain.apply(
+      new AccountOrganizationUpdatedOneEvent(accountOrganizationDomain.id)
     );
-    organizationMergedDomain.commit();
+    accountOrganizationDomain.commit();
 
-    return updatedOrganizationDomain;
+    return updatedAccountOrganizationDomain;
   }
 }
