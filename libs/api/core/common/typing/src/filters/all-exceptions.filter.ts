@@ -26,10 +26,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: Record<string, unknown>, host: ArgumentsHost): void {
-    console.log(
-      '🚀 ~ file: all-exceptions.filter.ts ~ line 29 ~ AllExceptionsFilter ~ exception',
-      exception
-    );
+    // console.log(
+    //   '🚀 ~ file: all-exceptions.filter.ts ~ line 29 ~ AllExceptionsFilter ~ exception',
+    //   exception
+    // );
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 

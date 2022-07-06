@@ -1,34 +1,24 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { MongooseModule } from '@nestjs/mongoose';
 import {
-  SuperAdmin,
-  SuperAdminEntityDomainFactory,
-  SuperAdminMongooseRepository,
-  SuperAdminSchema,
+  AccountMongooseModule,
+  AccountSuperAdminEntityDomainFactory,
+  AccountSuperAdminMongooseRepository,
 } from '@ustagil/api/core/account/data-access';
-import { SuperAdminCommandHandlers } from './command';
-import { SuperAdminEventHandlers } from './event';
-import { SuperAdminQueryHandlers } from './query';
-import { SuperAdminController } from './super_admin.controller';
+import { AccountSuperAdminCommandHandlers } from './command';
+import { AccountSuperAdminEventHandlers } from './event';
+import { AccountSuperAdminQueryHandlers } from './query';
+import { AccountSuperAdminController } from './super_admin.controller';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      {
-        name: SuperAdmin.name,
-        schema: SuperAdminSchema,
-      },
-    ]),
-    CqrsModule,
-  ],
-  controllers: [SuperAdminController],
+  imports: [AccountMongooseModule, CqrsModule],
+  controllers: [AccountSuperAdminController],
   providers: [
-    SuperAdminMongooseRepository,
-    SuperAdminEntityDomainFactory,
-    ...SuperAdminCommandHandlers,
-    ...SuperAdminEventHandlers,
-    ...SuperAdminQueryHandlers,
+    AccountSuperAdminMongooseRepository,
+    AccountSuperAdminEntityDomainFactory,
+    ...AccountSuperAdminCommandHandlers,
+    ...AccountSuperAdminEventHandlers,
+    ...AccountSuperAdminQueryHandlers,
   ],
 })
-export class SuperAdminModule {}
+export class AccountSuperAdminModule {}

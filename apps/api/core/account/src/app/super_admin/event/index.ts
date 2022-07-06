@@ -1,22 +1,22 @@
-import { SuperAdminCreatedOneHandler } from './super_admin-created-one/super_admin-created-one.handler';
-import { SuperAdminDeletedOneHandler } from './super_admin-deleted-one/super_admin-deleted-one.handler';
-import { SuperAdminReadedAllHandler } from './super_admin-readed-all/super_admin-readed-all.handler';
-import { SuperAdminReadedOneByEmailHandler } from './super_admin-readed-one-by-email/super_admin-readed-one-by-email.handler';
-import { SuperAdminReadedOneHandler } from './super_admin-readed-one/super_admin-readed-one.handler';
-import { SuperAdminUpdatedOneHandler } from './super_admin-updated-one/super_admin-updated-one.handler';
+import { AccountSuperAdminCreatedOneHandler } from './created-one/created-one.handler';
+import { AccountSuperAdminDeletedOneHandler } from './deleted-one/deleted-one.handler';
+import { AccountSuperAdminReadedAllHandler } from './readed-all/readed-all.handler';
+import { AccountSuperAdminReadedOneByEmailHandler } from './readed-one-by-email/readed-one-by-email.handler';
+import { AccountSuperAdminReadedOneHandler } from './readed-one/readed-one.handler';
+import { AccountSuperAdminUpdatedOneHandler } from './updated-one/updated-one.handler';
 
-export const SuperAdminEventHandlers = [
-  SuperAdminCreatedOneHandler,
-  SuperAdminUpdatedOneHandler,
-  SuperAdminDeletedOneHandler,
-  SuperAdminReadedAllHandler,
-  SuperAdminReadedOneHandler,
-  SuperAdminReadedOneByEmailHandler,
+export const AccountSuperAdminEventHandlers = [
+  AccountSuperAdminCreatedOneHandler,
+  AccountSuperAdminUpdatedOneHandler,
+  AccountSuperAdminDeletedOneHandler,
+  AccountSuperAdminReadedAllHandler,
+  AccountSuperAdminReadedOneHandler,
+  AccountSuperAdminReadedOneByEmailHandler,
 ];
 
-export { SuperAdminCreatedOneEvent } from './super_admin-created-one/super_admin-created-one.event';
-export { SuperAdminDeletedOneEvent } from './super_admin-deleted-one/super_admin-deleted-one.event';
-export { SuperAdminReadedAllEvent } from './super_admin-readed-all/super_admin-readed-all.event';
-export { SuperAdminReadedOneByEmailEvent } from './super_admin-readed-one-by-email/super_admin-readed-one-by-email.event';
-export { SuperAdminReadedOneEvent } from './super_admin-readed-one/super_admin-readed-one.event';
-export { SuperAdminUpdatedOneEvent } from './super_admin-updated-one/super_admin-updated-one.event';
+export { AccountSuperAdminCreatedOneEvent } from './created-one/created-one.event';
+export { AccountSuperAdminDeletedOneEvent } from './deleted-one/deleted-one.event';
+export { AccountSuperAdminReadedAllEvent } from './readed-all/readed-all.event';
+export { AccountSuperAdminReadedOneByEmailEvent } from './readed-one-by-email/readed-one-by-email.event';
+export { AccountSuperAdminReadedOneEvent } from './readed-one/readed-one.event';
+export { AccountSuperAdminUpdatedOneEvent } from './updated-one/updated-one.event';

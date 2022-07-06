@@ -2,62 +2,68 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  IUserGrpcController,
-  UserCreateOneRequest,
-  UserDeleteOneRequest,
-  UserFindAllRequest,
-  UserFindOneByEmailRequest,
-  UserFindOneRequest,
-  UserUpdateOneRequest,
+  AccountUserCreateOneRequest,
+  AccountUserDeleteOneRequest,
+  AccountUserReadAllRequest,
+  AccountUserReadOneByEmailRequest,
+  AccountUserReadOneRequest,
+  AccountUserUpdateOneRequest,
+  IAccountUserGrpcService,
 } from '@ustagil/api/core/account/typing';
 import { from } from 'rxjs';
 import {
-  UserCreateOneCommand,
-  UserDeleteOneCommand,
-  UserUpdateOneCommand,
+  AccountUserCreateOneCommand,
+  AccountUserDeleteOneCommand,
+  AccountUserUpdateOneCommand,
 } from './command';
 import {
-  UserReadAllQuery,
-  UserReadOneByEmailQuery,
-  UserReadOneQuery,
+  AccountUserReadAllQuery,
+  AccountUserReadOneByEmailQuery,
+  AccountUserReadOneQuery,
 } from './query';
 
 @Controller()
-export class UserController implements IUserGrpcController {
+export class AccountUserController implements IAccountUserGrpcService {
   constructor(
     private readonly commandBus: CommandBus<
-      UserCreateOneCommand | UserDeleteOneCommand | UserUpdateOneCommand
+      | AccountUserCreateOneCommand
+      | AccountUserDeleteOneCommand
+      | AccountUserUpdateOneCommand
     >,
     private readonly queryBus: QueryBus<
-      UserReadAllQuery | UserReadOneByEmailQuery | UserReadOneQuery
+      | AccountUserReadAllQuery
+      | AccountUserReadOneByEmailQuery
+      | AccountUserReadOneQuery
     >
   ) {}
 
-  @GrpcMethod('UserService')
-  ListUsers(data: UserFindAllRequest) {
-    return from(this.queryBus.execute(new UserReadAllQuery(data)));
+  @GrpcMethod('AccountUserService')
+  ListAccountUsers(data: AccountUserReadAllRequest) {
+    return from(this.queryBus.execute(new AccountUserReadAllQuery(data)));
   }
 
-  @GrpcMethod('UserService')
-  GetUserByEmail(data: UserFindOneByEmailRequest) {
-    return from(this.queryBus.execute(new UserReadOneByEmailQuery(data)));
+  @GrpcMethod('AccountUserService')
+  GetAccountUserByEmail(data: AccountUserReadOneByEmailRequest) {
+    return from(
+      this.queryBus.execute(new AccountUserReadOneByEmailQuery(data))
+    );
   }
 
-  @GrpcMethod('UserService')
-  GetUser(data: UserFindOneRequest) {
-    return from(this.queryBus.execute(new UserReadOneQuery(data)));
+  @GrpcMethod('AccountUserService')
+  GetAccountUser(data: AccountUserReadOneRequest) {
+    return from(this.queryBus.execute(new AccountUserReadOneQuery(data)));
   }
 
-  @GrpcMethod('UserService')
-  CreateUser(data: UserCreateOneRequest) {
-    return from(this.commandBus.execute(new UserCreateOneCommand(data)));
+  @GrpcMethod('AccountUserService')
+  CreateAccountUser(data: AccountUserCreateOneRequest) {
+    return from(this.commandBus.execute(new AccountUserCreateOneCommand(data)));
   }
 
-  @GrpcMethod('UserService')
-  UpdateUser(data: UserUpdateOneRequest) {
+  @GrpcMethod('AccountUserService')
+  UpdateAccountUser(data: AccountUserUpdateOneRequest) {
     return from(
       this.commandBus.execute(
-        new UserUpdateOneCommand({
+        new AccountUserUpdateOneCommand({
           id: data.id,
           ...data,
         })
@@ -65,8 +71,8 @@ export class UserController implements IUserGrpcController {
     );
   }
 
-  @GrpcMethod('UserService')
-  DeleteUser(data: UserDeleteOneRequest) {
-    return from(this.commandBus.execute(new UserDeleteOneCommand(data)));
+  @GrpcMethod('AccountUserService')
+  DeleteAccountUser(data: AccountUserDeleteOneRequest) {
+    return from(this.commandBus.execute(new AccountUserDeleteOneCommand(data)));
   }
 }

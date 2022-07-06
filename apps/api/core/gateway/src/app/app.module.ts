@@ -3,11 +3,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { AccountModule } from './account/account/account.module';
-import { OrganizationModule } from './account/organization/organization.module';
-import { SuperAdminModule } from './account/super_admin/super_admin.module';
-import { UserModule } from './account/user/user.module';
-import { AuthenticationModule } from './authentication/authentication.module';
+import { AccountBaseModule } from './account/base/base.module';
+import { AccountOrganizationModule } from './account/organization/organization.module';
+import { AccountSuperAdminModule } from './account/super_admin/super_admin.module';
+import { AccountUserModule } from './account/user/user.module';
+import { AuthenticationBaseModule } from './authentication/base/base.module';
+import { AuthenticationOrganizationModule } from './authentication/organization/organization.module';
+import { AuthenticationSuperAdminModule } from './authentication/super_admin/super_admin.module';
+import { AuthenticationUserModule } from './authentication/user/user.module';
 
 @Module({
   imports: [
@@ -32,11 +35,15 @@ import { AuthenticationModule } from './authentication/authentication.module';
       signOptions: { expiresIn: '60m' },
     }),
 
-    AccountModule,
-    OrganizationModule,
-    SuperAdminModule,
-    UserModule,
-    AuthenticationModule,
+    AccountBaseModule,
+    AccountOrganizationModule,
+    AccountSuperAdminModule,
+    AccountUserModule,
+
+    AuthenticationBaseModule,
+    AuthenticationUserModule,
+    AuthenticationOrganizationModule,
+    AuthenticationSuperAdminModule,
   ],
 })
 export class GatewayModule {}

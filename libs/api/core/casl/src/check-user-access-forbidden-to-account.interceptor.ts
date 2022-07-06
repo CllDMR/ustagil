@@ -5,9 +5,9 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { MyRequest } from '@ustagil/api/core/common/typing';
 import { Types } from 'mongoose';
 import { Observable, tap } from 'rxjs';
-import { MyRequest } from './typings';
 
 export interface Response {
   account: Types.ObjectId;

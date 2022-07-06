@@ -1,5 +1,5 @@
-export { UserCreateOneTransformInterceptor } from './create-one-transform.interceptor';
-export { UserDeleteOneTransformInterceptor } from './delete-one-transform.interceptor';
-export { UserFindAllTransformInterceptor } from './find-all-transform.interceptor';
-export { UserFindOneTransformInterceptor } from './find-one-transform.interceptor';
-export { UserUpdateOneTransformInterceptor } from './update-one-transform.interceptor';
+export { AccountUserCreateOneTransformInterceptor } from './create-one-transform.interceptor';
+export { AccountUserDeleteOneTransformInterceptor } from './delete-one-transform.interceptor';
+export { AccountUserReadAllTransformInterceptor } from './read-all-transform.interceptor';
+export { AccountUserReadOneTransformInterceptor } from './read-one-transform.interceptor';
+export { AccountUserUpdateOneTransformInterceptor } from './update-one-transform.interceptor';

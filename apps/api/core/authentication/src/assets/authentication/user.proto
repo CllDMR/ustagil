@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package authentication_user;
+
+service AuthenticationUserService {
+  rpc RegisterAccountUser(RegisterAccountUserRequest) 
+  returns (RegisterAccountUserResponse) {}
+  
+  rpc LoginAccountUser(LoginAccountUserRequest) 
+  returns (LoginAccountUserResponse) {}
+  
+  rpc ValidateAccountUser(ValidateAccountUserRequest) 
+  returns (ValidateAccountUserResponse) {}
+}
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_ORGANIZATION = 1;
+  ROLE_BASE = 2;
+  ROLE_SUPER_ADMIN = 3;
+  ROLE_USER = 4;
+}
+
+message RegisterAccountUserRequest {
+  string displayName = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message RegisterAccountUserResponse {
+  Role role = 1;
+  string displayName = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message LoginAccountUserRequest {
+  string id = 1;
+  string email = 2;
+  string displayName = 3;
+  Role role = 4;
+}
+
+message LoginAccountUserResponse {
+  string access_token = 1;
+}
+
+message ValidateAccountUserRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message ValidateAccountUserResponse {
+  string id = 1;
+  Role role = 2;
+  string displayName = 3;
+  string email = 4;
+  string password = 5;
+}

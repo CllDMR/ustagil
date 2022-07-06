@@ -1,31 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { UserDomain } from '@ustagil/api/core/account/typing';
+import { AccountUserDomain } from '@ustagil/api/core/account/typing';
 import { EntityDomainFactory } from '@ustagil/api/core/common/data-access';
+import { AccountKind } from '@ustagil/api/core/common/typing';
 import { ObjectId } from 'mongodb';
-import { User } from '../schema/user.schema';
+import { AccountUser } from '../schema/user.schema';
 
 @Injectable()
-export class UserEntityDomainFactory
-  implements EntityDomainFactory<User, UserDomain>
+export class AccountUserEntityDomainFactory
+  implements EntityDomainFactory<AccountUser, AccountUserDomain>
 {
-  createEntityFromDomain(domain: UserDomain): User {
+  createEntityFromDomain(domain: AccountUserDomain): AccountUser {
     return {
       _id: new ObjectId(domain.id),
+      kind: domain.kind.toString(),
       role: domain.role,
       displayName: domain.displayName,
       email: domain.email,
-      organization: domain.organization,
       password: domain.password,
     };
   }
 
-  createDomainFromEntity(entity: User): UserDomain {
-    return new UserDomain({
+  createDomainFromEntity(entity: AccountUser): AccountUserDomain {
+    return new AccountUserDomain({
       id: entity._id.toHexString(),
+      kind: AccountKind[entity.kind],
       role: entity.role,
       displayName: entity.displayName,
       email: entity.email,
-      organization: entity.organization,
       password: entity.password,
     });
   }

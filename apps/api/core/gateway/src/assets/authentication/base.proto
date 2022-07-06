@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package authentication_base;
+
+service AuthenticationBaseService {
+  rpc RegisterAccountBase(RegisterAccountBaseRequest) 
+  returns (RegisterAccountBaseResponse) {}
+  
+  rpc LoginAccountBase(LoginAccountBaseRequest) 
+  returns (LoginAccountBaseResponse) {}
+  
+  rpc ValidateAccountBase(ValidateAccountBaseRequest) 
+  returns (ValidateAccountBaseResponse) {}
+}
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_ORGANIZATION = 1;
+  ROLE_BASE = 2;
+  ROLE_SUPER_ADMIN = 3;
+  ROLE_USER = 4;
+}
+
+message RegisterAccountBaseRequest {
+  string displayName = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message RegisterAccountBaseResponse {
+  Role role = 1;
+  string displayName = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message LoginAccountBaseRequest {
+  string id = 1;
+  Role role = 4;
+}
+
+message LoginAccountBaseResponse {
+  string access_token = 1;
+}
+
+message ValidateAccountBaseRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message ValidateAccountBaseResponse {
+  string id = 1;
+  Role role = 2;
+  string displayName = 3;
+  string email = 4;
+  string password = 5;
+}

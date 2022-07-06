@@ -1,14 +1,11 @@
 import { IsString } from 'class-validator';
 
-export class SuperAdminCreateOneRequestBodyDto {
+export class AccountSuperAdminCreateOneRequestBodyDto {
   @IsString()
   displayName: string;
 
   @IsString()
   email: string;
-
-  @IsString()
-  organization: string;
 
   @IsString()
   password: string;

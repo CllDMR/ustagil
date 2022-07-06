@@ -1,12 +1,12 @@
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export class UserFindAllResponseBodyDto {
+export class AccountUserReadAllResponseBodyDto {
   users: {
     id: string;
+    kind: AccountKind;
     role: Role;
     displayName: string;
     email: string;
-    organization: string;
   }[];
   next_page_cursor: string;
 }

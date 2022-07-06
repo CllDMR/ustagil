@@ -1,13 +1,13 @@
-import { SuperAdminReadAllHandler } from './super_admin-read-all/super_admin-read-all.handler';
-import { SuperAdminReadOneByEmailHandler } from './super_admin-read-one-by-email/super_admin-read-one-by-email.handler';
-import { SuperAdminReadOneHandler } from './super_admin-read-one/super_admin-read-one.handler';
+import { AccountSuperAdminReadAllHandler } from './read-all/read-all.handler';
+import { AccountSuperAdminReadOneByEmailHandler } from './read-one-by-email/read-one-by-email.handler';
+import { AccountSuperAdminReadOneHandler } from './read-one/read-one.handler';
 
-export const SuperAdminQueryHandlers = [
-  SuperAdminReadAllHandler,
-  SuperAdminReadOneHandler,
-  SuperAdminReadOneByEmailHandler,
+export const AccountSuperAdminQueryHandlers = [
+  AccountSuperAdminReadAllHandler,
+  AccountSuperAdminReadOneHandler,
+  AccountSuperAdminReadOneByEmailHandler,
 ];
 
-export { SuperAdminReadAllQuery } from './super_admin-read-all/super_admin-read-all.query';
-export { SuperAdminReadOneByEmailQuery } from './super_admin-read-one-by-email/super_admin-read-one-by-email.query';
-export { SuperAdminReadOneQuery } from './super_admin-read-one/super_admin-read-one.query';
+export { AccountSuperAdminReadAllQuery } from './read-all/read-all.query';
+export { AccountSuperAdminReadOneByEmailQuery } from './read-one-by-email/read-one-by-email.query';
+export { AccountSuperAdminReadOneQuery } from './read-one/read-one.query';

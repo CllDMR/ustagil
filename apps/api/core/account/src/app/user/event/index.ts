@@ -1,22 +1,22 @@
-import { UserCreatedOneHandler } from './user-created-one/user-created-one.handler';
-import { UserDeletedOneHandler } from './user-deleted-one/user-deleted-one.handler';
-import { UserReadedAllHandler } from './user-readed-all/user-readed-all.handler';
-import { UserReadedOneByEmailHandler } from './user-readed-one-by-email/user-readed-one-by-email.handler';
-import { UserReadedOneHandler } from './user-readed-one/user-readed-one.handler';
-import { UserUpdatedOneHandler } from './user-updated-one/user-updated-one.handler';
+import { AccountUserCreatedOneHandler } from './created-one/created-one.handler';
+import { AccountUserDeletedOneHandler } from './deleted-one/deleted-one.handler';
+import { AccountUserReadedAllHandler } from './readed-all/readed-all.handler';
+import { AccountUserReadedOneByEmailHandler } from './readed-one-by-email/readed-one-by-email.handler';
+import { AccountUserReadedOneHandler } from './readed-one/readed-one.handler';
+import { AccountUserUpdatedOneHandler } from './updated-one/updated-one.handler';
 
-export const UserEventHandlers = [
-  UserCreatedOneHandler,
-  UserUpdatedOneHandler,
-  UserDeletedOneHandler,
-  UserReadedAllHandler,
-  UserReadedOneHandler,
-  UserReadedOneByEmailHandler,
+export const AccountUserEventHandlers = [
+  AccountUserCreatedOneHandler,
+  AccountUserUpdatedOneHandler,
+  AccountUserDeletedOneHandler,
+  AccountUserReadedAllHandler,
+  AccountUserReadedOneHandler,
+  AccountUserReadedOneByEmailHandler,
 ];
 
-export { UserCreatedOneEvent } from './user-created-one/user-created-one.event';
-export { UserDeletedOneEvent } from './user-deleted-one/user-deleted-one.event';
-export { UserReadedAllEvent } from './user-readed-all/user-readed-all.event';
-export { UserReadedOneByEmailEvent } from './user-readed-one-by-email/user-readed-one-by-email.event';
-export { UserReadedOneEvent } from './user-readed-one/user-readed-one.event';
-export { UserUpdatedOneEvent } from './user-updated-one/user-updated-one.event';
+export { AccountUserCreatedOneEvent } from './created-one/created-one.event';
+export { AccountUserDeletedOneEvent } from './deleted-one/deleted-one.event';
+export { AccountUserReadedAllEvent } from './readed-all/readed-all.event';
+export { AccountUserReadedOneByEmailEvent } from './readed-one-by-email/readed-one-by-email.event';
+export { AccountUserReadedOneEvent } from './readed-one/readed-one.event';
+export { AccountUserUpdatedOneEvent } from './updated-one/updated-one.event';

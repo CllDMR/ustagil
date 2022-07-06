@@ -1,42 +1,42 @@
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export interface SuperAdminGrpc {
+export interface AccountSuperAdminGrpc {
   id: string;
+  kind: AccountKind;
   role: Role;
   displayName: string;
   email: string;
-  organization: string;
   password: string;
 }
 
-export interface SuperAdminFindAllRequest {
+export interface AccountSuperAdminReadAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface SuperAdminFindAllResponse {
-  super_admins: SuperAdminGrpc[];
+export interface AccountSuperAdminReadAllResponse {
+  super_admins: AccountSuperAdminGrpc[];
   next_page_cursor: string;
 }
 
-export interface SuperAdminFindOneRequest {
+export interface AccountSuperAdminReadOneRequest {
   id: string;
 }
 
-export interface SuperAdminFindOneByEmailRequest {
+export interface AccountSuperAdminReadOneByEmailRequest {
   email: string;
 }
 
-export type SuperAdminCreateOneRequest = Omit<
-  Omit<SuperAdminGrpc, 'id'>,
-  'role'
+export type AccountSuperAdminCreateOneRequest = Omit<
+  Omit<Omit<AccountSuperAdminGrpc, 'id'>, 'role'>,
+  'kind'
 >;
 
-export interface SuperAdminUpdateOneRequest
-  extends Partial<Omit<Omit<SuperAdminGrpc, 'id'>, 'role'>> {
+export interface AccountSuperAdminUpdateOneRequest
+  extends Partial<AccountSuperAdminCreateOneRequest> {
   id: string;
 }
 
-export interface SuperAdminDeleteOneRequest {
+export interface AccountSuperAdminDeleteOneRequest {
   id: string;
 }

@@ -1,7 +1,8 @@
-import { Role } from '@ustagil/api/core/common/typing';
+import { AccountKind, Role } from '@ustagil/api/core/common/typing';
 
-export interface OrganizationGrpc {
+export interface AccountOrganizationGrpc {
   id: string;
+  kind: AccountKind;
   role: Role;
   displayName: string;
   email: string;
@@ -9,34 +10,34 @@ export interface OrganizationGrpc {
   password: string;
 }
 
-export interface OrganizationFindAllRequest {
+export interface AccountOrganizationReadAllRequest {
   page_size?: number;
   next_page_cursor?: string;
 }
 
-export interface OrganizationFindAllResponse {
-  organizations: OrganizationGrpc[];
+export interface AccountOrganizationReadAllResponse {
+  organizations: AccountOrganizationGrpc[];
   next_page_cursor: string;
 }
 
-export interface OrganizationFindOneRequest {
+export interface AccountOrganizationReadOneRequest {
   id: string;
 }
 
-export interface OrganizationFindOneByEmailRequest {
+export interface AccountOrganizationReadOneByEmailRequest {
   email: string;
 }
 
-export type OrganizationCreateOneRequest = Omit<
-  Omit<OrganizationGrpc, 'id'>,
-  'role'
+export type AccountOrganizationCreateOneRequest = Omit<
+  Omit<Omit<AccountOrganizationGrpc, 'id'>, 'role'>,
+  'kind'
 >;
 
-export interface OrganizationUpdateOneRequest
-  extends Partial<Omit<Omit<OrganizationGrpc, 'id'>, 'role'>> {
+export interface AccountOrganizationUpdateOneRequest
+  extends Partial<AccountOrganizationCreateOneRequest> {
   id: string;
 }
 
-export interface OrganizationDeleteOneRequest {
+export interface AccountOrganizationDeleteOneRequest {
   id: string;
 }

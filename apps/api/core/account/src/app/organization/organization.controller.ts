@@ -2,70 +2,78 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
-  IOrganizationGrpcController,
-  OrganizationCreateOneRequest,
-  OrganizationDeleteOneRequest,
-  OrganizationFindAllRequest,
-  OrganizationFindOneByEmailRequest,
-  OrganizationFindOneRequest,
-  OrganizationUpdateOneRequest,
+  AccountOrganizationCreateOneRequest,
+  AccountOrganizationDeleteOneRequest,
+  AccountOrganizationReadAllRequest,
+  AccountOrganizationReadOneByEmailRequest,
+  AccountOrganizationReadOneRequest,
+  AccountOrganizationUpdateOneRequest,
+  IAccountOrganizationGrpcService,
 } from '@ustagil/api/core/account/typing';
 import { from } from 'rxjs';
 import {
-  OrganizationCreateOneCommand,
-  OrganizationDeleteOneCommand,
-  OrganizationUpdateOneCommand,
+  AccountOrganizationCreateOneCommand,
+  AccountOrganizationDeleteOneCommand,
+  AccountOrganizationUpdateOneCommand,
 } from './command';
 import {
-  OrganizationReadAllQuery,
-  OrganizationReadOneByEmailQuery,
-  OrganizationReadOneQuery,
+  AccountOrganizationReadAllQuery,
+  AccountOrganizationReadOneByEmailQuery,
+  AccountOrganizationReadOneQuery,
 } from './query';
 
 @Controller()
-export class OrganizationController implements IOrganizationGrpcController {
+export class AccountOrganizationController
+  implements IAccountOrganizationGrpcService
+{
   constructor(
     private readonly commandBus: CommandBus<
-      | OrganizationCreateOneCommand
-      | OrganizationDeleteOneCommand
-      | OrganizationUpdateOneCommand
+      | AccountOrganizationCreateOneCommand
+      | AccountOrganizationDeleteOneCommand
+      | AccountOrganizationUpdateOneCommand
     >,
     private readonly queryBus: QueryBus<
-      | OrganizationReadAllQuery
-      | OrganizationReadOneByEmailQuery
-      | OrganizationReadOneQuery
+      | AccountOrganizationReadAllQuery
+      | AccountOrganizationReadOneByEmailQuery
+      | AccountOrganizationReadOneQuery
     >
   ) {}
 
-  @GrpcMethod('OrganizationService')
-  ListOrganizations(data: OrganizationFindAllRequest) {
-    return from(this.queryBus.execute(new OrganizationReadAllQuery(data)));
-  }
-
-  @GrpcMethod('OrganizationService')
-  GetOrganizationByEmail(data: OrganizationFindOneByEmailRequest) {
+  @GrpcMethod('AccountOrganizationService')
+  ListAccountOrganizations(data: AccountOrganizationReadAllRequest) {
     return from(
-      this.queryBus.execute(new OrganizationReadOneByEmailQuery(data))
+      this.queryBus.execute(new AccountOrganizationReadAllQuery(data))
     );
   }
 
-  @GrpcMethod('OrganizationService')
-  GetOrganization(data: OrganizationFindOneRequest) {
-    return from(this.queryBus.execute(new OrganizationReadOneQuery(data)));
-  }
-
-  @GrpcMethod('OrganizationService')
-  CreateOrganization(data: OrganizationCreateOneRequest) {
+  @GrpcMethod('AccountOrganizationService')
+  GetAccountOrganizationByEmail(
+    data: AccountOrganizationReadOneByEmailRequest
+  ) {
     return from(
-      this.commandBus.execute(new OrganizationCreateOneCommand(data))
+      this.queryBus.execute(new AccountOrganizationReadOneByEmailQuery(data))
     );
   }
 
-  @GrpcMethod('OrganizationService')
-  UpdateOrganization(data: OrganizationUpdateOneRequest) {
+  @GrpcMethod('AccountOrganizationService')
+  GetAccountOrganization(data: AccountOrganizationReadOneRequest) {
+    return from(
+      this.queryBus.execute(new AccountOrganizationReadOneQuery(data))
+    );
+  }
+
+  @GrpcMethod('AccountOrganizationService')
+  CreateAccountOrganization(data: AccountOrganizationCreateOneRequest) {
+    return from(
+      this.commandBus.execute(new AccountOrganizationCreateOneCommand(data))
+    );
+  }
+
+  @GrpcMethod('AccountOrganizationService')
+  UpdateAccountOrganization(data: AccountOrganizationUpdateOneRequest) {
     return from(
       this.commandBus.execute(
-        new OrganizationUpdateOneCommand({
+        new AccountOrganizationUpdateOneCommand({
           id: data.id,
           ...data,
         })
@@ -73,10 +81,10 @@ export class OrganizationController implements IOrganizationGrpcController {
     );
   }
 
-  @GrpcMethod('OrganizationService')
-  DeleteOrganization(data: OrganizationDeleteOneRequest) {
+  @GrpcMethod('AccountOrganizationService')
+  DeleteAccountOrganization(data: AccountOrganizationDeleteOneRequest) {
     return from(
-      this.commandBus.execute(new OrganizationDeleteOneCommand(data))
+      this.commandBus.execute(new AccountOrganizationDeleteOneCommand(data))
     );
   }
 }

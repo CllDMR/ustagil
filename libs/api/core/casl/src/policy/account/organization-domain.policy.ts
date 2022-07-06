@@ -1,22 +1,22 @@
-import { OrganizationDomain } from '@ustagil/api/core/account/typing';
+import { AccountOrganizationDomain } from '@ustagil/api/core/account/typing';
 import { Action, PolicyRule } from '../../types';
 
-export class OrganizationDomainCreatePolicyRule implements PolicyRule {
+export class AccountOrganizationDomainCreatePolicyRule implements PolicyRule {
   action = Action.Create;
-  subject = OrganizationDomain;
+  subject = AccountOrganizationDomain;
 }
 
-export class OrganizationDomainReadPolicyRule implements PolicyRule {
+export class AccountOrganizationDomainReadPolicyRule implements PolicyRule {
   action = Action.Read;
-  subject = OrganizationDomain;
+  subject = AccountOrganizationDomain;
 }
 
-export class OrganizationDomainUpdatePolicyRule implements PolicyRule {
+export class AccountOrganizationDomainUpdatePolicyRule implements PolicyRule {
   action = Action.Update;
-  subject = OrganizationDomain;
+  subject = AccountOrganizationDomain;
 }
 
-export class OrganizationDomainDeletePolicyRule implements PolicyRule {
+export class AccountOrganizationDomainDeletePolicyRule implements PolicyRule {
   action = Action.Delete;
-  subject = OrganizationDomain;
+  subject = AccountOrganizationDomain;
 }

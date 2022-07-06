@@ -15,90 +15,90 @@ import {
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
-import { ISuperAdminGrpcController } from '@ustagil/api/core/account/typing';
+import { ACCOUNT_SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  SuperAdminCreateOneTransformInterceptor,
-  SuperAdminDeleteOneTransformInterceptor,
-  SuperAdminFindAllTransformInterceptor,
-  SuperAdminFindOneTransformInterceptor,
-  SuperAdminUpdateOneTransformInterceptor,
+  AccountSuperAdminCreateOneRequestBodyDto,
+  AccountSuperAdminReadAllRequestQueryDto,
+  AccountSuperAdminUpdateOneRequestBodyDto,
+  IAccountSuperAdminGrpcService,
+} from '@ustagil/api/core/account/typing';
+import {
+  AccountSuperAdminCreateOneTransformInterceptor,
+  AccountSuperAdminDeleteOneTransformInterceptor,
+  AccountSuperAdminReadAllTransformInterceptor,
+  AccountSuperAdminReadOneTransformInterceptor,
+  AccountSuperAdminUpdateOneTransformInterceptor,
 } from '@ustagil/api/core/account/util';
 import {
+  AccountSuperAdminDomainCreatePolicyRule,
+  AccountSuperAdminDomainDeletePolicyRule,
+  AccountSuperAdminDomainReadPolicyRule,
+  AccountSuperAdminDomainUpdatePolicyRule,
   CheckPolicies,
   PoliciesGuard,
-  SuperAdminDomainCreatePolicyRule,
-  SuperAdminDomainDeletePolicyRule,
-  SuperAdminDomainReadPolicyRule,
-  SuperAdminDomainUpdatePolicyRule,
 } from '@ustagil/api/core/casl';
 import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard } from '@ustagil/api/core/common/util';
-import {
-  SuperAdminCreateOneBodyDto,
-  SuperAdminFindAllQueryDto,
-  SuperAdminUpdateOneBodyDto,
-} from './dtos';
 
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
-export class SuperAdminController implements OnModuleInit {
-  private superAdminGrpcService: ISuperAdminGrpcController;
+export class AccountSuperAdminController implements OnModuleInit {
+  private accountSuperAdminGrpcService: IAccountSuperAdminGrpcService;
 
   constructor(
-    @Inject(SUPER_ADMIN_MS_GRPC)
-    private readonly superAdminMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_SUPER_ADMIN_MS_GRPC)
+    private readonly accountSuperAdminMSGrpcClient: ClientGrpc
   ) {}
 
   onModuleInit() {
-    this.superAdminGrpcService =
-      this.superAdminMSGrpcClient.getService<ISuperAdminGrpcController>(
-        'SuperAdminService'
+    this.accountSuperAdminGrpcService =
+      this.accountSuperAdminMSGrpcClient.getService<IAccountSuperAdminGrpcService>(
+        'AccountSuperAdminService'
       );
   }
 
-  @UseInterceptors(SuperAdminCreateOneTransformInterceptor)
-  @CheckPolicies(new SuperAdminDomainCreatePolicyRule())
+  @UseInterceptors(AccountSuperAdminCreateOneTransformInterceptor)
+  @CheckPolicies(new AccountSuperAdminDomainCreatePolicyRule())
   @Post('account/super_admins')
-  postSuperAdmin(@Body() dto: SuperAdminCreateOneBodyDto) {
-    return this.superAdminGrpcService.CreateSuperAdmin(dto);
+  postSuperAdmin(@Body() dto: AccountSuperAdminCreateOneRequestBodyDto) {
+    return this.accountSuperAdminGrpcService.CreateAccountSuperAdmin(dto);
   }
 
-  @UseInterceptors(SuperAdminFindAllTransformInterceptor)
-  @CheckPolicies(new SuperAdminDomainReadPolicyRule())
+  @UseInterceptors(AccountSuperAdminReadAllTransformInterceptor)
+  @CheckPolicies(new AccountSuperAdminDomainReadPolicyRule())
   @Get('account/super_admins')
-  getSuperAdmins(@Query() dto: SuperAdminFindAllQueryDto) {
-    return this.superAdminGrpcService.ListSuperAdmins(dto);
+  getSuperAdmins(@Query() dto: AccountSuperAdminReadAllRequestQueryDto) {
+    return this.accountSuperAdminGrpcService.ListAccountSuperAdmins(dto);
   }
 
-  @UseInterceptors(SuperAdminFindOneTransformInterceptor)
-  @CheckPolicies(new SuperAdminDomainReadPolicyRule())
+  @UseInterceptors(AccountSuperAdminReadOneTransformInterceptor)
+  @CheckPolicies(new AccountSuperAdminDomainReadPolicyRule())
   @Get('account/super_admins/:id')
   getSuperAdmin(@Param('id') id: string) {
-    return this.superAdminGrpcService.GetSuperAdmin({ id });
+    return this.accountSuperAdminGrpcService.GetAccountSuperAdmin({ id });
   }
 
-  @UseInterceptors(SuperAdminUpdateOneTransformInterceptor)
-  @CheckPolicies(new SuperAdminDomainUpdatePolicyRule())
+  @UseInterceptors(AccountSuperAdminUpdateOneTransformInterceptor)
+  @CheckPolicies(new AccountSuperAdminDomainUpdatePolicyRule())
   @Patch('account/super_admins/:id')
   patchSuperAdmin(
     @Param('id') id: string,
-    @Body() dto: SuperAdminUpdateOneBodyDto
+    @Body() dto: AccountSuperAdminUpdateOneRequestBodyDto
   ) {
-    return this.superAdminGrpcService.UpdateSuperAdmin({
+    return this.accountSuperAdminGrpcService.UpdateAccountSuperAdmin({
       id,
       ...dto,
     });
   }
 
-  @UseInterceptors(SuperAdminDeleteOneTransformInterceptor)
-  @CheckPolicies(new SuperAdminDomainDeletePolicyRule())
+  @UseInterceptors(AccountSuperAdminDeleteOneTransformInterceptor)
+  @CheckPolicies(new AccountSuperAdminDomainDeletePolicyRule())
   @Delete('account/super_admins/:id')
   deleteSuperAdmin(@Param('id') id: string) {
-    return this.superAdminGrpcService.DeleteSuperAdmin({ id });
+    return this.accountSuperAdminGrpcService.DeleteAccountSuperAdmin({ id });
   }
 }

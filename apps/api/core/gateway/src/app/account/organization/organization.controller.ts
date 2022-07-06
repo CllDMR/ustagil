@@ -15,21 +15,26 @@ import {
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
-import { IOrganizationGrpcController } from '@ustagil/api/core/account/typing';
+import { ACCOUNT_ORGANIZATION_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  OrganizationCreateOneTransformInterceptor,
-  OrganizationDeleteOneTransformInterceptor,
-  OrganizationFindAllTransformInterceptor,
-  OrganizationFindOneTransformInterceptor,
-  OrganizationUpdateOneTransformInterceptor,
+  AccountOrganizationCreateOneRequestBodyDto,
+  AccountOrganizationReadAllRequestQueryDto,
+  AccountOrganizationUpdateOneRequestBodyDto,
+  IAccountOrganizationGrpcService,
+} from '@ustagil/api/core/account/typing';
+import {
+  AccountOrganizationCreateOneTransformInterceptor,
+  AccountOrganizationDeleteOneTransformInterceptor,
+  AccountOrganizationReadAllTransformInterceptor,
+  AccountOrganizationReadOneTransformInterceptor,
+  AccountOrganizationUpdateOneTransformInterceptor,
 } from '@ustagil/api/core/account/util';
 import {
+  AccountOrganizationDomainCreatePolicyRule,
+  AccountOrganizationDomainDeletePolicyRule,
+  AccountOrganizationDomainReadPolicyRule,
+  AccountOrganizationDomainUpdatePolicyRule,
   CheckPolicies,
-  OrganizationDomainCreatePolicyRule,
-  OrganizationDomainDeletePolicyRule,
-  OrganizationDomainReadPolicyRule,
-  OrganizationDomainUpdatePolicyRule,
   PoliciesGuard,
 } from '@ustagil/api/core/casl';
 import {
@@ -37,68 +42,65 @@ import {
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard } from '@ustagil/api/core/common/util';
-import {
-  OrganizationCreateOneBodyDto,
-  OrganizationFindAllQueryDto,
-  OrganizationUpdateOneBodyDto,
-} from './dtos';
 
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
-export class OrganizationController implements OnModuleInit {
-  private organizationGrpcService: IOrganizationGrpcController;
+export class AccountOrganizationController implements OnModuleInit {
+  private accountOrganizationGrpcService: IAccountOrganizationGrpcService;
 
   constructor(
-    @Inject(ORGANIZATION_MS_GRPC)
-    private readonly organizationMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_ORGANIZATION_MS_GRPC)
+    private readonly accountOrganizationMSGrpcClient: ClientGrpc
   ) {}
 
   onModuleInit() {
-    this.organizationGrpcService =
-      this.organizationMSGrpcClient.getService<IOrganizationGrpcController>(
-        'OrganizationService'
+    this.accountOrganizationGrpcService =
+      this.accountOrganizationMSGrpcClient.getService<IAccountOrganizationGrpcService>(
+        'AccountOrganizationService'
       );
   }
 
-  @UseInterceptors(OrganizationCreateOneTransformInterceptor)
-  @CheckPolicies(new OrganizationDomainCreatePolicyRule())
+  @UseInterceptors(AccountOrganizationCreateOneTransformInterceptor)
+  @CheckPolicies(new AccountOrganizationDomainCreatePolicyRule())
   @Post('account/organizations')
-  postOrganization(@Body() dto: OrganizationCreateOneBodyDto) {
-    return this.organizationGrpcService.CreateOrganization(dto);
+  postOrganization(@Body() dto: AccountOrganizationCreateOneRequestBodyDto) {
+    return this.accountOrganizationGrpcService.CreateAccountOrganization(dto);
   }
 
-  @UseInterceptors(OrganizationFindAllTransformInterceptor)
-  @CheckPolicies(new OrganizationDomainReadPolicyRule())
+  @UseInterceptors(AccountOrganizationReadAllTransformInterceptor)
+  @CheckPolicies(new AccountOrganizationDomainReadPolicyRule())
   @Get('account/organizations')
-  getOrganizations(@Query() dto: OrganizationFindAllQueryDto) {
-    return this.organizationGrpcService.ListOrganizations(dto);
+  getOrganizations(@Query() dto: AccountOrganizationReadAllRequestQueryDto) {
+    return this.accountOrganizationGrpcService.ListAccountOrganizations(dto);
   }
 
-  @UseInterceptors(OrganizationFindOneTransformInterceptor)
-  @CheckPolicies(new OrganizationDomainReadPolicyRule())
+  @UseInterceptors(AccountOrganizationReadOneTransformInterceptor)
+  @CheckPolicies(new AccountOrganizationDomainReadPolicyRule())
   @Get('account/organizations/:id')
   getOrganization(@Param('id') id: string) {
-    return this.organizationGrpcService.GetOrganization({ id });
+    return this.accountOrganizationGrpcService.GetAccountOrganization({ id });
   }
 
-  @UseInterceptors(OrganizationUpdateOneTransformInterceptor)
-  @CheckPolicies(new OrganizationDomainUpdatePolicyRule())
+  @UseInterceptors(AccountOrganizationUpdateOneTransformInterceptor)
+  @CheckPolicies(new AccountOrganizationDomainUpdatePolicyRule())
   @Patch('account/organizations/:id')
   patchOrganization(
     @Param('id') id: string,
-    @Body() dto: OrganizationUpdateOneBodyDto
+    @Body() dto: AccountOrganizationUpdateOneRequestBodyDto
   ) {
-    return this.organizationGrpcService.UpdateOrganization({
+    return this.accountOrganizationGrpcService.UpdateAccountOrganization({
       id,
       ...dto,
     });
   }
 
-  @UseInterceptors(OrganizationDeleteOneTransformInterceptor)
-  @CheckPolicies(new OrganizationDomainDeletePolicyRule())
+  @UseInterceptors(AccountOrganizationDeleteOneTransformInterceptor)
+  @CheckPolicies(new AccountOrganizationDomainDeletePolicyRule())
   @Delete('account/organizations/:id')
   deleteOrganization(@Param('id') id: string) {
-    return this.organizationGrpcService.DeleteOrganization({ id });
+    return this.accountOrganizationGrpcService.DeleteAccountOrganization({
+      id,
+    });
   }
 }

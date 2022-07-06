@@ -1,3 +1,3 @@
-export { OrganizationFindAllMSMessage } from './organization-find-all.ms-message';
-export { OrganizationFindOneByEmailMSMessage } from './organization-find-one-by-email.ms-message';
-export { OrganizationFindOneMSMessage } from './organization-find-one.ms-message';
+export { AccountOrganizationReadAllMSMessage } from './read-all.ms-message';
+export { AccountOrganizationReadOneByEmailMSMessage } from './read-one-by-email.ms-message';
+export { AccountOrganizationReadOneMSMessage } from './read-one.ms-message';

@@ -1,52 +1,71 @@
 syntax = "proto3";
 
-package organization;
+package account_organization;
 
-service OrganizationService {
-  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {}
-  rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
-  rpc GetOrganizationByEmail(GetOrganizationByEmailRequest) returns (Organization) {}
-  rpc CreateOrganization(CreateOrganizationRequest) returns (Organization) {}
-  rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
-  rpc DeleteOrganization(DeleteOrganizationRequest) returns (Organization) {}
+service AccountOrganizationService {
+  rpc ListAccountOrganizations(ListAccountOrganizationsRequest) 
+  returns (ListAccountOrganizationsResponse) {}
+  
+  rpc GetAccountOrganization(GetAccountOrganizationRequest) 
+  returns (AccountOrganization) {}
+  
+  rpc GetAccountOrganizationByEmail(GetAccountOrganizationByEmailRequest) 
+  returns (AccountOrganization) {}
+  
+  rpc CreateAccountOrganization(CreateAccountOrganizationRequest) 
+  returns (AccountOrganization) {}
+  
+  rpc UpdateAccountOrganization(UpdateAccountOrganizationRequest) 
+  returns (AccountOrganization) {}
+  
+  rpc DeleteAccountOrganization(DeleteAccountOrganizationRequest) 
+  returns (AccountOrganization) {}
 }
 
 enum Role {
   ROLE_UNSPECIFIED = 0;
   ROLE_ORGANIZATION = 1;
-  ROLE_ACCOUNT = 2;
+  ROLE_BASE = 2;
   ROLE_SUPER_ADMIN = 3;
   ROLE_USER = 4;
 }
 
-message Organization {
-  string id = 1;
-  Role role = 2;
-  string displayName = 3;
-  string email = 4;
-  string organization = 5;
-  optional string password = 6;
+enum AccountKind {
+  ACCOUNT_KIND_BASE = 0;
+  ACCOUNT_KIND_ORGANIZATION = 1;
+  ACCOUNT_KIND_SUPER_ADMIN = 2;
+  ACCOUNT_KIND_USER = 3;
 }
 
-message ListOrganizationsRequest {
+message AccountOrganization {
+  string id = 1;
+  AccountKind kind = 2;
+  Role role = 3;
+  string displayName = 4;
+  string email = 5;
+  string organization = 6;
+  optional string password = 7;
+}
+
+message ListAccountOrganizationsRequest {
   optional int32 page_size = 1;
   optional string next_page_cursor = 2;
 }
 
-message ListOrganizationsResponse {
-  repeated Organization organizations = 1;
+message ListAccountOrganizationsResponse {
+  repeated AccountOrganization organizations = 1;
   string next_page_cursor = 2;
 }
 
-message GetOrganizationRequest {
+message GetAccountOrganizationRequest {
   string id = 1;
 }
 
-message GetOrganizationByEmailRequest {
+message GetAccountOrganizationByEmailRequest {
   string email = 1;
 }
 
-message CreateOrganizationRequest {
+message CreateAccountOrganizationRequest {
   string id = 1;
   string displayName = 2;
   string email = 3;
@@ -54,13 +73,13 @@ message CreateOrganizationRequest {
   string password = 5;
 }
 
-message UpdateOrganizationRequest {
+message UpdateAccountOrganizationRequest {
   string id = 1;
   optional string displayName = 2;
   optional string email = 3;
   optional string organization = 4;
 }
 
-message DeleteOrganizationRequest {
+message DeleteAccountOrganizationRequest {
   string id = 1;
 }

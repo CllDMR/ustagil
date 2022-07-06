@@ -1,13 +1,13 @@
-import { OrganizationCreateOneHandler } from './organization-create-one/organization-create-one.handler';
-import { OrganizationDeleteOneHandler } from './organization-delete-one/organization-delete-one.handler';
-import { OrganizationUpdateOneHandler } from './organization-update-one/organization-update-one.handler';
+import { AccountOrganizationCreateOneHandler } from './create-one/create-one.handler';
+import { AccountOrganizationDeleteOneHandler } from './delete-one/delete-one.handler';
+import { AccountOrganizationUpdateOneHandler } from './update-one/update-one.handler';
 
-export const OrganizationCommandHandlers = [
-  OrganizationCreateOneHandler,
-  OrganizationUpdateOneHandler,
-  OrganizationDeleteOneHandler,
+export const AccountOrganizationCommandHandlers = [
+  AccountOrganizationCreateOneHandler,
+  AccountOrganizationUpdateOneHandler,
+  AccountOrganizationDeleteOneHandler,
 ];
 
-export { OrganizationCreateOneCommand } from './organization-create-one/organization-create-one.command';
-export { OrganizationDeleteOneCommand } from './organization-delete-one/organization-delete-one.command';
-export { OrganizationUpdateOneCommand } from './organization-update-one/organization-update-one.command';
+export { AccountOrganizationCreateOneCommand } from './create-one/create-one.command';
+export { AccountOrganizationDeleteOneCommand } from './delete-one/delete-one.command';
+export { AccountOrganizationUpdateOneCommand } from './update-one/update-one.command';

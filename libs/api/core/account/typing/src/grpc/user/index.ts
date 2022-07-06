@@ -1,11 +1,11 @@
-export { IUserGrpcController } from './user.controller.interface';
 export {
-  UserCreateOneRequest,
-  UserDeleteOneRequest,
-  UserFindAllRequest,
-  UserFindAllResponse,
-  UserFindOneByEmailRequest,
-  UserFindOneRequest,
-  UserGrpc,
-  UserUpdateOneRequest,
+  AccountUserCreateOneRequest,
+  AccountUserDeleteOneRequest,
+  AccountUserGrpc,
+  AccountUserReadAllRequest,
+  AccountUserReadAllResponse,
+  AccountUserReadOneByEmailRequest,
+  AccountUserReadOneRequest,
+  AccountUserUpdateOneRequest,
 } from './user.mics';
+export { IAccountUserGrpcService } from './user.service.interface';

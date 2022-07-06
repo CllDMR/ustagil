@@ -5,29 +5,32 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import {
-  SuperAdminCreateOneResponseBodyDto,
-  SuperAdminDomain,
+  AccountSuperAdminCreateOneResponseBodyDto,
+  AccountSuperAdminDomain,
 } from '@ustagil/api/core/account/typing';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class SuperAdminCreateOneTransformInterceptor
+export class AccountSuperAdminCreateOneTransformInterceptor
   implements
-    NestInterceptor<SuperAdminDomain, SuperAdminCreateOneResponseBodyDto>
+    NestInterceptor<
+      AccountSuperAdminDomain,
+      AccountSuperAdminCreateOneResponseBodyDto
+    >
 {
   intercept(
     context: ExecutionContext,
-    next: CallHandler<SuperAdminDomain>
-  ): Observable<SuperAdminCreateOneResponseBodyDto> {
+    next: CallHandler<AccountSuperAdminDomain>
+  ): Observable<AccountSuperAdminCreateOneResponseBodyDto> {
     return next.handle().pipe(
       map((data) => {
-        const resBody: SuperAdminCreateOneResponseBodyDto = {
+        const resBody: AccountSuperAdminCreateOneResponseBodyDto = {
           id: data.id,
+          kind: data.kind,
           role: data.role,
           displayName: data.displayName,
           email: data.email,
-          organization: data.organization,
         };
 
         return resBody;

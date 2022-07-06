@@ -15,82 +15,87 @@ import {
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { USER_MS_GPRC } from '@ustagil/api/core/account/constant';
-import { IUserGrpcController } from '@ustagil/api/core/account/typing';
+import { ACCOUNT_USER_MS_GRPC } from '@ustagil/api/core/account/constant';
 import {
-  UserCreateOneTransformInterceptor,
-  UserDeleteOneTransformInterceptor,
-  UserFindAllTransformInterceptor,
-  UserFindOneTransformInterceptor,
-  UserUpdateOneTransformInterceptor,
+  AccountUserCreateOneRequestBodyDto,
+  AccountUserReadAllRequestQueryDto,
+  AccountUserUpdateOneRequestBodyDto,
+  IAccountUserGrpcService,
+} from '@ustagil/api/core/account/typing';
+import {
+  AccountUserCreateOneTransformInterceptor,
+  AccountUserDeleteOneTransformInterceptor,
+  AccountUserReadAllTransformInterceptor,
+  AccountUserReadOneTransformInterceptor,
+  AccountUserUpdateOneTransformInterceptor,
 } from '@ustagil/api/core/account/util';
 import {
+  AccountUserDomainCreatePolicyRule,
+  AccountUserDomainDeletePolicyRule,
+  AccountUserDomainReadPolicyRule,
+  AccountUserDomainUpdatePolicyRule,
   CheckPolicies,
   PoliciesGuard,
-  UserDomainCreatePolicyRule,
-  UserDomainDeletePolicyRule,
-  UserDomainReadPolicyRule,
-  UserDomainUpdatePolicyRule,
 } from '@ustagil/api/core/casl';
 import {
   AllExceptionsFilter,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard } from '@ustagil/api/core/common/util';
-import {
-  UserCreateOneBodyDto,
-  UserFindAllQueryDto,
-  UserUpdateOneBodyDto,
-} from './dtos';
 
 @UseGuards(ThrottlerGuard, JwtAuthGuard, PoliciesGuard)
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller()
-export class UserController implements OnModuleInit {
-  private userGrpcService: IUserGrpcController;
+export class AccountUserController implements OnModuleInit {
+  private accountUserGrpcService: IAccountUserGrpcService;
 
   constructor(
-    @Inject(USER_MS_GPRC)
-    private readonly userMSGrpcClient: ClientGrpc
+    @Inject(ACCOUNT_USER_MS_GRPC)
+    private readonly accountUserMSGrpcClient: ClientGrpc
   ) {}
 
   onModuleInit() {
-    this.userGrpcService =
-      this.userMSGrpcClient.getService<IUserGrpcController>('UserService');
+    this.accountUserGrpcService =
+      this.accountUserMSGrpcClient.getService<IAccountUserGrpcService>(
+        'AccountUserService'
+      );
   }
 
-  @UseInterceptors(UserCreateOneTransformInterceptor)
-  @CheckPolicies(new UserDomainCreatePolicyRule())
+  @UseInterceptors(AccountUserCreateOneTransformInterceptor)
+  @CheckPolicies(new AccountUserDomainCreatePolicyRule())
   @Post('account/users')
-  postUser(@Body() dto: UserCreateOneBodyDto) {
-    return this.userGrpcService.CreateUser(dto);
+  postUser(@Body() dto: AccountUserCreateOneRequestBodyDto) {
+    return this.accountUserGrpcService.CreateAccountUser(dto);
   }
 
-  @UseInterceptors(UserFindAllTransformInterceptor)
-  @CheckPolicies(new UserDomainReadPolicyRule())
+  @UseInterceptors(AccountUserReadAllTransformInterceptor)
+  @CheckPolicies(new AccountUserDomainReadPolicyRule())
   @Get('account/users')
-  getUsers(@Query() dto: UserFindAllQueryDto) {
-    return this.userGrpcService.ListUsers(dto);
+  getUsers(@Query() dto: AccountUserReadAllRequestQueryDto) {
+    return this.accountUserGrpcService.ListAccountUsers(dto);
   }
 
-  @UseInterceptors(UserFindOneTransformInterceptor)
-  @CheckPolicies(new UserDomainReadPolicyRule())
+  @UseInterceptors(AccountUserReadOneTransformInterceptor)
+  @CheckPolicies(new AccountUserDomainReadPolicyRule())
   @Get('account/users/:id')
   getUser(@Param('id') id: string) {
-    return this.userGrpcService.GetUser({ id });
+    return this.accountUserGrpcService.GetAccountUser({ id });
   }
 
-  @UseInterceptors(UserUpdateOneTransformInterceptor)
-  @CheckPolicies(new UserDomainUpdatePolicyRule())
+  @UseInterceptors(AccountUserUpdateOneTransformInterceptor)
+  @CheckPolicies(new AccountUserDomainUpdatePolicyRule())
   @Patch('account/users/:id')
-  patchUser(@Param('id') id: string, @Body() dto: UserUpdateOneBodyDto) {
-    return this.userGrpcService.UpdateUser({ id, ...dto });
+  patchUser(
+    @Param('id') id: string,
+    @Body() dto: AccountUserUpdateOneRequestBodyDto
+  ) {
+    return this.accountUserGrpcService.UpdateAccountUser({ id, ...dto });
   }
 
-  @UseInterceptors(UserDeleteOneTransformInterceptor)
-  @CheckPolicies(new UserDomainDeletePolicyRule())
+  @UseInterceptors(AccountUserDeleteOneTransformInterceptor)
+  @CheckPolicies(new AccountUserDomainDeletePolicyRule())
   @Delete('account/users/:id')
   deleteUser(@Param('id') id: string) {
-    return this.userGrpcService.DeleteUser({ id });
+    return this.accountUserGrpcService.DeleteAccountUser({ id });
   }
 }
