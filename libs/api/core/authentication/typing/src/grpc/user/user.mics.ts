@@ -8,8 +8,6 @@ export interface AuthenticationUserRegisterAccountRequest {
 
 export interface AuthenticationUserLoginAccountRequest {
   id: string;
-  email: string;
-  displayName: string;
   role: Role;
 }
 

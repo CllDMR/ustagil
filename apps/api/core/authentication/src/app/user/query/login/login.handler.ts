@@ -17,14 +17,13 @@ export class AuthenticationUserLoginHandler
   async execute({ dto }: AuthenticationUserLoginQuery): Promise<{
     access_token: string;
   }> {
-    const { displayName, email, id, role } = dto;
+    const { id, role } = dto;
 
     const AuthenticationUserMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationUserDomain);
 
     const authenticationUserDomain = new AuthenticationUserMergedDomain({
-      displayName,
-      email,
+      id,
       role,
     });
 
@@ -34,10 +33,7 @@ export class AuthenticationUserLoginHandler
     };
 
     authenticationUserDomain.apply(
-      new AuthenticationUserLoginnedEvent(
-        authenticationUserDomain.displayName,
-        authenticationUserDomain.email
-      )
+      new AuthenticationUserLoginnedEvent(authenticationUserDomain.id)
     );
 
     authenticationUserDomain.commit();

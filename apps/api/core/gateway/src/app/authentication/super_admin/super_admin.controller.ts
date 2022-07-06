@@ -4,7 +4,8 @@ import {
   Get,
   Inject,
   Post,
-  Request,
+  Req,
+  Res,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -12,15 +13,19 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { AUTHENTICATION_SUPER_ADMIN_MS_GRPC } from '@ustagil/api/core/authentication/constant';
 import {
+  AuthenticationSuperAdminLoginAccountResponse,
   AuthenticationSuperAdminRegisterRequestBodyDto,
   IAuthenticationSuperAdminGrpcService,
 } from '@ustagil/api/core/authentication/typing';
 import { AuthenticationSuperAdminRegisterTransformInterceptor } from '@ustagil/api/core/authentication/util';
 import {
   AllExceptionsFilter,
+  MyRequest,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
+import { Response } from 'express';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller('auth/super_admin')
@@ -41,11 +46,21 @@ export class AuthenticationSuperAdminController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  async login(
+    @Req() req: MyRequest,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const account = req.user;
-    return this.authenticationSuperAdminGrpcService.loginAccountSuperAdmin(
-      account
+    const auth = await firstValueFrom(
+      this.authenticationSuperAdminGrpcService.loginAccountSuperAdmin(
+        account
+      ) as unknown as Observable<AuthenticationSuperAdminLoginAccountResponse>
     );
+    res.cookie('access_token', auth.access_token, {
+      httpOnly: true,
+      secure: true,
+    });
+    return auth;
   }
 
   @UseInterceptors(AuthenticationSuperAdminRegisterTransformInterceptor)
@@ -58,7 +73,7 @@ export class AuthenticationSuperAdminController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Req() req) {
     return req.user;
   }
 }

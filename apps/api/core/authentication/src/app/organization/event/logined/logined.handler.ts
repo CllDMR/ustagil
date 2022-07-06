@@ -5,10 +5,7 @@ import { AuthenticationOrganizationLoginnedEvent } from './logined.event';
 export class AuthenticationOrganizationLoginnedHandler
   implements IEventHandler<AuthenticationOrganizationLoginnedEvent>
 {
-  async handle({
-    displayName,
-    email,
-  }: AuthenticationOrganizationLoginnedEvent): Promise<void> {
-    console.log('Loginned account organization with id:', displayName, email);
+  async handle({ id }: AuthenticationOrganizationLoginnedEvent): Promise<void> {
+    console.log('Loginned account organization with id:', id);
   }
 }

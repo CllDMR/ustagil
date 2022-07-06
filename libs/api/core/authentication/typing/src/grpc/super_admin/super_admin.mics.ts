@@ -8,8 +8,6 @@ export interface AuthenticationSuperAdminRegisterAccountRequest {
 
 export interface AuthenticationSuperAdminLoginAccountRequest {
   id: string;
-  email: string;
-  displayName: string;
   role: Role;
 }
 

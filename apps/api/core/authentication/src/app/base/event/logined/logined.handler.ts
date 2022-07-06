@@ -5,10 +5,7 @@ import { AuthenticationBaseLoginnedEvent } from './logined.event';
 export class AuthenticationBaseLoginnedHandler
   implements IEventHandler<AuthenticationBaseLoginnedEvent>
 {
-  async handle({
-    displayName,
-    email,
-  }: AuthenticationBaseLoginnedEvent): Promise<void> {
-    console.log('Loginned account base with id:', displayName, email);
+  async handle({ id }: AuthenticationBaseLoginnedEvent): Promise<void> {
+    console.log('Loginned account base with id:', id);
   }
 }

@@ -4,7 +4,8 @@ import {
   Get,
   Inject,
   Post,
-  Request,
+  Req,
+  Res,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -12,15 +13,19 @@ import {
 import { ClientGrpc } from '@nestjs/microservices';
 import { AUTHENTICATION_BASE_MS_GRPC } from '@ustagil/api/core/authentication/constant';
 import {
+  AuthenticationBaseLoginAccountResponse,
   AuthenticationBaseRegisterRequestBodyDto,
   IAuthenticationBaseGrpcService,
 } from '@ustagil/api/core/authentication/typing';
 import { AuthenticationBaseRegisterTransformInterceptor } from '@ustagil/api/core/authentication/util';
 import {
   AllExceptionsFilter,
+  MyRequest,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
 import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
+import { Response } from 'express';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
 @Controller('auth/base')
@@ -41,9 +46,21 @@ export class AuthenticationBaseController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  async login(
+    @Req() req: MyRequest,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const account = req.user;
-    return this.authenticationBaseGrpcService.loginAccountBase(account);
+    const auth = await firstValueFrom(
+      this.authenticationBaseGrpcService.loginAccountBase(
+        account
+      ) as unknown as Observable<AuthenticationBaseLoginAccountResponse>
+    );
+    res.cookie('access_token', auth.access_token, {
+      httpOnly: true,
+      secure: true,
+    });
+    return auth;
   }
 
   @UseInterceptors(AuthenticationBaseRegisterTransformInterceptor)
@@ -54,7 +71,7 @@ export class AuthenticationBaseController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Req() req) {
     return req.user;
   }
 }

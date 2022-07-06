@@ -5,10 +5,7 @@ import { AuthenticationSuperAdminLoginnedEvent } from './logined.event';
 export class AuthenticationSuperAdminLoginnedHandler
   implements IEventHandler<AuthenticationSuperAdminLoginnedEvent>
 {
-  async handle({
-    displayName,
-    email,
-  }: AuthenticationSuperAdminLoginnedEvent): Promise<void> {
-    console.log('Loginned account super_admin with id:', displayName, email);
+  async handle({ id }: AuthenticationSuperAdminLoginnedEvent): Promise<void> {
+    console.log('Loginned account super_admin with id:', id);
   }
 }

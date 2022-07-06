@@ -9,8 +9,6 @@ export interface AuthenticationOrganizationRegisterAccountRequest {
 
 export interface AuthenticationOrganizationLoginAccountRequest {
   id: string;
-  email: string;
-  displayName: string;
   role: Role;
 }
 

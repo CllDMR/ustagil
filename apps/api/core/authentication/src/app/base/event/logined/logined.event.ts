@@ -1,6 +1,3 @@
 export class AuthenticationBaseLoginnedEvent {
-  constructor(
-    public readonly displayName: string,
-    public readonly email: string
-  ) {}
+  constructor(public readonly id: string) {}
 }

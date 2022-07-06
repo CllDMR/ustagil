@@ -17,15 +17,14 @@ export class AuthenticationSuperAdminLoginHandler
   async execute({ dto }: AuthenticationSuperAdminLoginQuery): Promise<{
     access_token: string;
   }> {
-    const { displayName, email, id, role } = dto;
+    const { id, role } = dto;
 
     const AuthenticationSuperAdminMergedDomain =
       this.eventPublisher.mergeClassContext(AuthenticationSuperAdminDomain);
 
     const authenticationSuperAdminDomain =
       new AuthenticationSuperAdminMergedDomain({
-        displayName,
-        email,
+        id,
         role,
       });
 
@@ -36,8 +35,7 @@ export class AuthenticationSuperAdminLoginHandler
 
     authenticationSuperAdminDomain.apply(
       new AuthenticationSuperAdminLoginnedEvent(
-        authenticationSuperAdminDomain.displayName,
-        authenticationSuperAdminDomain.email
+        authenticationSuperAdminDomain.id
       )
     );
 
