@@ -23,7 +23,7 @@ import {
 import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
 
 @UseFilters(AllExceptionsFilter, TimeoutErrorExceptionsFilter)
-@Controller()
+@Controller('auth/base')
 export class AuthenticationBaseController {
   private authenticationBaseGrpcService: IAuthenticationBaseGrpcService;
 
