@@ -21,9 +21,7 @@ export class AccountSuperAdminReadOneByEmailHandler
     );
 
     const readedAccountSuperAdminDomain =
-      await this.accountSuperAdminRepository.readOne({
-        email,
-      });
+      await this.accountSuperAdminRepository.readOne({ email }, '+password');
 
     const accountSuperAdminDomain = new AccountSuperAdminMergedDomain(
       readedAccountSuperAdminDomain

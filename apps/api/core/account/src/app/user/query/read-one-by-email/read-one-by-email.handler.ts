@@ -19,9 +19,10 @@ export class AccountUserReadOneByEmailHandler
     const AccountUserMergedDomain =
       this.eventPublisher.mergeClassContext(AccountUserDomain);
 
-    const readedAccountUserDomain = await this.accountUserRepository.readOne({
-      email,
-    });
+    const readedAccountUserDomain = await this.accountUserRepository.readOne(
+      { email },
+      '+password'
+    );
 
     const accountUserDomain = new AccountUserMergedDomain(
       readedAccountUserDomain

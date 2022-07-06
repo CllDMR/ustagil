@@ -20,9 +20,7 @@ export class AccountOrganizationReadOneByEmailHandler
       this.eventPublisher.mergeClassContext(AccountOrganizationDomain);
 
     const readedAccountOrganizationDomain =
-      await this.accountOrganizationRepository.readOne({
-        email,
-      });
+      await this.accountOrganizationRepository.readOne({ email }, '+password');
 
     const accountOrganizationDomain = new AccountOrganizationMergedDomain(
       readedAccountOrganizationDomain
