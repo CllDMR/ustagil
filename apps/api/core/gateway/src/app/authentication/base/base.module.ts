@@ -10,7 +10,10 @@ import {
   AUTHENTICATION_BASE_MS_GRPC,
   AUTHENTICATION_BASE_MS_GRPC_URL,
 } from '@ustagil/api/core/authentication/constant';
-import { JwtStrategy, LocalStrategy } from '@ustagil/api/core/common/util';
+import {
+  BaseJwtStrategy,
+  BaseLocalStrategy,
+} from '@ustagil/api/core/common/util';
 import { join } from 'path';
 import { AuthenticationBaseController } from './base.controller';
 
@@ -49,7 +52,7 @@ import { AuthenticationBaseController } from './base.controller';
     }),
   ],
   controllers: [AuthenticationBaseController],
-  providers: [LocalStrategy, JwtStrategy],
-  exports: [PassportModule, LocalStrategy, JwtStrategy],
+  providers: [BaseLocalStrategy, BaseJwtStrategy],
+  exports: [PassportModule, BaseLocalStrategy, BaseJwtStrategy],
 })
 export class AuthenticationBaseModule {}

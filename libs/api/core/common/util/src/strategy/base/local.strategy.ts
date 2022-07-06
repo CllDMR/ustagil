@@ -12,7 +12,10 @@ import { Strategy } from 'passport-local';
 import { firstValueFrom, Observable } from 'rxjs';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class BaseLocalStrategy extends PassportStrategy(
+  Strategy,
+  'BaseLocalStrategy'
+) {
   private readonly authenticationBaseGrpcService: IAuthenticationBaseGrpcService;
   private readonly accountBaseGrpcService: IAccountBaseGrpcService;
 
@@ -20,7 +23,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     @Inject(AUTHENTICATION_BASE_MS_GRPC)
     private readonly authenticationClientGrpc: ClientGrpc,
     @Inject(ACCOUNT_BASE_MS_GRPC)
-    private readonly baseClientGrpc: ClientGrpc
+    private readonly accountBaseClientGrpc: ClientGrpc
   ) {
     super({ usernameField: 'email' });
 
@@ -29,7 +32,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         'AuthenticationBaseService'
       );
     this.accountBaseGrpcService =
-      this.baseClientGrpc.getService<IAccountBaseGrpcService>(
+      this.accountBaseClientGrpc.getService<IAccountBaseGrpcService>(
         'AccountBaseService'
       );
   }

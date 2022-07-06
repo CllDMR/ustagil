@@ -23,7 +23,10 @@ import {
   MyRequest,
   TimeoutErrorExceptionsFilter,
 } from '@ustagil/api/core/common/typing';
-import { JwtAuthGuard, LocalAuthGuard } from '@ustagil/api/core/common/util';
+import {
+  JwtAuthGuard,
+  UserLocalAuthGuard,
+} from '@ustagil/api/core/common/util';
 import { Response } from 'express';
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -44,7 +47,7 @@ export class AuthenticationUserController {
       );
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(UserLocalAuthGuard)
   @Post('login')
   async login(
     @Req() req: MyRequest,
