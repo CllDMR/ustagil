@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { JWTPayload, MyRequest } from '@ustagil/api/core/common/typing';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class OrganizationJwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'secretKey',
+      secretOrKey: configService.getOrThrow('jwt.secret'),
     });
   }
 

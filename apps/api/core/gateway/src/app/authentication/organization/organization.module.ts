@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PassportModule } from '@nestjs/passport';
@@ -15,6 +16,7 @@ import {
   OrganizationLocalStrategy,
 } from '@ustagil/api/core/common/util';
 import { join } from 'path';
+import { jwtConfig } from '../../../config';
 import { AuthenticationOrganizationController } from './organization.controller';
 
 @Module({
@@ -49,9 +51,13 @@ import { AuthenticationOrganizationController } from './organization.controller'
       },
     ]),
     PassportModule,
-    JwtModule.register({
-      secret: 'secretKey',
-      signOptions: { expiresIn: '60m' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [jwtConfig.KEY],
+      useFactory: async (config: ConfigType<typeof jwtConfig>) => ({
+        secret: config.secret,
+        signOptions: { expiresIn: '60m' },
+      }),
     }),
   ],
   controllers: [AuthenticationOrganizationController],

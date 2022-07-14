@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -8,6 +9,7 @@ import {
   ACCOUNT_ORGANIZATION_MS_GRPC_URL,
 } from '@ustagil/api/core/account/constant';
 import { join } from 'path';
+import { jwtConfig } from '../../config';
 import { AuthenticationOrganizationCommandHandlers } from './command';
 import { AuthenticationOrganizationEventHandlers } from './event';
 import { AuthenticationOrganizationController } from './organization.controller';
@@ -17,9 +19,13 @@ import { AuthenticationOrganizationQueryHandlers } from './query';
   imports: [
     CqrsModule,
     PassportModule,
-    JwtModule.register({
-      secret: 'secretKey',
-      signOptions: { expiresIn: '60m' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [jwtConfig.KEY],
+      useFactory: async (config: ConfigType<typeof jwtConfig>) => ({
+        secret: config.secret,
+        signOptions: { expiresIn: '60m' },
+      }),
     }),
     ClientsModule.register([
       {
