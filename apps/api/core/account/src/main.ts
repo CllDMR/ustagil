@@ -36,7 +36,6 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       url: ACCOUNT_BASE_MS_GRPC_URL,
-      // TODO: Rename as accountBase, include proto files
       package: 'account_base',
       protoPath: join(__dirname, 'assets/account/base.proto'),
       loader: {
