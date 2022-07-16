@@ -18,7 +18,7 @@ export const BlogLayout: FunctionComponent<Props> = ({ children, title }) => (
     <Header />
 
     <Main>
-      <article>{children}</article>
+      <article className="prose lg:prose-lg max-w-none">{children}</article>
     </Main>
 
     <Footer />
