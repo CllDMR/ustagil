@@ -30,5 +30,18 @@
       }
     ]
   },
-  "defaultProject": "api-core-gateway"
+  "defaultProject": "api-core-gateway",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
+  }
 }

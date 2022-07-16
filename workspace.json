@@ -17,6 +17,8 @@
     "api-core-common-data-access": "libs/api/core/common/data-access",
     "api-core-common-typing": "libs/api/core/common/typing",
     "api-core-common-util": "libs/api/core/common/util",
-    "api-core-gateway": "apps/api/core/gateway"
+    "api-core-gateway": "apps/api/core/gateway",
+    "web-core-blog": "apps/web/core/blog",
+    "web-core-blog-e2e": "apps/web/core/blog-e2e"
   }
 }
