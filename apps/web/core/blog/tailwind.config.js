@@ -5,6 +5,8 @@ const { join } = require('path');
 module.exports = {
   content: [
     join(__dirname, 'pages/**/*.{js,ts,jsx,tsx,mdx}'),
+    join(__dirname, 'components/**/*.{js,ts,jsx,tsx,mdx}'),
+    join(__dirname, 'layouts/**/*.{js,ts,jsx,tsx,mdx}'),
     ...createGlobPatternsForDependencies(join(__dirname, 'apps/web/core/blog')),
   ],
   theme: {
