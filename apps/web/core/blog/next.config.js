@@ -1,3 +1,4 @@
+const { withContentlayer } = require('next-contentlayer');
 const withPlugins = require('next-compose-plugins');
 const withNx = require('@nrwl/next/plugins/with-nx');
 const withMDX = require('@next/mdx')({
@@ -8,7 +9,7 @@ const withMDX = require('@next/mdx')({
     // If you use `MDXProvider`, uncomment the following line.
     // providerImportSource: "@mdx-js/react",
   },
-})
+});
 
 /**
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
@@ -29,8 +30,10 @@ const mdxConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
 };
 
+const withContentlayerConfig = {};
 
 module.exports = withPlugins([
   [withNx, nextConfig],
-  [withMDX, mdxConfig]
+  [withMDX, mdxConfig],
+  [withContentlayer, withContentlayerConfig],
 ]);
