@@ -49,11 +49,11 @@ const IndexPage: NextPage<IndexPageProps> = ({ articles }) => (
   </>
 );
 
-export default IndexPage;
-
 export async function getStaticProps() {
   const articles = allArticles.sort((a, b) => {
     return compareDesc(new Date(a.date), new Date(b.date));
   });
   return { props: { articles } };
 }
+
+export default IndexPage;
