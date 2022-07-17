@@ -1,8 +1,10 @@
+import Footer from 'components/PageFooter/Footer';
+import Header from 'components/PageHeader/Header';
+import Main from 'components/PageMain/Main';
 import { allArticles, type Article } from 'contentlayer/generated';
 import { format, parseISO } from 'date-fns';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { FC } from 'react';
 
 const ArticlePage: FC<{ article: Article }> = ({ article }) => (
@@ -10,23 +12,22 @@ const ArticlePage: FC<{ article: Article }> = ({ article }) => (
     <Head>
       <title>{article.title}</title>
     </Head>
-    <main className="container mx-auto">
-      <article className="py-16 prose lg:prose-lg max-w-none">
-        <Link href="/">
-          <a className="text-sm font-bold text-blue-700 uppercase">Home</a>
-        </Link>
+
+    <Header />
+
+    <Main>
+      <article className="prose lg:prose-lg max-w-none">
         <div className="mb-6 text-center">
           <h1 className="mb-1">{article.title}</h1>
           <time dateTime={article.date} className="">
             {format(parseISO(article.date), 'LLLL d, yyyy')}
           </time>
         </div>
-        <div
-          className="cl-article-body"
-          dangerouslySetInnerHTML={{ __html: article.body.html }}
-        />
+        <div dangerouslySetInnerHTML={{ __html: article.body.html }} />
       </article>
-    </main>
+    </Main>
+
+    <Footer />
   </>
 );
 
