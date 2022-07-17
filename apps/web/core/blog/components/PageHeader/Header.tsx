@@ -6,7 +6,7 @@ import { Navigation } from './Navigation';
 type Props = {};
 
 export const Header: FC<Props> = () => (
-  <header className="px-3 py-4 flex bg-blue-100 border-b border-gray-300 border-solid shadow">
+  <header className="flex px-4 py-3 bg-blue-100 border-b border-gray-300 border-solid shadow">
     <Logo />
     <Navigation />
   </header>

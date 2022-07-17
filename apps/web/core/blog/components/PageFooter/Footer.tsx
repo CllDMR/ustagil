@@ -6,10 +6,12 @@ import { Logo } from './Logo';
 type Props = {};
 
 export const Footer: FC<Props> = () => (
-  <footer className="px-3 py-4 flex bg-blue-100 border-t-2 border-gray-300 border-solid">
+  <footer className="flex px-4 py-3 bg-blue-100 border-t-2 border-gray-300 border-solid">
     <Logo />
-    <div className="flex-1 flex items-center justify-center">
-      <Link href="/">Index Page</Link>
+    <div className="flex items-center justify-center flex-1 gap-3">
+      <Link href="/">Home</Link>
+      <Link href="/articles">Articles</Link>
+      <Link href="/about">About</Link>
     </div>
   </footer>
 );

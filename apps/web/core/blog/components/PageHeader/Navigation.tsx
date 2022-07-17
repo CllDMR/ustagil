@@ -5,11 +5,10 @@ import { FC } from 'react';
 type Props = {};
 
 export const Navigation: FC<Props> = () => (
-  <nav className="flex-1 flex gap-3 items-center justify-center">
-    <Link href="/blogs/blog-1">Blog - 1</Link>
-    <Link href="/blogs/blog-2">Blog - 2</Link>
-    <Link href="/blogs/blog-3">Blog - 3</Link>
-    <Link href="/blogs/blog-4">Blog - 4</Link>
+  <nav className="flex items-center justify-center flex-1 gap-3">
+    <Link href="/">Home</Link>
+    <Link href="/articles">Articles</Link>
+    <Link href="/about">About</Link>
   </nav>
 );
 
