@@ -12,7 +12,7 @@ type IndexPageProps = {
 const IndexPage: NextPage<IndexPageProps> = () => (
   <>
     <Head>
-      <title>Ustagil Blog</title>
+      <title>Ustagil Blog - Home</title>
     </Head>
 
     <Header />
